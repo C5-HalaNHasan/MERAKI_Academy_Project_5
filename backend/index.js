@@ -12,7 +12,8 @@ const PORT=process.env.PORT;
 //require routers
 const roleRouter=require("./routes/role");
 const userRouter=require("./routes/user");
-const postRouter=require("./routes/post")
+const postRouter=require("./routes/post");
+const reactionRouter=require("./routes/reaction");
 
 
 
@@ -21,6 +22,7 @@ const postRouter=require("./routes/post")
 app.use("/role",roleRouter);
 app.use("/user",userRouter);
 app.use("/post",postRouter);
+app.use("/reaction",reactionRouter);
 
 
 
