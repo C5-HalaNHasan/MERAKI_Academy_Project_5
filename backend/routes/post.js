@@ -1,6 +1,6 @@
 const express=require("express");
 const postRouter = express.Router();
-const {createPost,getUserPosts,getPostByUserId,updatePostById}= require("../controllers/post")
+const {createPost,getUserPosts,getPostByUserId,updatePostById,deletePostById}= require("../controllers/post")
 
 const {authentication}=require("../middlewares/authentication");
 //endpoint for POST request ==> http://localhost:5000/post==> createPost
@@ -14,5 +14,8 @@ postRouter.get("/user/:id",getPostByUserId);
 
 //endpoint for PUT request ==> http://localhost:5000/post/:id==> getPostByUserId
 postRouter.put("/:id",authentication,updatePostById);
+
+//endpoint for DELETE request ==> http://localhost:5000/post/:id==> deletePostById
+postRouter.delete("/:id",authentication,deletePostById);
 
 module.exports=postRouter;

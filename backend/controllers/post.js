@@ -135,9 +135,39 @@ const updatePostById = (req, res) => {
   });
 };
 
+// create function to delete post using id
+const deletePostById =(req,res)=>{
+const id = req.params.id;
+const author_id = req.token.userId;
+const query = `UPDATE post SET isDeleted =1 WHERE author_id=? AND id=?`
+const data =[id,author_id];
+connection.query(query, data, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        massage: "Server Error",
+        err: err,
+      });
+    }
+    if (!result.changedRows) {
+      return res.status(404).json({
+        success: false,
+        massage: `The Post: ${id} is not found`,
+        err: err,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      massage: `Succeeded to delete post with id: ${id}`,
+      result: result,
+    });
+  });
+}
+
 module.exports = {
   createPost,
   getUserPosts,
   getPostByUserId,
   updatePostById,
+  deletePostById,
 };
