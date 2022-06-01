@@ -23,27 +23,45 @@ const createPost = (req, res) => {
 };
 
 //create function to get the current user posts
-const getUserPosts =(req,res)=>{
-    const author_id = req.token.userId;
-    const query = `SELECT * FROM post WHERE author_id = ? AND isDeleted =0`;
-    const data = [author_id];
-    connection.query(query,data,(error,result)=>{
-        if(error){
-            return res.status(500).json({
-                success: false,
-                message: error.message,
-              });
-        }
-        res.status(201).json({
-            success: true,
-            message: `All posts for userId => ${author_id}`,
-            result: result,
-          });
-    })
-
-}
+const getUserPosts = (req, res) => {
+  const author_id = req.token.userId;
+  const query = `SELECT * FROM post WHERE author_id = ? AND isDeleted =0`;
+  const data = [author_id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: `All posts for userId => ${author_id}`,
+      result: result,
+    });
+  });
+};
 
 // create function to get posts by user id
+
+const getPostByUserId = (req, res) => {
+  const author_id = req.params.id;
+  const query = `SELECT * FROM post WHERE author_id=? AND isDeleted=0 `;
+  const data = [author_id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: `All posts for userId => ${author_id}`,
+      result: result,
+    });
+  });
+
 const getPostByUserId =(req,res)=>{
 
    const author_id = req.params.id;
@@ -65,11 +83,61 @@ const getPostByUserId =(req,res)=>{
 
   
 
+
 };
 
-module.exports={
-    createPost,
-    getUserPosts,
-    getPostByUserId,
+//creating function to get user posts then update on them using Post Id
+const updatePostById = (req, res) => {
+  const { postText, postImg, postVideo } = req.body;
+  const id = req.params.id;
+  const author_id = req.token.userId;
+  const query = `SELECT * FROM post WHERE id=? AND author_id=? `;
+  const data = [id, author_id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: error,
+      });
+    }
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        massage: `The Post: ${id} is not found`,
+        error: error,
+      });
+    } else {
+      const query = `UPDATE post SET postText=?, postImg=?, postVideo=? WHERE id=? `;
+      const data = [
+        postText || result[0].postText,
+        postImg || result[0].postImg,
+        postVideo || result[0].postVideo,
+        id,
+      ];
+      connection.query(query, data, (err, result) => {
+        if (err) {
+          return res.status(404).json({
+            success: false,
+            massage: `Server error`,
+            error: err,
+          });
+        }
+        if (result.affectedRows != 0) {
+          res.status(201).json({
+            success: true,
+            massage: `Post updated`,
+            result: result,
+          });
+        }
+      });
+    }
+  });
+};
 
-}
+module.exports = {
+  createPost,
+  getUserPosts,
+  getPostByUserId,
+  updatePostById,
+};
