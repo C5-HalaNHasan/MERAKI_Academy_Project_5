@@ -12,7 +12,7 @@ const createUser=async (req,res)=>{
     const hashedPassword=await bcrypt.hash(password,SALT);
     const data=[firstName,lastName,email,hashedPassword,birthday,country,gender,role_id];
     //before registration: the entered email is going to be checked if it exists in the dataBase or not:
-    const query1=`SELECT * FROM users WHERE email=?`
+    const query1=`SELECT * FROM user WHERE email=?`
     const data1=[email];
     connection.query(query1,data1,(error1,result1)=>{
         if(error1){
@@ -50,7 +50,7 @@ const createUser=async (req,res)=>{
 // a function that logins the user by email & password
 const loginUser=(req,res)=>{
     const {email,password}=req.body;
-    const query=`SELECT * FROM users WHERE email=?`;
+    const query=`SELECT * FROM user WHERE email=?`;
     const data=[email,password]
     //first the user email is checked if it's in the dataBase,
     //if it's in the database: the password is checked if it matches with the one saved in the database
@@ -99,9 +99,34 @@ const loginUser=(req,res)=>{
           }
     })
 };
+// a function that gets all users 
+const getAllUsers=(req,res)=>{
+    // get all user by role id where users=1
+    const query=`SELECT * FROM USER WHERE ROLE_id =1 && isDeleted=0`
+    connection.query(query,(error,result)=>{
+        if(error){
+            return res.status(500).json({
+                success:false,
+                message:error.message,
+            })
+        }if (!result.length) {
+            return res.status(404).json({
+                success:false,
+                message:`No Users Found`,
+            })
+            
+        }else{
+            res.status(302).json({
+                success:true,
+                message:`all users`,
+                result 
+            })
+        }
+})}
+
 
 module.exports={
     createUser,
-    loginUser,
+    loginUser,getAllUsers
 }
 
