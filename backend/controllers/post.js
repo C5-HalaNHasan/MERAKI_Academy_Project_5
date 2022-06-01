@@ -43,11 +43,10 @@ const getUserPosts =(req,res)=>{
 
 }
 
-// create function to get post by user id
+// create function to get posts by user id
 const getPostByUserId =(req,res)=>{
-   const author_id = req.params.id;
-
-}
+  
+};
 
 module.exports={
     createPost,
