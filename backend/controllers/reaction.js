@@ -45,8 +45,30 @@ const getAllReactionByPostId = (req, res) => {
     });
   };
 
+  //a function that removes a rection from a specific post by post_id 
+const removeReactionFromPost = (req, res) => {
+    // const query = `UPDATE  post_reaction SET isDeleted=1 WHERE id=? AND user_id=?`;
+    // const post_id = req.params.id;
+    // const data=[post_id];
+    // connection.query(query, data, (error, result) => {
+    //   if (error) {
+    //  return res.status(500).json({
+    //       success: false,
+    //       massage: "server error",
+    //       error: error,
+    //     });
+    //   }
+    //   res.status(201).json({
+    //     success: true,
+    //     massage: `all reactions for post_id ${post_id}`,
+    //     result: result,
+    //   });
+    // });
+  };
+
 
 module.exports={
     addReactionToPost,
     getAllReactionByPostId,
+    removeReactionFromPost,
 }

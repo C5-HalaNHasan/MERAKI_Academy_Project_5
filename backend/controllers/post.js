@@ -186,6 +186,7 @@ connection.query(query,data,(error,result)=>{
       }
 })
 }
+
 module.exports = {
   createPost,
   getUserPosts,
