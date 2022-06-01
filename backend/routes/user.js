@@ -1,7 +1,7 @@
-
 //create the userRouter and its endpoints
 const express=require("express");
 const {createUser,loginUser}=require("../controllers/user");
+const {authentication}=require("../middlewares/authentication");
 
 const userRouter=express.Router();
 
