@@ -7,10 +7,10 @@ const jwt=require("jsonwebtoken");
 const createUser=async (req,res)=>{
     //user data is collected then the password is hashed before being saved in the database
     const {firstName,lastName,email,password,birthday,country,gender,role_id}=req.body;
-    const query=`INSERT INTO user(email,password,role_id) VALUES(?,?,?)`
+    const query=`INSERT INTO user(firstName,lastName,email,password,birthday,country,gender,role_id) VALUES(?,?,?,?,?,?,?,?)`
     const SALT=10;
     const hashedPassword=await bcrypt.hash(password,SALT);
-    const data=[email,hashedPassword,role_id];
+    const data=[firstName,lastName,email,hashedPassword,birthday,country,gender,role_id];
     //before registration: the entered email is going to be checked if it exists in the dataBase or not:
     const query1=`SELECT * FROM users WHERE email=?`
     const data1=[email];
