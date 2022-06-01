@@ -162,6 +162,7 @@ const reportPostById = (req, res) => {
     }
   });
 };
+
 const removePostByIdAdmin = (req, res) => {
   const id = req.params.id;
   const query = `SELECT * FROM post WHERE isReported = 1 AND id =?`;
@@ -200,6 +201,25 @@ const removePostByIdAdmin = (req, res) => {
     }
   });
 };
+
+// this function will get all reported posts and not deleted yet
+const getReportedPosts = (req,res)=>{
+    const query = `SELECT * FROM post WHERE isReported = 1 AND isDeleted=0`;
+    connection.query(query,(error,result)=>{
+        if (error) {
+            return res.status(404).json({
+              success: false,
+              massage: `Server error`,
+              error: error,
+            });
+          }
+          res.status(201).json({
+            success: true,
+            message: `All Reported posts`,
+            result: result,
+          });
+    })
+}
 module.exports = {
   createPost,
   getUserPosts,
@@ -208,4 +228,5 @@ module.exports = {
   deletePostById,
   reportPostById,
   removePostByIdAdmin,
+  getReportedPosts
 };
