@@ -99,9 +99,34 @@ const loginUser=(req,res)=>{
           }
     })
 };
+// a function that gets all users 
+const getAllUsers=(req,res)=>{
+    // get all user by role id where users=1
+    const query=`SELECT * FROM USER WHERE ROLE_id =1 && isDeleted=0`
+    connection.query(query,(error,result)=>{
+        if(error){
+            return res.status(500).json({
+                success:false,
+                message:error.message,
+            })
+        }if (!result.length) {
+            return res.status(404).json({
+                success:false,
+                message:`No Users Found`,
+            })
+            
+        }else{
+            res.status(302).json({
+                success:true,
+                message:`all users`,
+                result 
+            })
+        }
+})}
+
 
 module.exports={
     createUser,
-    loginUser,
+    loginUser,getAllUsers
 }
 
