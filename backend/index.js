@@ -11,11 +11,15 @@ const PORT=process.env.PORT;
 
 //require routers
 const roleRouter=require("./routes/role");
+const userRouter=require("./routes/user");
+
 
 
 
 //routers endpoint
 app.use("/role",roleRouter);
+app.use("/user",userRouter);
+
 
 
 app.listen(PORT,()=>{
