@@ -143,27 +143,70 @@ const deletePostById = (req, res) => {
 };
 
 //this function will update isReported to 1 if the post reported
-const reportPostById = (req,res)=>{
-const id = req.params.id;
-const query =`UPDATE post SET isReported=1 WHERE id=?`
-const data =[id];
-connection.query(query,data,(error,result)=>{
+const reportPostById = (req, res) => {
+  const id = req.params.id;
+  const query = `UPDATE post SET isReported=1 WHERE id=?`;
+  const data = [id];
+  connection.query(query, data, (error, result) => {
     if (error) {
-        return res.status(404).json({
-          success: false,
-          massage: `Server error`,
-          error: err,
-        });
-      }
-      if (result.affectedRows != 0) {
-        res.status(201).json({
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: err,
+      });
+    }
+    if (result.affectedRows != 0) {
+      res.status(201).json({
+        success: true,
+        massage: `Post reported`,
+        result: result,
+      });
+    }
+  });
+};
+// this function will remove the reported post by the admin using the id for the post
+const removePostByIdAdmin = (req, res) => {
+  const id = req.params.id;
+  const query = `SELECT * FROM post WHERE isReported = 1 AND id =?`;
+  const data = [id];
+  connection.query(query,data, (error, result) => {
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: error,
+      });
+    }
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        massage: `The Post: ${id} is not found`,
+        error: error,
+      });
+    } else {
+      const query = `UPDATE post SET isDeleted=1 WHERE id=?`;
+      const data = [id];
+      connection.query(query, data, (err, result2) => {
+        if (!result2.changedRows) {
+          return res.status(404).json({
+            success: false,
+            massage: `The Post: ${id} is not found`,
+            err: err,
+          });
+        }
+        res.status(200).json({
           success: true,
-          massage: `Post reported`,
-          result: result,
+          massage: `Succeeded to delete post with id: ${id}`,
+          result: result2,
         });
-      }
-})
-}
+
+      });
+    }
+  });
+};
+
+
+
 
 module.exports = {
   createPost,
@@ -172,6 +215,7 @@ module.exports = {
   updatePostById,
   deletePostById,
   reportPostById,
+  removePostByIdAdmin,
 };
 
 //
