@@ -10,12 +10,12 @@ app.use(cors());
 const PORT=process.env.PORT;
 
 //require routers
-// const roleRouter=require("./routes/role");
+const roleRouter=require("./routes/role");
 
 
 
 //routers endpoint
-// app.use("/role",roleRouter);
+app.use("/role",roleRouter);
 
 
 app.listen(PORT,()=>{
