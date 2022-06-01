@@ -111,6 +111,7 @@ const updatePostById = (req, res) => {
   });
 };
 
+
 module.exports = {
   createPost,
   getUserPosts,
