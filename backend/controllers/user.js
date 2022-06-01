@@ -12,7 +12,7 @@ const createUser=async (req,res)=>{
     const hashedPassword=await bcrypt.hash(password,SALT);
     const data=[firstName,lastName,email,hashedPassword,birthday,country,gender,role_id];
     //before registration: the entered email is going to be checked if it exists in the dataBase or not:
-    const query1=`SELECT * FROM users WHERE email=?`
+    const query1=`SELECT * FROM user WHERE email=?`
     const data1=[email];
     connection.query(query1,data1,(error1,result1)=>{
         if(error1){
@@ -50,7 +50,7 @@ const createUser=async (req,res)=>{
 // a function that logins the user by email & password
 const loginUser=(req,res)=>{
     const {email,password}=req.body;
-    const query=`SELECT * FROM users WHERE email=?`;
+    const query=`SELECT * FROM user WHERE email=?`;
     const data=[email,password]
     //first the user email is checked if it's in the dataBase,
     //if it's in the database: the password is checked if it matches with the one saved in the database
