@@ -43,6 +43,7 @@ const getUserPosts = (req, res) => {
 };
 
 // create function to get posts by user id
+
 const getPostByUserId = (req, res) => {
   const author_id = req.params.id;
   const query = `SELECT * FROM post WHERE author_id=? AND isDeleted=0 `;
@@ -60,6 +61,7 @@ const getPostByUserId = (req, res) => {
       result: result,
     });
   });
+
 };
 
 //creating function to get user posts then update on them using Post Id
@@ -162,6 +164,7 @@ const reportPostById = (req, res) => {
     }
   });
 };
+// this function will remove the reported post by the admin using the id for the post
 const removePostByIdAdmin = (req, res) => {
   const id = req.params.id;
   const query = `SELECT * FROM post WHERE isReported = 1 AND id =?`;
@@ -196,10 +199,15 @@ const removePostByIdAdmin = (req, res) => {
           massage: `Succeeded to delete post with id: ${id}`,
           result: result2,
         });
+
       });
     }
   });
 };
+
+
+
+
 module.exports = {
   createPost,
   getUserPosts,
@@ -209,3 +217,5 @@ module.exports = {
   reportPostById,
   removePostByIdAdmin,
 };
+
+//

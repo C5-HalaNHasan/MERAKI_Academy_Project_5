@@ -5,7 +5,7 @@ const createNewRole = (req, res) => {
 
   const query = `INSERT INTO role (role) VALUES (?)`;
   const data = [role];
-  connection.query(query, data, (error, results) => {
+  connection.query(query, data, (error, result) => {
     if (error) {
    return res.status(500).json({
         success: false,
@@ -16,7 +16,7 @@ const createNewRole = (req, res) => {
     res.status(201).json({
       success: true,
       massage: "Role created successfully",
-      results: results,
+      result: result,
     });
   });
 };
