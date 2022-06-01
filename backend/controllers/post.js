@@ -25,7 +25,7 @@ const createPost = (req, res) => {
 //create function to get the current user posts
 const getUserPosts =(req,res)=>{
     const author_id = req.token.userId;
-    const query = `SELECT * FROM post WHERE author_id = ?`;
+    const query = `SELECT * FROM post WHERE author_id = ? AND isDeleted =0`;
     const data = [author_id];
     connection.query(query,data,(error,result)=>{
         if(error){
@@ -43,10 +43,11 @@ const getUserPosts =(req,res)=>{
 
 }
 
-// // create function to update post that belong to the current user
-// const updatePostById =(req,res)=>{
-// // const {postText,}
-// }
+// create function to get post by user id
+const getPostByUserId =(req,res)=>{
+   const author_id = req.params.id;
+
+}
 
 module.exports={
     createPost,
