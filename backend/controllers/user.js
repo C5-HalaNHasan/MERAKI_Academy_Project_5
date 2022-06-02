@@ -204,11 +204,9 @@ const removeFriendById = (req, res) => {
   const query = `UPDATE friendship SET isDELETED=1 WHERE friendshipAccept=? AND friendshipRequest=? `;
   const data = [friendshipAccept, friendshipRequest];
   connection.query(query, data, (error, result) => {
-    console.log("OK");
     if (error) {
      return res.status(500).json({ success: false, message: error.message });
     }
-    console.log('HI');
     res.status(200).json({
       success:true,
       message:`friend deleted successfully`,
