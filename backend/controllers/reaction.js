@@ -1,7 +1,7 @@
 const connection = require("../models/db");
 
 
-//a function that all posts-reactions
+//a function that returns all posts-reactions
 const getAllPostsReactions = (req, res) => {
   const query = `SELECT * FROM post_reaction`;
   connection.query(query, (error, result) => {
@@ -120,9 +120,30 @@ const removeReactionFromPost = (req, res) => {
   })
   };
 
+  //a function that returns all comments-reactions
+const getAllCommentsReactions = (req, res) => {
+  const query = `SELECT * FROM comment_reaction`;
+  connection.query(query, (error, result) => {
+    if (error) {
+   return res.status(500).json({
+        success: false,
+        massage: "server error",
+        error: error,
+      });
+    }
+    res.status(201).json({
+      success: true,
+      massage: `all comments reactions`,
+      result: result,
+    });
+  });
+};
 
 module.exports={
   getAllPostsReactions,
     addReactionToPost,
     removeReactionFromPost,
+    getAllCommentsReactions,
+    addReactionToComment,
+    removeReactionFromComment
 }
