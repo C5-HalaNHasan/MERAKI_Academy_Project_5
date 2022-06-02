@@ -42,26 +42,10 @@ const getUserPosts = (req, res) => {
   });
 };
 
-// create function to get posts by user id
+// create function to get posts by use
 
-const getPostByUserId = (req, res) => {
-  const author_id = req.params.id;
-  const query = `SELECT * FROM post WHERE author_id=? AND isDeleted=0 `;
-  const data = [author_id];
-  connection.query(query, data, (error, result) => {
-    if (error) {
-      return res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
-    res.status(201).json({
-      success: true,
-      message: `All posts for userId => ${author_id}`,
-      result: result,
-    });
-  });
 };
+
 //creating function to get user posts then update on them using Post Id
 const updatePostById = (req, res) => {
   const { postText, postImg, postVideo } = req.body;
@@ -141,27 +125,94 @@ const deletePostById = (req, res) => {
 };
 
 //this function will update isReported to 1 if the post reported
-const reportPostById = (req,res)=>{
-const id = req.params.id;
-const query =`UPDATE post SET isReported=1 WHERE id=?`
-const data =[id];
-connection.query(query,data,(error,result)=>{
+const reportPostById = (req, res) => {
+  const id = req.params.id;
+  const query = `UPDATE post SET isReported=1 WHERE id=?`;
+  const data = [id];
+  connection.query(query, data, (error, result) => {
     if (error) {
-        return res.status(404).json({
-          success: false,
-          massage: `Server error`,
-          error: err,
-        });
-      }
-      if (result.affectedRows != 0) {
-        res.status(201).json({
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: err,
+      });
+    }
+    if (result.affectedRows != 0) {
+      res.status(201).json({
+        success: true,
+        massage: `Post reported`,
+        result: result,
+      });
+    }
+  });
+};
+
+
+
+// this function will remove the reported post by the admin using the id for the post
+
+const removePostByIdAdmin = (req, res) => {
+  const id = req.params.id;
+  const query = `SELECT * FROM post WHERE isReported = 1 AND id =?`;
+  const data = [id];
+  connection.query(query,data, (error, result) => {
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: error,
+      });
+    }
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        massage: `The Post: ${id} is not found`,
+        error: error,
+      });
+    } else {
+      const query = `UPDATE post SET isDeleted=1 WHERE id=?`;
+      const data = [id];
+      connection.query(query, data, (err, result2) => {
+        if (!result2.changedRows) {
+          return res.status(404).json({
+            success: false,
+            massage: `The Post: ${id} is not found`,
+            err: err,
+          });
+        }
+        res.status(200).json({
           success: true,
-          massage: `Post reported`,
-          result: result,
+          massage: `Succeeded to delete post with id: ${id}`,
+          result: result2,
         });
-      }
-})
+
+      });
+    }
+  });
+};
+
+
+// this function will get all reported posts and not deleted yet
+const getReportedPosts = (req,res)=>{
+    const query = `SELECT * FROM post WHERE isReported = 1 AND isDeleted=0`;
+    connection.query(query,(error,result)=>{
+        if (error) {
+            return res.status(404).json({
+              success: false,
+              massage: `Server error`,
+              error: error,
+            });
+          }
+          res.status(201).json({
+            success: true,
+            message: `All Reported posts`,
+            result: result,
+          });
+    })
 }
+
+
+
 
 module.exports = {
   createPost,
@@ -170,4 +221,8 @@ module.exports = {
   updatePostById,
   deletePostById,
   reportPostById,
+  removePostByIdAdmin,
+  getReportedPosts
 };
+
+//
