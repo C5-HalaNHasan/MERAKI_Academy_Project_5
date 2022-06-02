@@ -198,27 +198,30 @@ const addFriendById = (req, res) => {
   });
 };
 // ______this function to removeFriendById__________
-// const removeFriendById = (req, res) => {
-//   const friendshipAccept = req.params.id;
-//   const friendshipRequest = req.token.userId;
-//   const query = `UPDATE friendship SET isDELETED=1 WHERE friendshipAccept=? AND friendshipRequest=? `;
-//   const data = [friendshipAccept, friendshipRequest];
-//   connection.query(query, data, (error, result) => {
-//     if (error) {
-//       res.status(500).json({ success: false, message: error.message });
-//     }
-//     res.status(200).json({
-//       success:true,
-//       message:`friend deleted successfully`,
-//       result
-//     })
-//   });
-// };
+const removeFriendById = (req, res) => {
+  const friendshipAccept = req.params.id;
+  const friendshipRequest = req.token.userId;
+  const query = `UPDATE friendship SET isDELETED=1 WHERE friendshipAccept=? AND friendshipRequest=? `;
+  const data = [friendshipAccept, friendshipRequest];
+  connection.query(query, data, (error, result) => {
+    console.log("OK");
+    if (error) {
+     return res.status(500).json({ success: false, message: error.message });
+    }
+    console.log('HI');
+    res.status(200).json({
+      success:true,
+      message:`friend deleted successfully`,
+      result
+    })
+  });
+};
 // ________ this function to get all friends ____________
 const getAllFriends = (req, res) => {
   const friendshipRequest = req.token.userId;
-  const query = `SELECT * FROM friendship  WHERE friendshipRequest=? `;
-  const data = [friendshipRequest];
+  const friendshipAccept = req.token.userId;
+  const query = `SELECT * FROM friendship  WHERE friendshipRequest=? OR friendshipAccept=? `;
+  const data = [friendshipRequest,friendshipAccept];
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -234,5 +237,5 @@ module.exports = {
   loginUser,
   getAllUsers,
   updateUserProfile,
-  addFriendById,getAllFriends
+  addFriendById,getAllFriends,removeFriendById
 };
