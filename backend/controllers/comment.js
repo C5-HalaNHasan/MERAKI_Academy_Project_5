@@ -25,11 +25,29 @@ const createComment = (req, res) => {
 };
 
 // create function to get all comment in the post.
-const getCommentsByPostId = (req, res) => {
-  const post_id = req.params.id;
-  const query = `SELECT * FROM comment WHERE post_id =? AND isDeleted=0`;
-  const data = [post_id];
-  connection.query(query, data, (error, result) => {
+// const getCommentsByPostId = (req, res) => {
+//   const post_id = req.params.id;
+//   const query = `SELECT * FROM comment WHERE post_id =? AND isDeleted=0`;
+//   const data = [post_id];
+//   connection.query(query, data, (error, result) => {
+//     if (error) {
+//       return res.status(500).json({
+//         success: false,
+//         message: error.message,
+//       });
+//     }
+//     res.status(201).json({
+//       success: true,
+//       message: `All comment for post_id => ${post_id}`,
+//       result: result,
+//     });
+//   });
+// };
+
+// function to get all comments
+const getAllComments = (req, res) => {
+  const query = `SELECT * FROM comment WHERE isDeleted=0`;
+  connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
         success: false,
@@ -38,7 +56,7 @@ const getCommentsByPostId = (req, res) => {
     }
     res.status(201).json({
       success: true,
-      message: `All comment for post_id => ${post_id}`,
+      message: `All comments`,
       result: result,
     });
   });
@@ -180,30 +198,31 @@ const removeCommentByIdAdmin = (req, res) => {
   });
 };
 
-const getReportedComments =(req,res)=>{
-const query = `SELECT * FROM comment WHERE isDeleted =0 AND isReported =1`;
-connection.query(query,(error,result)=>{
+const getReportedComments = (req, res) => {
+  const query = `SELECT * FROM comment WHERE isDeleted =0 AND isReported =1`;
+  connection.query(query, (error, result) => {
     if (error) {
-        return res.status(404).json({
-          success: false,
-          massage: `Server error`,
-          error: error,
-        });
-      }
-      res.status(201).json({
-        success: true,
-        message: `All Reported comments`,
-        result: result,
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: error,
       });
-})
-}
+    }
+    res.status(201).json({
+      success: true,
+      message: `All Reported comments`,
+      result: result,
+    });
+  });
+};
 
 module.exports = {
   createComment,
-  getCommentsByPostId,
+  //   getCommentsByPostId,
+  getAllComments,
   updateCommentById,
   deleteCommentById,
   reportCommentById,
   removeCommentByIdAdmin,
-  getReportedComments
+  getReportedComments,
 };
