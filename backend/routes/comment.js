@@ -1,9 +1,10 @@
 const express = require("express");
 const commentRouter = express.Router();
 
-const {createComment,getCommentsByPostId,updateCommentById,deleteCommentById,reportCommentById}= require("../controllers/comment");
+const {createComment,getCommentsByPostId,updateCommentById,deleteCommentById,reportCommentById,removeCommentByIdAdmin}= require("../controllers/comment");
 
 const {authentication}=require("../middlewares/authentication");
+const {authorization} = require("../middlewares/authorization")
 
 //endpoint for POST request ==> http://localhost:5000/comment/post/:id==> createPost
 commentRouter.post("/post/:id",authentication,createComment);
@@ -22,5 +23,9 @@ commentRouter.delete("/:id",authentication,deleteCommentById);
 
 //endpoint for PUT request ==> http://localhost:5000/comment/remove/:id==> reportCommentById
 commentRouter.put("/remove/:id",reportCommentById);
+
+//endpoint for DELETE request ==> http://localhost:5000/comment/remove/:id==> removeCommentByIdAdmin
+commentRouter.delete("/remove/:id",authentication,authorization("Delete_Comments"),removeCommentByIdAdmin);
+
 
 module.exports=commentRouter;

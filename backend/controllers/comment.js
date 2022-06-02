@@ -88,7 +88,6 @@ const updateCommentById = (req, res) => {
   });
 };
 
-
 // create function to delete comment using id
 const deleteCommentById = (req, res) => {
   const id = req.params.id;
@@ -121,29 +120,73 @@ const deleteCommentById = (req, res) => {
 //create function to report the comment to the admin using comment id
 const reportCommentById = (req, res) => {
   const id = req.params.id;
-  const query = `UPDATE comment SET isReported = 1 WHERE id = ?`
-  const data=[id];
-  connection.query(query,data,(error,result)=>{
+  const query = `UPDATE comment SET isReported = 1 WHERE id = ?`;
+  const data = [id];
+  connection.query(query, data, (error, result) => {
     if (error) {
-        return res.status(404).json({
-          success: false,
-          massage: `Server error`,
-          error: err,
-        });
-      }
-      if(result.affectedRows != 0){
-        res.status(201).json({
-            success: true,
-            massage: `Comment reported`,
-            result: result,
-          });
-      }
-  })
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: err,
+      });
+    }
+    if (result.affectedRows != 0) {
+      res.status(201).json({
+        success: true,
+        massage: `Comment reported`,
+        result: result,
+      });
+    }
+  });
 };
+
+// this function will remove the reported comment by the admin using the id of the comment
+const removeCommentByIdAdmin = (req, res) => {
+  const id = req.params.id;
+  const query = `SELECT * FROM comment WHERE isReported=1 AND id=?`;
+  const data = [id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: err,
+      });
+    }
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        massage: `The Comment: ${id} is not found`,
+        error: error,
+      });
+    } else {
+      const query = `UPDATE comment SET isDeleted=1 WHERE id =?`;
+      const data = [id];
+      connection.query(query, data, (error2, result2) => {
+        if (!result2.changedRows) {
+          return res.status(404).json({
+            success: false,
+            massage: `The Post: ${id} is not found`,
+            error: error2,
+          });
+        }
+        res.status(200).json({
+          success: true,
+          massage: `Succeeded to delete comment with id: ${id}`,
+          result: result2,
+        });
+      });
+    }
+  });
+};
+
+
+
 module.exports = {
   createComment,
   getCommentsByPostId,
   updateCommentById,
   deleteCommentById,
   reportCommentById,
+  removeCommentByIdAdmin,
 };
