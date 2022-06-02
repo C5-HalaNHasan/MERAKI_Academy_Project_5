@@ -1,4 +1,4 @@
--- DROP DATABASE MERAKI_PROJECT5;
+DROP DATABASE MERAKI_PROJECT5;
 CREATE DATABASE MERAKI_PROJECT5;
 USE MERAKI_PROJECT5;
 
@@ -54,6 +54,7 @@ CREATE TABLE friendship(
     FOREIGN KEY (friendshipRequest) REFERENCES user(id),
     friendshipAccept INT,
     FOREIGN KEY (friendshipAccept) REFERENCES user(id),
+    isDeleted TINYINT DEFAULT 0,
     PRIMARY KEY (id)
 );
 

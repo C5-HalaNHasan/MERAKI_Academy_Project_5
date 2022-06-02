@@ -61,10 +61,6 @@ const getPostByUserId = (req, res) => {
       result: result,
     });
   });
-<<<<<<< HEAD
-=======
-
->>>>>>> 387513cc454a73cb089c83aa5523fbf358a0f1ae
 };
 //creating function to get user posts then update on them using Post Id
 const updatePostById = (req, res) => {
