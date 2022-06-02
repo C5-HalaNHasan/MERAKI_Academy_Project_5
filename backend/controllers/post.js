@@ -44,6 +44,24 @@ const getUserPosts = (req, res) => {
 
 // create function to get posts by use
 
+const getPostByUserId = (req, res) => {
+  const author_id = req.params.id;
+  const query = `SELECT * FROM post WHERE author_id=? AND isDeleted=0 `;
+  const data = [author_id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: `All posts for userId => ${author_id}`,
+      result: result,
+    });
+  });
+
 };
 
 //creating function to get user posts then update on them using Post Id
