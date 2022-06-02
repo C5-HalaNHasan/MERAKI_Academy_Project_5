@@ -45,11 +45,51 @@ const getCommentsByPostId = (req, res) => {
 };
 
 // create function to update comment
-const updateCommentById = (req,res)=>{
-
-}
+const updateCommentById = (req, res) => {
+  const { comment } = req.body;
+  const id = req.params.id;
+  const author_id = req.token.userId;
+  const query = `SELECT * FROM comment WHERE id=? AND author_id=? `;
+  const data = [id, author_id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: error,
+      });
+    }
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        massage: `The Comment: ${id} is not found`,
+        error: error,
+      });
+    } else {
+      const query = `UPDATE comment SET comment =? WHERE id  = ?`;
+      const data = [comment, id];
+      connection.query(query, data, (error2, result2) => {
+        if (error2) {
+          return res.status(404).json({
+            success: false,
+            massage: `Server error`,
+            error: error2,
+          });
+        }
+        if (result.affectedRows != 0) {
+          res.status(201).json({
+            success: true,
+            massage: `Comment updated`,
+            result: result2,
+          });
+        }
+      });
+    }
+  });
+};
 
 module.exports = {
   createComment,
   getCommentsByPostId,
+  updateCommentById,
 };
