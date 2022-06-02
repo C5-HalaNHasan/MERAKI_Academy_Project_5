@@ -1,6 +1,6 @@
 //create the userRouter and its endpoints
 const express=require("express");
-const {createUser,loginUser,getAllUsers,updateUserProfile,addFriendById}=require("../controllers/user");
+const {createUser,loginUser,getAllUsers,updateUserProfile,addFriendById,getAllFriends}=require("../controllers/user");
 const {authentication}=require("../middlewares/authentication");
 
 const userRouter=express.Router();
@@ -17,5 +17,16 @@ userRouter.get("/",getAllUsers);
  userRouter.put("/",authentication,updateUserProfile);
 //endpoint for post request ==> http://localhost:5000/user/:id ==>addFriendById
 userRouter.post("/:id",authentication,addFriendById);
+
+
+
+//endpoint for delete request ==> http://localhost:5000/user/:id ==>removeFriendById
+// userRouter.post("/:id",authentication,removeFriendById);
+
+
+
+
+//endpoint for get request ==> http://localhost:5000/user/friends ==>getAllFriends
+userRouter.get("/friends",authentication,getAllFriends);
 
 module.exports=userRouter;
