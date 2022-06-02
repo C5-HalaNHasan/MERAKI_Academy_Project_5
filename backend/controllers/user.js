@@ -142,7 +142,7 @@ const getAllUsers = (req, res) => {
   });
 };
 // a function that updates User Profile
-const updateUserProfile = (req, res) => {
+const updateUserProfile = async (req, res) => {
   const {
     firstName,
     lastName,
@@ -154,11 +154,13 @@ const updateUserProfile = (req, res) => {
     isPrivate
   } = req.body;
   const id = req.token.userId;
+  const SALT=10
+  const hashedPassword = await bcrypt.hash(password, SALT)
   const query = `UPDATE user SET firstName=?,lastName=?,password=?,birthday=?,country=?,profileImg=?,coverImg=?,isPrivate=? WHERE id=?`;
   const data = [
     firstName,
     lastName,
-    password,
+    hashedPassword,
     birthday,
     country,
     profileImg,
@@ -173,10 +175,37 @@ const updateUserProfile = (req, res) => {
     res.status(200).json({ result });
   });
 };
+// a function to add a new user to the data base
+const addFriendById = (req, res) => {
+  //user data is collected then the password is hashed before being saved in the database
+  const friendshipRequest = req.token.userId;
+  const friendshipAccept = req.params.id;
+  const query = `INSERT INTO friendship(friendshipRequest,friendshipAccept) VALUES(?,?)`;
+  const data = [friendshipRequest, friendshipAccept];
+  //before add: the entered email is going to be checked if it exists in the dataBase or not:
+  // const query1 = `SELECT * FROM user WHERE email=?`;
+  // const data1 = [email];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+    {
+     
+      res.status(201).json({
+        success: true,
+        message: `Request send successfully`,
+        result
+      });
+    }
+  });
+};
 
 module.exports = {
   createUser,
   loginUser,
   getAllUsers,
-  updateUserProfile
+  updateUserProfile,addFriendById
 };
