@@ -1,17 +1,23 @@
 const express = require("express");
 const commentRouter = express.Router();
 
-const {createComment,getCommentsByPostId,updateCommentById,deleteCommentById,reportCommentById,removeCommentByIdAdmin,getReportedComments}= require("../controllers/comment");
+const {createComment,
+    // getCommentsByPostId,
+    getAllComments,
+    updateCommentById,deleteCommentById,reportCommentById,removeCommentByIdAdmin,getReportedComments}= require("../controllers/comment");
 
 const {authentication}=require("../middlewares/authentication");
 const {authorization} = require("../middlewares/authorization")
 
-//endpoint for POST request ==> http://localhost:5000/comment/post/:id==> createPost
+//endpoint for POST request ==> http://localhost:5000/comment/post/:id==> createComment
 commentRouter.post("/post/:id",authentication,createComment);
 
 //endpoint for GET request ==> http://localhost:5000/comment/post/:id==> getCommentsByPostId
-commentRouter.get("/post/:id",getCommentsByPostId);
+// commentRouter.get("/post/:id",getCommentsByPostId);
 
+
+//endpoint for GET request ==> http://localhost:5000/comment/==> getAllComments
+commentRouter.get("/",getAllComments);
 
 
 //endpoint for PUT request ==> http://localhost:5000/comment/:id==> updateCommentById

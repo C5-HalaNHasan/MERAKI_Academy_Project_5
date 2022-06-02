@@ -1,6 +1,9 @@
 const express=require("express");
 const postRouter = express.Router();
-const {createPost,getUserPosts,getPostByUserId,updatePostById,deletePostById,reportPostById,removePostByIdAdmin,getReportedPosts}= require("../controllers/post")
+const {createPost,
+    // getUserPosts,
+    getAllPosts,
+    getPostByUserId,updatePostById,deletePostById,reportPostById,removePostByIdAdmin,getReportedPosts}= require("../controllers/post")
 
 const {authentication}=require("../middlewares/authentication");
 const {authorization}= require("../middlewares/authorization")
@@ -8,12 +11,16 @@ const {authorization}= require("../middlewares/authorization")
 postRouter.post("/",authentication,createPost);
 
 //endpoint for GET request ==> http://localhost:5000/post==> getUserPosts
-postRouter.get("/",authentication,getUserPosts);
+// postRouter.get("/",authentication,getUserPosts);
+
+//endpoint for GET request ==> http://localhost:5000/post==> getAllPosts
+postRouter.get("/",getAllPosts);
+
 
 //endpoint for GET request ==> http://localhost:5000/post/user/:id==> getPostByUserId
 postRouter.get("/user/:id",getPostByUserId);
 
-//endpoint for PUT request ==> http://localhost:5000/post/:id==> getPostByUserId
+//endpoint for PUT request ==> http://localhost:5000/post/:id==> updatePostById
 postRouter.put("/:id",authentication,updatePostById);
 
 //endpoint for DELETE request ==> http://localhost:5000/post/:id==> deletePostById
