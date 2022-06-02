@@ -15,7 +15,13 @@ reactionRouter.post("/post/:id",authentication,addReactionToPost);
 reactionRouter.delete("/post/:id",authentication,removeReactionFromPost);
 
 //endpoint for GET request ==> http://localhost:5000/reaction/comment ==> getAllCommentsReactions
-reactionRouter.get("/post",authentication,getAllPostsReactions);
+reactionRouter.get("/comment",authentication,getAllCommentsReactions);
+
+//endpoint for POST request ==> http://localhost:5000/reaction/comment/:id ==> addReactionToComment
+reactionRouter.post("/comment/:id",authentication,addReactionToComment);
+
+//endpoint for GET request ==> http://localhost:5000/reaction/comment/:id ==> removeReactionFromComment
+reactionRouter.delete("/comment/:id",authentication,removeReactionFromComment);
 
 
 
