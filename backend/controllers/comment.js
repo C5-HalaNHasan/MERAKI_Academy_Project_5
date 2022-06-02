@@ -88,11 +88,13 @@ const updateCommentById = (req, res) => {
   });
 };
 
+
+// create function to delete comment using id
 const deleteCommentById = (req, res) => {
   const id = req.params.id;
   const author_id = req.token.userId;
   const query = `UPDATE comment SET isDeleted =1 WHERE author_id=? AND id=?`;
-  const data = [author_id,id];
+  const data = [author_id, id];
   connection.query(query, data, (err, result) => {
     if (err) {
       return res.status(500).json({
@@ -116,9 +118,32 @@ const deleteCommentById = (req, res) => {
   });
 };
 
+//create function to report the comment to the admin using comment id
+const reportCommentById = (req, res) => {
+  const id = req.params.id;
+  const query = `UPDATE comment SET isReported = 1 WHERE id = ?`
+  const data=[id];
+  connection.query(query,data,(error,result)=>{
+    if (error) {
+        return res.status(404).json({
+          success: false,
+          massage: `Server error`,
+          error: err,
+        });
+      }
+      if(result.affectedRows != 0){
+        res.status(201).json({
+            success: true,
+            massage: `Comment reported`,
+            result: result,
+          });
+      }
+  })
+};
 module.exports = {
   createComment,
   getCommentsByPostId,
   updateCommentById,
-  deleteCommentById
+  deleteCommentById,
+  reportCommentById,
 };
