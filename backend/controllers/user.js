@@ -155,11 +155,8 @@ const updateUserProfile = async (req, res) => {
   } = req.body;
   const id = req.token.userId;
   const SALT = 10;
-  let hashedPassword;
+  let hashedPassword=await bcrypt.hash(password, SALT);
   const query = `UPDATE user SET firstName=COALESCE(?,firstName),lastName=COALESCE(?,lastName),password=COALESCE(?,password),birthday=COALESCE(?,birthday),country=COALESCE(?,country),profileImg=COALESCE(?,profileImg),coverImg=COALESCE(?,coverImg),isPrivate=COALESCE(?,isPrivate) WHERE id=?`;
-  bcrypt.hash(password, SALT, (err, hash) => {
-    hashedPassword=hash;
-  });
   const data = [
     firstName,
     lastName,
@@ -220,11 +217,12 @@ const removeFriendById = (req, res) => {
 // ________ this function to get all friends ____________
 const getAllFriends = (req, res) => {
   const friendshipRequest = req.token.userId;
-  const friendshipAccept = req.token.userId;
-  // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=? WHERE f.friendshipAccept=? `;
-  //! query to be cheked/not working
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const data = [friendshipRequest,friendshipAccept];
+  // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`
+
+  // const data = [friendshipRequest,friendshipAccept];
+  const data = [friendshipRequest];
+
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -232,9 +230,6 @@ const getAllFriends = (req, res) => {
         message: error.message
       });
     }
-    const result2=result.filter((friend)=>{//! to be deleted
-      return friend.id != req.token.userId
-    })
     res.status(200).json({ 
       success: true,
        message: `All Friends`,
