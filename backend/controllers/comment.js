@@ -180,7 +180,23 @@ const removeCommentByIdAdmin = (req, res) => {
   });
 };
 
-
+const getReportedComments =(req,res)=>{
+const query = `SELECT * FROM comment WHERE isDeleted =0 AND isReported =1`;
+connection.query(query,(error,result)=>{
+    if (error) {
+        return res.status(404).json({
+          success: false,
+          massage: `Server error`,
+          error: error,
+        });
+      }
+      res.status(201).json({
+        success: true,
+        message: `All Reported comments`,
+        result: result,
+      });
+})
+}
 
 module.exports = {
   createComment,
@@ -189,4 +205,5 @@ module.exports = {
   deleteCommentById,
   reportCommentById,
   removeCommentByIdAdmin,
+  getReportedComments
 };
