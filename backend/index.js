@@ -14,6 +14,7 @@ const roleRouter=require("./routes/role");
 const userRouter=require("./routes/user");
 const postRouter=require("./routes/post");
 const reactionRouter=require("./routes/reaction");
+const commentRouter = require("./routes/comment");
 
 
 
@@ -23,6 +24,7 @@ app.use("/role",roleRouter);
 app.use("/user",userRouter);
 app.use("/post",postRouter);
 app.use("/reaction",reactionRouter);
+app.use("/comment",commentRouter);
 
 
 

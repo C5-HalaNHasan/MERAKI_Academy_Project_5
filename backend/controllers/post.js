@@ -100,7 +100,7 @@ const deletePostById = (req, res) => {
   const id = req.params.id;
   const author_id = req.token.userId;
   const query = `UPDATE post SET isDeleted =1 WHERE author_id=? AND id=?`;
-  const data = [id, author_id];
+  const data = [author_id,id];
   connection.query(query, data, (err, result) => {
     if (err) {
       return res.status(500).json({
