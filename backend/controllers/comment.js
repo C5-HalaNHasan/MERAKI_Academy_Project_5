@@ -44,10 +44,10 @@ const getCommentsByPostId = (req, res) => {
   });
 };
 
-// // create function to update comment
-// const updateCommentById = (req,res)=>{
-    
-// }
+// create function to update comment
+const updateCommentById = (req,res)=>{
+
+}
 
 module.exports = {
   createComment,
