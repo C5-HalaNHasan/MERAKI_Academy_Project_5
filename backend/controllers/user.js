@@ -155,7 +155,7 @@ const updateUserProfile = async (req, res) => {
   } = req.body;
   const id = req.token.userId;
   const SALT = 10;
-  let hashedPassword=await bcrypt.hash(password, SALT);
+  let hashedPassword = await bcrypt.hash(password, SALT);
   const query = `UPDATE user SET firstName=COALESCE(?,firstName),lastName=COALESCE(?,lastName),password=COALESCE(?,password),birthday=COALESCE(?,birthday),country=COALESCE(?,country),profileImg=COALESCE(?,profileImg),coverImg=COALESCE(?,coverImg),isPrivate=COALESCE(?,isPrivate) WHERE id=?`;
   const data = [
     firstName,
@@ -205,20 +205,20 @@ const removeFriendById = (req, res) => {
   const data = [friendshipAccept, friendshipRequest];
   connection.query(query, data, (error, result) => {
     if (error) {
-     return res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
     res.status(200).json({
-      success:true,
-      message:`friend deleted successfully`,
+      success: true,
+      message: `friend deleted successfully`,
       result
-    })
+    });
   });
 };
 // ________ this function to get all friends ____________
 const getAllFriends = (req, res) => {
   const friendshipRequest = req.token.userId;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`;
 
   // const data = [friendshipRequest,friendshipAccept];
   const data = [friendshipRequest];
@@ -230,11 +230,28 @@ const getAllFriends = (req, res) => {
         message: error.message
       });
     }
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
-       message: `All Friends`,
-        result:result
-       });
+      message: `All Friends`,
+      result: result
+    });
+  });
+};
+const reportUserById = (req, res) => {
+  // const userId = req.token.userId;
+  const id = req.params.id;
+  const query = `UPDATE user SET isReported=1 WHERE id=? `;
+  const data = [id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "User is reported", result });
   });
 };
 module.exports = {
@@ -242,5 +259,7 @@ module.exports = {
   loginUser,
   getAllUsers,
   updateUserProfile,
-  addFriendById,getAllFriends,removeFriendById
+  addFriendById,
+  getAllFriends,
+  removeFriendById,reportUserById
 };
