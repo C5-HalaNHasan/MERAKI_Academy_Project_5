@@ -3,8 +3,8 @@ import "./adv.css";
 
 const Adv = () => {
     return (
-        <div>
-            
+        <div className="advComponent">
+        AdvComponent
         </div>
     );
 };

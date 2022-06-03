@@ -11,7 +11,7 @@ import ShowPost from "../../ShowPost/ShowPost";
 
 const HomePage = () => {
     return (
-        <div>
+        <div className="componentsContainer">
         <NavBar/>
         HomePage
         <FriendList/>

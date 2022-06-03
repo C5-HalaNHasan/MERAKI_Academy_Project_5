@@ -3,8 +3,8 @@ import "./suggested.css";
 
 const Suggested = () => {
     return (
-        <div>
-            
+        <div className="suggestedComponent">
+        suggestedComponent
         </div>
     );
 };

@@ -3,8 +3,8 @@ import "./showPost.css";
 
 const ShowPost = () => {
     return (
-        <div>
-            
+        <div className="showsPostComponent">
+        showsPostComponent
         </div>
     );
 };

@@ -3,8 +3,8 @@ import "./userInfo.css";
 
 const UserInfo = () => {
     return (
-        <div>
-            
+        <div className="userInfoComponent">
+        userInfoComponent
         </div>
     );
 };

@@ -10,7 +10,7 @@ import Adv from "../../Adv/Adv";
 
 const MessagePage = () => {
     return (
-        <div>
+        <div className="componentsContainer">
         <NavBar/>
             MessagePage
         <FriendList/>

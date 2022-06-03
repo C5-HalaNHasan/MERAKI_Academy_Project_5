@@ -3,7 +3,8 @@ import "./createPost.css";
 
 const CreatePost = () => {
     return (
-        <div>
+        <div className="createPostComponent">
+        createPostComponent
             
         </div>
     );

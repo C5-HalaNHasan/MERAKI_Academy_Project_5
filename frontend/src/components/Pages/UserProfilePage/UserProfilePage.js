@@ -16,7 +16,7 @@ const UserProfilePage = () => {
     //! and compared with the saved id in redux store to know which component to render:Actions or Adv
     const {id}=useParams(); 
     return (
-        <div>
+        <div className="componentsContainer">
         <NavBar/>
             UserProfile
         <FriendList/>

@@ -3,8 +3,8 @@ import "./users.css";
 
 const Users = () => {
     return (
-        <div>
-            
+        <div className="usersComponent">
+        usersComponent
         </div>
     );
 };

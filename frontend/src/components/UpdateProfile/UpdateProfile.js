@@ -3,8 +3,8 @@ import "./updateProfile.css";
 
 const UpdateProfile = () => {
     return (
-        <div>
-            
+        <div className="updateProfileComponent">
+        updateProfileComponent
         </div>
     );
 };
