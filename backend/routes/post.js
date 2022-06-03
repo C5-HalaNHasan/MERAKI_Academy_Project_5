@@ -3,7 +3,7 @@ const postRouter = express.Router();
 const {createPost,
     // getUserPosts,
     getAllPosts,
-    getPostByUserId,updatePostById,deletePostById,reportPostById,removePostByIdAdmin,getReportedPosts}= require("../controllers/post")
+    getPostByUserId,updatePostById,deletePostById,reportPostById,removePostByIdAdmin,getReportedPosts,getFriendsPosts}= require("../controllers/post")
 
 const {authentication}=require("../middlewares/authentication");
 const {authorization}= require("../middlewares/authorization")
@@ -37,6 +37,7 @@ postRouter.delete("/remove/:id",authentication,authorization("Delete_Post")
 //endpoint for GET request ==> http://localhost:5000/post/remove==> getReportedPosts
 postRouter.get("/remove",authentication,authorization("Get-Reported_Posts"),getReportedPosts);
 
-
+//endpoint for GET request ==> http://localhost:5000/post/friends==> getFriendsPosts
+postRouter.get("/friends",authentication,getFriendsPosts);
 
 module.exports=postRouter;
