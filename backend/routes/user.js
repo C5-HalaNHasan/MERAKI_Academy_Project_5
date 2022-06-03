@@ -1,7 +1,8 @@
 //create the userRouter and its endpoints
 const express=require("express");
-const {createUser,loginUser,getAllUsers,updateUserProfile,addFriendById,getAllFriends,removeFriendById,reportUserById}=require("../controllers/user");
+const {createUser,loginUser,getAllUsers,updateUserProfile,addFriendById,getAllFriends,removeFriendById,reportUserById,removeUserByIdAdmin}=require("../controllers/user");
 const {authentication}=require("../middlewares/authentication");
+const { authorization } = require("../middlewares/authorization");
 
 const userRouter=express.Router();
 
@@ -25,5 +26,8 @@ userRouter.delete("/:id",authentication,removeFriendById);
 userRouter.get("/friends",authentication,getAllFriends);
 //endpoint for put request ==> http://localhost:5000/user/remove/:id ==>reportUserById
 userRouter.put("/remove/:id",authentication,reportUserById);
+//endpoint for put request ==> http://localhost:5000/user/remove/:id ==>removeUserByIdAdmin
+userRouter.put("/remove_1/:id",authentication,authorization('DELETE user'),removeUserByIdAdmin);
+
 
 module.exports=userRouter;
