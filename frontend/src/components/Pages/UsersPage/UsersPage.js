@@ -13,7 +13,7 @@ const UsersPage = () => {
     //to get the type of the page if search or friendlist from params:
     const {type}=useParams(); 
     return (
-        <div className="componentsContainer">
+        <>
         <NavBar/>
             UsersPage
         <FriendList/>
@@ -21,7 +21,7 @@ const UsersPage = () => {
         <Users type={type}/>
         <Adv/>
         <Footer/>
-        </div>
+        </>
     );
 };
 

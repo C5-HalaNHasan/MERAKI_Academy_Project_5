@@ -11,9 +11,8 @@ import ShowPost from "../../ShowPost/ShowPost";
 
 const HomePage = () => {
     return (
-        <div className="componentsContainer">
+        <>
         <NavBar/>
-        HomePage
         <FriendList/>
         <Suggested/>
         <CreatePost/>
@@ -21,7 +20,7 @@ const HomePage = () => {
         <Adv/>
         <Footer/>
        
-        </div>
+        </>
     );
 };
 

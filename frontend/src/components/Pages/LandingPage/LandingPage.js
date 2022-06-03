@@ -6,12 +6,12 @@ import Register from "../../Register/Register";
 
 const LandingPage = () => {
     return (
-        <div className="componentsContainer">
+        <>
         <NavBar/>
         LandingPage
         <Register/>
         <Footer/>
-        </div>
+        </>
     );
 };
 

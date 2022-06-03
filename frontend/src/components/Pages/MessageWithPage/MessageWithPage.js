@@ -9,7 +9,7 @@ import Adv from "../../Adv/Adv";
 
 const MessagePageWith = () => {
     return (
-        <div className="componentsContainer">
+        <>
         <NavBar/>
             MessageWithPage
         <FriendList/>
@@ -17,7 +17,7 @@ const MessagePageWith = () => {
         <MessageWith/>
         <Adv/>
         <Footer/>
-        </div>
+        </>
     );
 };
 

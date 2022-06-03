@@ -13,7 +13,7 @@ import UsersPage from "./components/Pages/UsersPage/UsersPage";
 
 function App() {
   return  (
-    <div className="App">
+    <div className="componentsContainer">
       <Routes>
       <Route path="/" element={<LandingPage/>}/>
       <Route path="/home" element={<HomePage/>}/>
