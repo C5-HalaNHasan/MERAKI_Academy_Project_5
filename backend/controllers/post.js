@@ -243,9 +243,30 @@ const getReportedPosts = (req, res) => {
 };
 
 // this function will get friends posts with the logged user posts
+// const getFriendsPosts = (req, res) => {
+//   const friendshipRequest = req.token.userId;
+//   const query = `SELECT * FROM post WHERE author_id =? OR author_id IN(SELECT friendshipAccept FROM friendship WHERE friendshipRequest=?  AND isDeleted=0)`;
+//   const data = [friendshipRequest, friendshipRequest];
+//   connection.query(query, data, (error, result) => {
+//     if (error) {
+//       return res.status(404).json({
+//         success: false,
+//         massage: `Server error`,
+//         error: error,
+//       });
+//     }
+
+//     res.status(201).json({
+//       success: true,
+//       message: `All friends posts`,
+//       result: result,
+//     });
+//   });
+// };
+// this function will get friends posts
 const getFriendsPosts = (req, res) => {
   const friendshipRequest = req.token.userId;
-  const query = `SELECT * FROM post WHERE author_id =? OR author_id IN(SELECT friendshipAccept FROM friendship WHERE friendshipRequest=?  AND isDeleted=0)`;
+  const query = `SELECT * FROM post WHERE author_id IN(SELECT friendshipAccept FROM friendship WHERE friendshipRequest=?  AND isDeleted=0)`;
   const data = [friendshipRequest, friendshipRequest];
   connection.query(query, data, (error, result) => {
     if (error) {
