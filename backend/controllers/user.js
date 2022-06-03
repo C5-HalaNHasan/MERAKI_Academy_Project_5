@@ -254,6 +254,22 @@ const reportUserById = (req, res) => {
       .json({ success: true, message: "User is reported", result });
   });
 };
+const removeUserByIdAdmin = (req, res) => {
+  const id = req.params.id;
+  const userId=req.token.userId
+  const query = `UPDATE user set isDeleted=1 WHERE id=? and isReported=1`;
+  const data = [id,userId];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({});
+    }
+    res.status(200).json({
+      success: true,
+      message: `The reported user is deleted`,
+      result
+    });
+  });
+};
 module.exports = {
   createUser,
   loginUser,
@@ -261,5 +277,6 @@ module.exports = {
   updateUserProfile,
   addFriendById,
   getAllFriends,
-  removeFriendById,reportUserById
+  removeFriendById,
+  reportUserById,removeUserByIdAdmin
 };
