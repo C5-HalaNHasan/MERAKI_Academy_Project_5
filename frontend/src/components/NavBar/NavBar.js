@@ -32,9 +32,12 @@ const NavBar = () => {
           <input
             placeholder="Search for a friend.."
             className="inputSearch"
-            onClick={() => {}}
+            onClick={() => {
+                navigate("/users/search")
+            }}
             onChange={(e) => {}}
           />
+          {/* to be updated after users/search is done */}
         </div>
       </div>
       <div className="navBarRight">
@@ -58,7 +61,7 @@ const NavBar = () => {
             />
           </div>
         </div>
-        <img src={allUsers.profileImg} onClick={()=>{
+        <img src="https://res.cloudinary.com/dl2kfs2nu/image/upload/v1653160801/mhqxzisztvpv4h43q1ly.jpg" onClick={()=>{
             navigate(`/user/${userId}`)
         }}/> 
         {/* ! to be update after reg */}
