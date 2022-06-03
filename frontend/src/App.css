@@ -1,3 +1,130 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;500;600&display=swap');
+
+/* darkMode & lightMode*/
+:root {
+  --mainText: #003049;
+  --mainBgColor: rgba(0, 0, 0, 0.1);
+  --mainBgColorHeavy: rgba(0, 0, 0, 0.85);
+  --spanColor: rgba(255, 255, 255, 0.9);
+  --lightBgColor: rgba(255, 255, 255, 0.7);
+  --onHover: rgba(255, 226, 76, 0.6);
+  --mainBgImg: url("");
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* color: var(--mainText); */
+  text-decoration: none;
+  list-style: none;
+  /* font-family: 'Hind Siliguri', sans-serif; */
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.componentsContainer {
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  grid-template-rows: repeat(7, 1fr);
+  grid-template-areas: "nav nav nav""ls1 m1 rs1""ls1 m2 rs1""ls2 m3 rs2""ls2 m3 rs2""ftr ftr ftr";
+  width: 100%;
+  height: 100%;
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
+}
+
+.navBarComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: nav;
+}
+
+.advComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: rs1/rs1/rs2/rs2;
+}
+
+.createPostComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m1;
+}
+
+.showsPostComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m2/m3/m3;
+}
+
+.friendListComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: ls1;
+}
+
+.suggestedComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: ls2;
+}
+
+
+.messagesComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m1/m2/m3/m3;
+}
+
+.messagesWithComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m1/m2/m3/m3;
+}
+
+.profileImgsComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m1;
+}
+
+.updateProfileComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m2/m3/m3;
+}
+
+.userInfoComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: ls2;
+}
+
+.usersComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m1/ m2/m3/m3;
+}
+
+.footerComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: ftr;
+}
+
+.registerComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m2/m3/m3;
+}
+
+.actionsComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: rs1/rs1;
 }

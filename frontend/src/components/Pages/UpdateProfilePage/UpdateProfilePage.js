@@ -10,7 +10,7 @@ import Adv from "../../Adv/Adv";
 
 const UpdateProfilePage = () => {
     return (
-        <div>
+        <div className="componentsContainer">
         <NavBar/>
             UpdateProfile
         <FriendList/>

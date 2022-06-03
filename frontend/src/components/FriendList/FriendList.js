@@ -3,8 +3,8 @@ import "./friendList.css";
 
 const FriendList = () => {
     return (
-        <div>
-            
+        <div className="friendListComponent">
+        friendListComponent
         </div>
     );
 };

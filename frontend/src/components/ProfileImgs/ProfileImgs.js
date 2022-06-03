@@ -3,8 +3,8 @@ import "./profileImgs.css";
 
 const ProfileImgs = () => {
     return (
-        <div>
-            
+        <div className="profileImgsComponent">
+            profileImgsComponent
         </div>
     );
 };

@@ -3,8 +3,8 @@ import "./messagesWith.css";
 
 const MessagesWith = () => {
     return (
-        <div>
-            
+        <div className="messagesWithComponent">
+        messagesWithComponent
         </div>
     );
 };

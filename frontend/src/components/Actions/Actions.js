@@ -3,8 +3,8 @@ import "./actions.css";
 
 const Actions = () => {
     return (
-        <div>
-            
+        <div className="actionsComponent">
+        actionsComponent
         </div>
     );
 };

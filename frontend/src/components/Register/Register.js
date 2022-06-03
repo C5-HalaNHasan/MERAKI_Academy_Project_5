@@ -3,7 +3,7 @@ import "./register.css";
 
 const Register = () => {
     return (
-        <div>
+        <div className="registerComponent">
             Register
         </div>
     );
