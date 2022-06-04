@@ -10,15 +10,15 @@ import Adv from "../../Adv/Adv";
 
 
 const UsersPage = () => {
-    //to get the type of the page if search or friendlist from params:
-    const {type}=useParams(); 
+    //to get the type of the page if search or friendlist and the name of the searche user from params:
+    const {type,name}=useParams(); 
     return (
         <>
         <NavBar/>
             UsersPage
         <FriendList/>
         <Suggested/>
-        <Users type={type}/>
+        <Users type={type} name={name}/>
         <Adv/>
         <Footer/>
         </>
