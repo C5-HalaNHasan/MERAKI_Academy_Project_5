@@ -5,15 +5,17 @@ const userSlice=createSlice({
     initialState:{
         token: localStorage.getItem("token") || "",
         userId: localStorage.getItem("userId") || "",
-        userInfo:{},
+        currentUserInfo:{},
+        visitedUserInfo:{},
         userFriends:[],
         allUsers:[],
     },
     reducers:{
         setLogin:(state,action)=>{
-            // action:{payload:{token,userId}}
+            // action:{payload:{token,userId,userInfo}}
             state.token=action.payload.token;
             state.userId=action.payload.userId;
+            state.currentUserInfo=action.payload.currentUserInfo;
             localStorage.setItem("token",`Bearer ${action.payload.token}`); 
             localStorage.setItem("userId",`${action.payload.userId}`); 
         },
@@ -24,7 +26,7 @@ const userSlice=createSlice({
         },
         setUserInfo:(state,action)=>{
             // action:{payload:{userInfo}}
-            state.userInfo=action.payload;
+            state.visitedUserInfo=action.payload;
         },
         setUserFriends:(state,action)=>{
             // action:{payload:[]}
