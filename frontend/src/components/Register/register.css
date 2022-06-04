@@ -1,0 +1,56 @@
+.loginBox {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    border-radius: 1vw;
+    background-color: var(--lightBgColor);
+    padding: 5%;
+}
+
+.loginBox span a {
+    text-decoration: underline;
+    display: inline;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: row;
+}
+
+.inputField label {
+    width: 140px;
+}
+
+.inputField input {
+    border-radius: 2vh;
+    border: 1px solid var(--spanColor);
+    padding: 0.3rem 0.8rem;
+    display: block;
+    background-color: var(--mainBgColor);
+    width: 20vw;
+}
+
+.dropDown {
+    display: flex;
+}
+
+.dropDown select {
+    border-radius: 1vw;
+    padding: 0.1vw;
+    width: 20vw;
+}
+
+
+.loginBox .btn {
+    background-color: var(--mainText);
+    color: var(--spanColor);
+    font-size: 1.1rem;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 0.7vh;
+    border-radius: 2vh;
+}
+
+.loginBox .btn:hover {
+    transform: scale(1.1);
+}
