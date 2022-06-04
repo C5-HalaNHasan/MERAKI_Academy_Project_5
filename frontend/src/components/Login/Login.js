@@ -3,7 +3,7 @@ import axios from "axios";
 import React,{useState} from "react";
 import { useNavigate,Link } from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {setLogin,setLogout, setUserInfo} from "../redux/reducers/user/index";
+import {setLogin,setLogout} from "../redux/reducers/user/index";
 
 
 const Login = () => {
@@ -19,10 +19,10 @@ const LoginAction=()=>{
     axios.post(loginUrl,{email,password}).then((result)=>{
         //!toast notification to be added
         if(result.data.token){
-            dispatch(setLogin({token:result.data.token,userId:result.data.userId
+            dispatch(setLogin({token:result.data.token,userId:result.data.userId,currentUserInfo:result.data.userInfo
             }));
-            dispatch( setUserInfo(result.data.userInfo))
             navigate("/home");
+            console.log({fromLogin:result.data.userInfo})
         }
     }).catch((error)=>{
         dispatch(setLogout);

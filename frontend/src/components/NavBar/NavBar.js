@@ -10,11 +10,11 @@ import { setLogout } from "../redux/reducers/user";
 const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token, userInfo, userId } = useSelector((state) => {
+  const { token, currentUserInfo, userId } = useSelector((state) => {
     return {
       token: state.user.token,
-      userInfo: state.user.userInfo,
       userId: state.user.userId,
+      currentUserInfo: state.user.currentUserInfo,
     };
   });
 
@@ -69,13 +69,13 @@ const NavBar = () => {
             <HiOutlineLogout
               onClick={() => {
                 dispatch(setLogout());
-                navigate("/Login");
+                navigate("/");
               }}
             />
           </div>
         </div>
         <img
-          src={userInfo.profileImg}
+          src={currentUserInfo.profileImg}
           onClick={() => {
             navigate(`/user/${userId}`);
           }}
