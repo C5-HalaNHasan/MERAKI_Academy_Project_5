@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./navBar.css";
 import { BiSearch } from "react-icons/bi";
 import { BsMessenger } from "react-icons/bs";
@@ -17,7 +17,7 @@ const NavBar = () => {
       userId:state.user.userId
     };
   });
-  console.log(allUsers);
+  const [find,setFind] = useState("")
   return (
     <div className="navBarComponent">
       <div className="navBarLeft">
@@ -33,9 +33,10 @@ const NavBar = () => {
             placeholder="Search for a friend.."
             className="inputSearch"
             onClick={() => {
-                navigate("/users/search")
+                navigate(`/users/search/`)
             }}
-            onChange={(e) => {}}
+            onChange={(e) => {setFind(e.target.value)
+                navigate(`/users/search/${find}`)}}
           />
           {/* to be updated after users/search is done */}
         </div>
