@@ -1,4 +1,3 @@
-
 import {configureStore} from "@reduxjs/toolkit";
 import userReducer from "./reducers/user/index";
 import postReducer from "./reducers/post/index";

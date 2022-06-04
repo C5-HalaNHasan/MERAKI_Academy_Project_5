@@ -1,4 +1,5 @@
 import "./App.css";
+import React from "react";
 import {Routes,Route, Router} from "react-router-dom";
 import LandingPage from "./components/Pages/LandingPage/LandingPage";
 import HomePage from "./components/Pages/HomePage/HomePage";
