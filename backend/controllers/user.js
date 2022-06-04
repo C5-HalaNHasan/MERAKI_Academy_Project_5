@@ -100,7 +100,7 @@ const loginUser = (req, res) => {
           };
           const secret = process.env.SECRET;
           const token = jwt.sign(payload, secret, options);
-          res.status(200).json({ token:token,userId:result[0].id });
+          res.status(200).json({ token:token,userId:result[0].id,userInfo:result[0] });
         } else {
           res.status(403).json({
             success: false,
@@ -289,6 +289,7 @@ const getReportedUsers = (req, res) => {
     });
   });
 };
+
 
 module.exports = {
   createUser,

@@ -3,7 +3,7 @@ import "./register.css";
 import axios from "axios";
 import { useNavigate,Link } from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {setLogin,setLogout} from "../redux/reducers/user/index";
+import {setLogin,setLogout,setUserInfo} from "../redux/reducers/user/index";
 
 const Register = () => {
     //to redirect the user to the home page afetr a successful registration
@@ -32,7 +32,9 @@ const Register = () => {
             password:userData.password,
         }).then(async (result1)=>{
             console.log({fromregister:result1})
-            dispatch(setLogin({token:result1.data.token,userId:result1.data.userId}));
+            dispatch(setLogin({token:result1.data.token,userId:result1.data.userId
+                }));
+                dispatch( setUserInfo(result.data.userInfo))
             navigate("/home");
                 }).catch((error1)=>{
                     dispatch(setLogout);
