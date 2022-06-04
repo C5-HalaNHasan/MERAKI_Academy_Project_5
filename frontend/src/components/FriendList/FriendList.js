@@ -1,29 +1,46 @@
 import React, { useEffect, useState } from "react";
 import "./friendList.css";
 import axios from "axios";
+import { BiSearch } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserFriends } from "../redux/reducers/user/index";
 const FriendList = () => {
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => {
-    return { token: state.user.token };
+  const { token,userFriends } = useSelector((state) => {
+    return { token: state.user.token, userFriends:state.user.userFriends};
   });
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [img, setImg] = useState("");
+  const navigate=useNavigate()
   const getAllFriends=async()=>{
       const response= await axios.get("http://localhost:5000/user/friends",{
         headers:{
             Authorization:token
         } 
+      }).then((response)=>{
+        console.log(response.data.result); 
+dispatch(setUserFriends(response.data.result))
+      }).catch((err)=>{
+        console.log(err);
       })
-      console.log(response); 
 
   }
   useEffect(()=>{
       getAllFriends()
   },[])
-  return <div className="friendListComponent">friendListComponent</div>;
+  return (
+  <div className="friendListComponent">
+    friendListComponent
+    <BiSearch/>
+    {userFriends.map((friend,index)=>{
+      return(
+        <>
+        <div key={index}>
+          <img src={friend.profileImg} onClick={()=>{navigate("/user/:id")}}></img>
+          <h4>{friend.firstName}</h4>
+          </div></>
+      )
+    })}
+    </div>);
 };
 
 export default FriendList;
