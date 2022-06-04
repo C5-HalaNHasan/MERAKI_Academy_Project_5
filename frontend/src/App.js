@@ -23,7 +23,7 @@ function App() {
       <Route path="/user/update/:id" element={<UpdateProfilePage/>}/>
       <Route path="/message" element={<MessagePage/>}/>
       <Route path="/message/:id" element={<MessageWithPage/>}/>
-      <Route path="/users/:type" element={<UsersPage/>}/>
+      <Route path="/users/:type/:name" element={<UsersPage/>}/>
       {/* admin dashboard route to be added */}
       </Routes>
     </div>
