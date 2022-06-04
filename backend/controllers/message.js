@@ -3,8 +3,8 @@ const connection = require("../models/db");
 // a function that sends message to a user by his id:
 const sendMessageToUserById= (req, res) => {
   const sentBy = req.token.userId;
-const receivedBy=req.token.params;
-  const { message } = req.body;
+const receivedBy=req.params.id;
+  const { message } = req.body; //! if message is empty:it will be handeled in FE
   const query = `INSERT INTO message (message,sentBy,receivedBy) VALUE (?,?,?)`;
   const data = [message,sentBy,receivedBy];
   connection.query(query, data, (error, result) => {
@@ -22,10 +22,10 @@ const receivedBy=req.token.params;
   });
 };
 
-// a function that gets all messages received from a user by his id:
+// a function that returns all messages received from a user by his id:
 const getAllMessagesFromUserById= (req, res) => {
     const sentBy = req.token.userId;
-  const receivedBy=req.token.params;
+  const receivedBy=req.params.id;
     const { message } = req.body;
     const query = `SELECT * FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? UNION SELECT * FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=?`;
     const data = [sentBy,receivedBy];
@@ -44,8 +44,8 @@ const getAllMessagesFromUserById= (req, res) => {
     });
   };
 
+  // a function that returns all messages for the logged in user:
 const getAllUserMessages=(req,res)=>{
-
 };
 
 const removeSentMessageById=(req,res)=>{
