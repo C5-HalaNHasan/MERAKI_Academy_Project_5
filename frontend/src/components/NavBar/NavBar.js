@@ -30,7 +30,7 @@ const NavBar = () => {
       console.log(error)
     })
   };
-
+console.log(currentUserInfo);
   useEffect(()=>{
     getCurrentUser();
   },[])
@@ -90,7 +90,7 @@ const NavBar = () => {
             />
           </div>
         </div>
-        <img
+        <img className="userImg"
           src={currentUserInfo.profileImg}
           onClick={() => {
             navigate(`/user/${userId}`);

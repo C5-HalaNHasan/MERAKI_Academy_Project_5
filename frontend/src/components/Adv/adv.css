@@ -1,0 +1,10 @@
+.advComponent{
+    background-color: white;
+    width: 100%;
+}
+.advImg{
+    height: 47vh;
+    background-color: white;
+    width: 24.8vw;
+    padding: 1em;
+}
