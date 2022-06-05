@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./navBar.css";
+import axios from "axios";
 import { BiSearch } from "react-icons/bi";
 import { BsMessenger } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
 import { HiOutlineLogout } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogout } from "../redux/reducers/user";
+import { setLogout,setCurrentUserInfo } from "../redux/reducers/user";
 const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,6 +20,21 @@ const NavBar = () => {
   });
 
   const [find, setFind] = useState("");
+
+  //!useEffect to be used to dispatch(setCurrentUserInf(data from BE))
+  const getCurrentUser=()=>{
+    let getCurrentUserUrl=`http://localhost:5000/user/${userId}`;
+    axios.get(getCurrentUserUrl,{headers:{authorization:token}}).then((result)=>{
+      dispatch(setCurrentUserInfo(result.data.result[0]))
+    }).catch((error)=>{
+      console.log(error)
+    })
+  };
+
+  useEffect(()=>{
+    getCurrentUser();
+  },[])
+
   return (
     <div className="navBarComponent">
       <div className="navBarLeft">
