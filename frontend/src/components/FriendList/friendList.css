@@ -1,12 +1,17 @@
-.freiendIcon {
+.friendIcon {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1%;
+
 }
 
-.freiendIcon img {
-    width: 50px;
+.friendIcon img {
+    width: 30px;
     border-radius: 50%;
     cursor: pointer;
+}
+
+.friendIcon h4 {
+    font-size: 0.9rem;
 }
