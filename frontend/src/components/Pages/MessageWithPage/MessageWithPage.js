@@ -6,13 +6,20 @@ import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import MessageWith from "../../MessagesWith/MessagesWith"
 import Adv from "../../Adv/Adv"; 
+import { useSelector } from 'react-redux';
+
 
 const MessagePageWith = () => {
+    const {userId}=useSelector((state)=>{
+        return{
+            userId:state.user.userId
+     }
+    });
     return (
         <>
         <NavBar/>
             MessageWithPage
-        <FriendList type={"current"}/>
+        <FriendList id={userId}/>
         <Suggested/>
         <MessageWith/>
         <Adv/>

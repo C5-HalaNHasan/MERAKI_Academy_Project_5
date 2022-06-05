@@ -21,7 +21,6 @@ const UserProfilePage = () => {
             userId:state.user.userId
         }
     })
-    const type= id==userId?"current":"visited";
     const usedId=id==userId?userId:id;
     return (
         <>

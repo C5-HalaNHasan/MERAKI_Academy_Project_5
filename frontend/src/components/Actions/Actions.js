@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react';
 import "./actions.css";
 import axios from 'axios';
 import { useSelector,useDispatch } from 'react-redux';
-import {addToFriendsList,removeFromFriendsList,setCurrentUserFriends} from "../redux/reducers/user/index";
+import {addToFriendsList,removeFromFriendsList,setCurrentUserFriends,setVisitedUserFriends} from "../redux/reducers/user/index";
 
 const Actions = ({id}) => {
     const [isReported,setIsReported]=useState("Report");
@@ -15,12 +15,13 @@ const Actions = ({id}) => {
             token:state.user.token,
             userId:state.user.userId,
             currentUserFriends:state.user.currentUserFriends,
+            setVisitedUserFriends:state.user.setVisitedUserFriends
         }
     });
 //a function that reports user by id!
 const reportUserById=(id)=>{
-    let reportUserUrl=`http://localhost:5000/user/remove/${userId}`
-    axios.put(reportUserUrl,{headers:{authorization:token}}).then((result)=>{
+    let reportUserUrl=`http://localhost:5000/user/remove/${id}`
+    axios.put(reportUserUrl,{},{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){
             console.log({fromReportUser_result:result})
             //!toast notification to be added "reported successfully"/a modal box asking for the reason might be added and by clicking ok after filling the box==> the user is going to be reported and the text on the button will change from report t reported!"
@@ -31,15 +32,15 @@ const reportUserById=(id)=>{
 };
 //a function that adds a user as a friend if not in currentUserFriends
 const addFriend=(id)=>{
-    let addFriendUrl=`http://localhost:5000/user/${userId}`
+    let addFriendUrl=`http://localhost:5000/user/${id}`
     axios.post(addFriendUrl,{},{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){//!toast notification to be added "added successfully"
-            let getUserUrl=`http://localhost:5000/user/${userId}`;
+            let getUserUrl=`http://localhost:5000/user/${id}`;
             // console.log({fromAddFriend_result:result})
             axios.get(getUserUrl,{headers:{authorization:token}}).then((result1)=>{
                 console.log(result1)
                 if(result1.data.success){
-                   dispatch(addToFriendsList(result1.data.result));
+                   dispatch(addToFriendsList(result1.data.result[0]));
                    getAllFriends();
                 }
             }).catch((error1)=>{
@@ -53,14 +54,15 @@ const addFriend=(id)=>{
 
 //a function that removes a user from currentUserFriends if 
 const removeFriend=(id)=>{
-    let reportUserUrl=`http://localhost:5000/user/${userId}`
+    let reportUserUrl=`http://localhost:5000/user/${id}`
     axios.delete(reportUserUrl,{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){//!toast notification to be added "added successfully"
-            let getUserUrl=`http://localhost:5000/user/${userId}`
+            let getUserUrl=`http://localhost:5000/user/${id}`
             // console.log({fromRemoveFriend_result:result})
             axios.get(getUserUrl,{headers:{authorization:token}}).then((result1)=>{
                 if(result1.data.success){
-                   dispatch(removeFromFriendsList(result1.data.result));
+                    console.log({hala:result1.data.result[0].id})
+                   dispatch(removeFromFriendsList(result1.data.result[0].id));
                    getAllFriends();
                 }
             }).catch((error1)=>{
@@ -85,7 +87,7 @@ const getAllFriends=async()=>{
     let getFriendsUrl=` http://localhost:5000/user/friends/${id}`;//! supposed to show friend on the visited page not mine
     axios.get(getFriendsUrl,{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){
-            dispatch(setCurrentUserFriends(result.data.result));
+            dispatch(setVisitedUserFriends(result.data.result));
         }
     }).catch((error)=>{
         console.log({fromGetAllFriends_error:error}) //! to be deleted and replaced by toast notification
@@ -94,7 +96,7 @@ const getAllFriends=async()=>{
 useEffect(()=>{
     checkIfFriend(id);
     // getAllFriends();
-},[currentUserFriends]);
+},[]);
 
 console.log(currentUserFriends)
     return (
@@ -103,7 +105,7 @@ console.log(currentUserFriends)
         <div className="actionButtons">
        {isFriend?
         <button onClick={()=>removeFriend(id)}>Remove</button>:
-        <button onClick={(e)=>addFriend(id)}>Add</button>
+        <button onClick={()=>addFriend(id)}>Add</button>
       }
       {/* send message popup aill appear when clicking on send message button */}
        <button>Send Message</button>
