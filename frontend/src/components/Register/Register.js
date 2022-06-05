@@ -17,7 +17,6 @@ const Register = () => {
     const [country,setCountry]=useState("");
     const [gender,setGender]=useState("0");
     const [birthday,setBirthday]=useState("");
-    // const [role_id,setRole_id]=useState(1)
 
     const RegisterAction=async ()=>{ 
         //when the user clicks on the register button: the userData is going to be sent to the BE by axios!

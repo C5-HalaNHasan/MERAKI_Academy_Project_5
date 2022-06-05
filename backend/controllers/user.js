@@ -218,7 +218,7 @@ const getAllFriendsByUserId= (req, res) => {
   const friendshipRequest = req.params.id;
   const friendshipAccept=friendshipRequest;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=?`;
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=? AND f.isDeleted=0`;
 
 
   const data = [friendshipRequest,friendshipAccept];
