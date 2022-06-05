@@ -320,9 +320,9 @@ const getUserById = (req, res) => {
         message: `No Users Found`
       });
     } else {
-      res.status(302).json({
+      res.status(201).json({
         success: true,
-        message: `all users`,
+        message: `user ${userId} info`,
         result
       });
     }
