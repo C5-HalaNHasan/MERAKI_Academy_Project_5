@@ -1,12 +1,51 @@
-import React from 'react';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./adv.css";
 
 const Adv = () => {
-    return (
-        <div className="advComponent">
-        AdvComponent
-        </div>
-    );
+  const [imgNews, setImgNews] = useState("");
+  let [index, setIndex] = useState(0);
+
+
+//   useEffect(()=>{
+//     setInterval(() => {
+//             if (index == 19) {
+//             setIndex(0);
+//             } else {
+//               setIndex(index++);
+//               console.log(index);
+//             }
+//           }, 5000);
+//   },[])
+  
+  const adv = () => {
+    axios
+      .get(
+        "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=c6fc5ff0868641f19393cabe5ca30802"
+      )
+      .then((result) => {
+        
+        setImgNews(result.data.articles[index].urlToImage);
+   
+      })
+      .catch((error) => {});
+  };
+
+  useEffect(() => {
+    adv();
+  }, [index]);
+       
+
+  return (
+    <div className="advComponent">
+      <span>Advertisement:</span>
+      <img
+        className="advImg"
+        // src={"https://image.tmdb.org/t/p/w500" + imgNews}
+        src={imgNews}
+      />
+    </div>
+  );
 };
 
 export default Adv;
