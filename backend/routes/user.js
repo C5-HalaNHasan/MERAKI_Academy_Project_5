@@ -33,7 +33,7 @@ userRouter.put("/remove/:id",authentication,reportUserById);
 //endpoint for PUT request ==> http://localhost:5000/user/remove/:id ==>removeUserByIdAdmin
 userRouter.delete("/remove/:id",authentication,authorization('DELETE user'),removeUserByIdAdmin);
 
-//endpoint for GET request ==> http://localhost:5000/comment/remove/==> getReportedUsers
+//endpoint for GET request ==> http://localhost:5000/user/remove/==> getReportedUsers
 userRouter.get("/remove",authentication,getReportedUsers);
 
 //endpoint for GET request ==> http://localhost:5000/user/:id ==>getUserById
