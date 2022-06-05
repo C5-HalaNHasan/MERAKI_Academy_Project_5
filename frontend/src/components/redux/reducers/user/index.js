@@ -24,7 +24,11 @@ const userSlice=createSlice({
             state.userId="";
             localStorage.clear();
         },
-        setUserInfo:(state,action)=>{
+        setCurrentUserInfo:(state,action)=>{
+            // action:{payload:{userInfo}}
+            state.currentUserInfo=action.payload;
+        },
+        setVisitedUserInfo:(state,action)=>{
             // action:{payload:{userInfo}}
             state.visitedUserInfo=action.payload;
         },
@@ -66,5 +70,5 @@ const userSlice=createSlice({
     }
 });
 
-export const {setLogin,setLogout,setUserInfo,setUserFriends,setAllUsers,addToFriendsList,removeFromFriendsList,updateUserInfo}=userSlice.actions;
+export const {setLogin,setLogout,setCurrentUserInfo,setVisitedUserInfo,setUserFriends,setAllUsers,addToFriendsList,removeFromFriendsList,updateUserInfo}=userSlice.actions;
 export default userSlice.reducer;

@@ -7,12 +7,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUserFriends } from "../redux/reducers/user/index";
 const FriendList = () => {
   const dispatch = useDispatch();
-  const { token,userFriends } = useSelector((state) => {
-    return { token: state.user.token, userFriends:state.user.userFriends};
+  const { token,userFriends,userId } = useSelector((state) => {
+    return { 
+      token: state.user.token, 
+      userId: state.user.userId,
+      userFriends:state.user.userFriends};
   });
   const navigate=useNavigate()
   const getAllFriends=async()=>{
-      const response= await axios.get("http://localhost:5000/user/friends",{
+      const response= await axios.get(`http://localhost:5000/user/friends/${userId}`,{
         headers:{
             Authorization:token
         } 
@@ -26,7 +29,7 @@ dispatch(setUserFriends(response.data.result))
   }
   useEffect(()=>{
       getAllFriends()
-  },[])
+  },[]);
   return (
   <div className="friendListComponent">
     friendListComponent
