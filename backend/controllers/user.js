@@ -215,13 +215,14 @@ const removeFriendById = (req, res) => {
   });
 };
 // ________ this function to get all friends ____________
-const getAllFriends = (req, res) => {
-  const friendshipRequest = req.token.userId;
+const getAllFriendsByUserId= (req, res) => {
+  const friendshipRequest = req.params.id;
+  const friendshipAccept=friendshipRequest;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`;
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest WHERE f.friendshipAccept=?`;
 
-  // const data = [friendshipRequest,friendshipAccept];
-  const data = [friendshipRequest];
+  const data = [friendshipRequest,friendshipAccept];
+  // const data = [friendshipRequest];
 
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -230,13 +231,25 @@ const getAllFriends = (req, res) => {
         message: error.message
       });
     }
+
+    //to remove duplicates:
+    const result2=result.filter((elem,index)=>{
+      return elem.id==friendshipAccept;
+    });
+
+    const result3=result.filter((elem,index)=>{
+      return elem.id!=friendshipAccept;
+    });
+
     res.status(200).json({
       success: true,
-      message: `All Friends`,
-      result: result
+      message: `All Friends for userId ${friendshipRequest}`,
+      result: result2.slice(result2.length-1).concat(result3),
     });
   });
 };
+
+
 const reportUserById = (req, res) => {
   // const userId = req.token.userId;
   const id = req.params.id;
@@ -297,7 +310,7 @@ module.exports = {
   getAllUsers,
   updateUserProfile,
   addFriendById,
-  getAllFriends,
+  getAllFriendsByUserId,
   removeFriendById,
   reportUserById,
   removeUserByIdAdmin,
