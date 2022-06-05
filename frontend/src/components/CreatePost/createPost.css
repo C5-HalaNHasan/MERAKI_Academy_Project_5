@@ -1,0 +1,38 @@
+.createPostComponent{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.userPostImg{
+    padding: 0.1em;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    margin-right: 0.5em;
+}
+.userPostInput{
+    border: none;
+    width: 70%;
+}
+.userPostInput:focus{
+    outline: none;
+}
+.bottomPostCreate{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ImgUpload{
+    display: flex;
+    flex-direction: column;
+}
+.leftBottomPost{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
