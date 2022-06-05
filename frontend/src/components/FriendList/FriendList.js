@@ -41,7 +41,7 @@ dispatch(setCurrentUserFriends(response.data.result))
   <div className="friendListComponent">
     friendListComponent
     <div  className="freiendIcon">
-    {currentUserFriends&&currentUserFriends.map((friend,index)=>{
+    {currentUserFriends.length&&currentUserFriends.map((friend,index)=>{
       return(
         <>
         <div key={index}  >
