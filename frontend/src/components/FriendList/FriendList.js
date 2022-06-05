@@ -11,11 +11,13 @@ const FriendList = ({id}) => {
     //if id=userId: dispatch(setCurrentUserFriends ({getAllFriendsByUserId from backend}))
     //if id!=userId: disptch(setVisitedUserFriends({getAllFriendsByUserId from backend}))
   const dispatch = useDispatch();
-  const { token,userFriends,userId } = useSelector((state) => {
+  const { token,userId,currentUserFriends, visitedUserFriends } = useSelector((state) => {
     return { 
       token: state.user.token, 
       userId: state.user.userId,
-      userFriends:state.user.userFriends};
+      currentUserFriends:state.user.currentUserFriends,
+      visitedUserFriends:state.user.visitedUserFriends,
+    };
   });
   const navigate=useNavigate()
   const getAllFriends=async()=>{
@@ -34,11 +36,12 @@ dispatch(setCurrentUserFriends(response.data.result))
   useEffect(()=>{
       getAllFriends()
   },[]);
+  console.log({currentUserFriends})
   return (
   <div className="friendListComponent">
     friendListComponent
     <div  className="freiendIcon">
-    {userFriends.map((friend,index)=>{
+    {currentUserFriends&&currentUserFriends.map((friend,index)=>{
       return(
         <>
         <div key={index}  >
