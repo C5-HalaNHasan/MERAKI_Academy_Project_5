@@ -118,8 +118,7 @@ const loginUser = (req, res) => {
 };
 // a function that gets all users
 const getAllUsers = (req, res) => {
-  // get all user by role id where users=1
-  const query = `SELECT * FROM USER WHERE ROLE_id =1 && isDeleted=0`;
+  const query = `SELECT * FROM USER WHERE ROLE_id =1 AND isDeleted=0`;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -249,7 +248,7 @@ const getAllFriendsByUserId= (req, res) => {
   });
 };
 
-
+//a function that reports a user by id
 const reportUserById = (req, res) => {
   // const userId = req.token.userId;
   const id = req.params.id;
@@ -267,6 +266,8 @@ const reportUserById = (req, res) => {
       .json({ success: true, message: "User is reported", result });
   });
 };
+
+//a function that removes a reported user by id by Admin only
 const removeUserByIdAdmin = (req, res) => {
   const id = req.params.id;
   const userId=req.token.userId
@@ -284,7 +285,7 @@ const removeUserByIdAdmin = (req, res) => {
   });
 };
 
-
+//a function that returns all reported users
 const getReportedUsers = (req, res) => {
   const query = `SELECT * FROM user WHERE isDeleted =0 AND isReported =1`;
   connection.query(query, (error, result) => {
@@ -303,6 +304,33 @@ const getReportedUsers = (req, res) => {
   });
 };
 
+// a function that returns user by id
+const getUserById = (req, res) => {
+  const userId=req.params.id
+  const query = `SELECT * FROM USER WHERE role_id =1 AND isDeleted=0 AND id=?`;
+  const data=[userId];
+  connection.query(query,data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+    if (!result.length) {
+      return res.status(404).json({
+        success: false,
+        message: `No Users Found`
+      });
+    } else {
+      res.status(302).json({
+        success: true,
+        message: `all users`,
+        result
+      });
+    }
+  });
+};
+
 
 module.exports = {
   createUser,
@@ -314,5 +342,6 @@ module.exports = {
   removeFriendById,
   reportUserById,
   removeUserByIdAdmin,
-  getReportedUsers
+  getReportedUsers,
+  getUserById
 };
