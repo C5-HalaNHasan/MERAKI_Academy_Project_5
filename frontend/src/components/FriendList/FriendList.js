@@ -5,7 +5,11 @@ import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserFriends } from "../redux/reducers/user/index";
-const FriendList = () => {
+
+const FriendList = ({id}) => {
+  //! FriendList component to be modified based on the following:
+    //if id=userId: dispatch(userFriends({getAllFriendsByUserId from backend}))
+    //if id!=userId: disptch(userFriends({getAllFriendsByUserId from backend}))
   const dispatch = useDispatch();
   const { token,userFriends,userId } = useSelector((state) => {
     return { 

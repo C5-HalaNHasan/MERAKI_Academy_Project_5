@@ -19,8 +19,7 @@ const LoginAction=()=>{
     axios.post(loginUrl,{email,password}).then((result)=>{
         //!toast notification to be added
         if(result.data.token){
-            dispatch(setLogin({token:result.data.token,userId:result.data.userId,currentUserInfo:result.data.userInfo
-            }));
+            dispatch(setLogin({token:result.data.token,userId:result.data.userId}));
             navigate("/home");
             console.log({fromLogin:result.data.userInfo})
         }

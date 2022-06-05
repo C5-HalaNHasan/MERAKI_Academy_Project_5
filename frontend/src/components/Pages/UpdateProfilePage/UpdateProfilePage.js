@@ -13,8 +13,8 @@ const UpdateProfilePage = () => {
         <>
         <NavBar/>
             UpdateProfile
-        <FriendList/>
-        <UserInfo/>
+        <FriendList type={"current"}/>
+        <UserInfo type={"current"}/>
         <ProfileImgs/>
         <UpdateProfile/>
         <Adv/>

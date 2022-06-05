@@ -7,16 +7,23 @@ import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import Users from "../../Users/Users"
 import Adv from "../../Adv/Adv"; 
+import { useSelector } from 'react-redux';
+
 
 
 const UsersPage = () => {
+    const {userId}=useSelector((state)=>{
+        return{
+            userId:state.user.userId
+        }
+    });
     //to get the type of the page if search or friendlist and the name of the searche user from params:
     const {type,name}=useParams(); 
     return (
         <>
         <NavBar/>
             UsersPage
-        <FriendList/>
+        <FriendList id={userId}/>
         <Suggested/>
         <Users type={type} name={name}/>
         <Adv/>
