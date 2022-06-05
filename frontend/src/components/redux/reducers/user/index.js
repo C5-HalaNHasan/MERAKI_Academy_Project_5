@@ -46,11 +46,11 @@ const userSlice=createSlice({
         },
         addToFriendsList:(state,action)=>{
             // action:{payload:{}}
-            state.userFriends.push(action.payload);
+            state.currentUserFriends.push(action.payload);
         },
         removeFromFriendsList:(state,action)=>{
             // action:{payload:id of removed user from friendlist}
-            state.userFriends.splice(action.payload,1)
+            state.currentUserFriends.splice(action.payload,1)
         },
         updateUserInfo:(state,action)=>{
             // action:{payload:{updated info}}

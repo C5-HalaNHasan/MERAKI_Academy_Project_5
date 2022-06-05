@@ -1,0 +1,24 @@
+.actionsComponent {}
+
+.actionButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    margin: 1vh 1vw;
+    align-items: center;
+}
+
+.actionButtons button {
+    border-radius: 1vw;
+    width: 50%;
+    background-color: blue;
+    transition: 0.5s ease;
+    color: aliceblue;
+    border: none;
+    padding: 1vh;
+}
+
+.actionButtons button:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+}
