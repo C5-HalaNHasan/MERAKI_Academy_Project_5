@@ -118,8 +118,7 @@ const loginUser = (req, res) => {
 };
 // a function that gets all users
 const getAllUsers = (req, res) => {
-  // get all user by role id where users=1
-  const query = `SELECT * FROM USER WHERE ROLE_id =1 && isDeleted=0`;
+  const query = `SELECT * FROM USER WHERE ROLE_id =1 AND isDeleted=0`;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -215,13 +214,14 @@ const removeFriendById = (req, res) => {
   });
 };
 // ________ this function to get all friends ____________
-const getAllFriends = (req, res) => {
-  const friendshipRequest = req.token.userId;
+const getAllFriendsByUserId= (req, res) => {
+  const friendshipRequest = req.params.id;
+  const friendshipAccept=friendshipRequest;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`;
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest WHERE f.friendshipAccept=?`;
 
-  // const data = [friendshipRequest,friendshipAccept];
-  const data = [friendshipRequest];
+  const data = [friendshipRequest,friendshipAccept];
+  // const data = [friendshipRequest];
 
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -230,13 +230,25 @@ const getAllFriends = (req, res) => {
         message: error.message
       });
     }
+
+    //to remove duplicates:
+    const result2=result.filter((elem,index)=>{
+      return elem.id==friendshipAccept;
+    });
+
+    const result3=result.filter((elem,index)=>{
+      return elem.id!=friendshipAccept;
+    });
+
     res.status(200).json({
       success: true,
-      message: `All Friends`,
-      result: result
+      message: `All Friends for userId ${friendshipRequest}`,
+      result: result2.slice(result2.length-1).concat(result3),
     });
   });
 };
+
+//a function that reports a user by id
 const reportUserById = (req, res) => {
   // const userId = req.token.userId;
   const id = req.params.id;
@@ -254,6 +266,8 @@ const reportUserById = (req, res) => {
       .json({ success: true, message: "User is reported", result });
   });
 };
+
+//a function that removes a reported user by id by Admin only
 const removeUserByIdAdmin = (req, res) => {
   const id = req.params.id;
   const userId=req.token.userId
@@ -271,7 +285,7 @@ const removeUserByIdAdmin = (req, res) => {
   });
 };
 
-
+//a function that returns all reported users
 const getReportedUsers = (req, res) => {
   const query = `SELECT * FROM user WHERE isDeleted =0 AND isReported =1`;
   connection.query(query, (error, result) => {
@@ -290,6 +304,33 @@ const getReportedUsers = (req, res) => {
   });
 };
 
+// a function that returns user by id
+const getUserById = (req, res) => {
+  const userId=req.params.id
+  const query = `SELECT * FROM USER WHERE role_id =1 AND isDeleted=0 AND id=?`;
+  const data=[userId];
+  connection.query(query,data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+    if (!result.length) {
+      return res.status(404).json({
+        success: false,
+        message: `No Users Found`
+      });
+    } else {
+      res.status(302).json({
+        success: true,
+        message: `all users`,
+        result
+      });
+    }
+  });
+};
+
 
 module.exports = {
   createUser,
@@ -297,9 +338,10 @@ module.exports = {
   getAllUsers,
   updateUserProfile,
   addFriendById,
-  getAllFriends,
+  getAllFriendsByUserId,
   removeFriendById,
   reportUserById,
   removeUserByIdAdmin,
-  getReportedUsers
+  getReportedUsers,
+  getUserById
 };
