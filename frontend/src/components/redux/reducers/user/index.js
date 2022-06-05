@@ -7,7 +7,8 @@ const userSlice=createSlice({
         userId: localStorage.getItem("userId") || "",
         currentUserInfo:{},
         visitedUserInfo:{},
-        userFriends:[],
+        currentUserFriends:[],
+        visitedUserFriends:[],
         allUsers:[],
     },
     reducers:{
@@ -31,9 +32,13 @@ const userSlice=createSlice({
             // action:{payload:{userInfo}}
             state.visitedUserInfo=action.payload;
         },
-        setUserFriends:(state,action)=>{
+        setCurrentUserFriends:(state,action)=>{
             // action:{payload:[]}
-            state.userFriends=action.payload;
+            state.currentUserFriends=action.payload;
+        },
+        setVisitedUserFriends:(state,action)=>{
+            // action:{payload:[]}
+            state.visitedUserFriends=action.payload;
         },
         setAllUsers:(state,action)=>{
             // action:{payload:[]}
@@ -69,5 +74,5 @@ const userSlice=createSlice({
     }
 });
 
-export const {setLogin,setLogout,setCurrentUserInfo,setVisitedUserInfo,setUserFriends,setAllUsers,addToFriendsList,removeFromFriendsList,updateUserInfo}=userSlice.actions;
+export const {setLogin,setLogout,setCurrentUserInfo,setVisitedUserInfo, setCurrentUserFriends,setVisitedUserFriends,setAllUsers,addToFriendsList,removeFromFriendsList,updateUserInfo}=userSlice.actions;
 export default userSlice.reducer;

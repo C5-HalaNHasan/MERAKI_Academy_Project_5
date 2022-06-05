@@ -4,12 +4,12 @@ import axios from "axios";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserFriends } from "../redux/reducers/user/index";
+import { setVisitedUserFriends,setCurrentUserFriends } from "../redux/reducers/user/index";
 
 const FriendList = ({id}) => {
   //! FriendList component to be modified based on the following:
-    //if id=userId: dispatch(userFriends({getAllFriendsByUserId from backend}))
-    //if id!=userId: disptch(userFriends({getAllFriendsByUserId from backend}))
+    //if id=userId: dispatch(setCurrentUserFriends ({getAllFriendsByUserId from backend}))
+    //if id!=userId: disptch(setVisitedUserFriends({getAllFriendsByUserId from backend}))
   const dispatch = useDispatch();
   const { token,userFriends,userId } = useSelector((state) => {
     return { 
@@ -25,7 +25,7 @@ const FriendList = ({id}) => {
         } 
       }).then((response)=>{
         console.log(response.data.result); 
-dispatch(setUserFriends(response.data.result))
+dispatch(setCurrentUserFriends(response.data.result))
       }).catch((err)=>{
         console.log(err);
       })

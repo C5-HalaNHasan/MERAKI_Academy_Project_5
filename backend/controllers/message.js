@@ -16,7 +16,7 @@ const receivedBy=req.params.id;
     }
     res.status(201).json({
       success: true,
-      message: `message sent successfully successfully`,
+      message: `message sent successfully`,
       result: result,
     });
   });
