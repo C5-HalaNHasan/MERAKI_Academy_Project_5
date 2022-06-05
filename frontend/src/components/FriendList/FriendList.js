@@ -37,16 +37,18 @@ dispatch(setUserFriends(response.data.result))
   return (
   <div className="friendListComponent">
     friendListComponent
-    <BiSearch/>
+    <div  className="freiendIcon">
     {userFriends.map((friend,index)=>{
       return(
         <>
-        <div key={index}>
-          <img src={friend.profileImg} onClick={()=>{navigate("/user/:id")}}></img>
+        <div key={index}  >
+          <img src={friend.profileImg} id={friend.id}  onClick={(e)=>navigate(`/user/${e.target.id}`)}></img>
           <h4>{friend.firstName}</h4>
-          </div></>
+          </div>
+          </>
       )
     })}
+    </div>
     </div>);
 };
 
