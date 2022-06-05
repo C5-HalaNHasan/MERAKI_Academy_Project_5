@@ -132,7 +132,7 @@ const getAllUsers = (req, res) => {
         message: `No Users Found`
       });
     } else {
-      res.status(302).json({
+      res.status(200).json({
         success: true,
         message: `all users`,
         result
