@@ -50,7 +50,9 @@ const userSlice=createSlice({
         },
         removeFromFriendsList:(state,action)=>{
             // action:{payload:id of removed user from friendlist}
-            state.currentUserFriends.splice(action.payload,1)
+            state.currentUserFriends= state.currentUserFriends.filter((friend,index) => {
+                return friend.id != action.payload;
+              });
         },
         updateUserInfo:(state,action)=>{
             // action:{payload:{updated info}}
