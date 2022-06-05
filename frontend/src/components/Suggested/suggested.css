@@ -1,4 +1,11 @@
+.userIcon {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1%
+}
 .userIcon img{
-    size: 50%;
-    border-radius: 50px;
+    width: 50px;
+    border-radius: 50%;
+    cursor: pointer;
 }

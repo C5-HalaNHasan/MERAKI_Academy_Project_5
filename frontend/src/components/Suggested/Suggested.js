@@ -41,12 +41,13 @@ const Suggested = () => {
           {allUsers.map((user, index) => {
             return (
               <>
-                <div key={index}>
+                <div className="userCard" key={index}>
                   <img src={user.profileImg}></img>
                   <h4>
                     {user.firstName}.{user.lastName}
                   </h4>
                   <button
+                //   to make function that send request to add friend
                     onClick={() => {
                     //   axios
                     //     .post("http://localhost:5000/user/:id")

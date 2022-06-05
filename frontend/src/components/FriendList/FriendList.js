@@ -26,8 +26,12 @@ const FriendList = ({id}) => {
             Authorization:token
         } 
       }).then((response)=>{
-        console.log(response.data.result); 
-dispatch(setCurrentUserFriends(response.data.result))
+        console.log(response.data.result);
+        if (id=userId) {
+          dispatch(setCurrentUserFriends(response.data.result))
+        } 
+        dispatch(setVisitedUserFriends(response.data.result))
+
       }).catch((err)=>{
         console.log(err);
       })
