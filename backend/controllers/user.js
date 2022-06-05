@@ -218,7 +218,8 @@ const getAllFriendsByUserId= (req, res) => {
   const friendshipRequest = req.params.id;
   const friendshipAccept=friendshipRequest;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest WHERE f.friendshipAccept=?`;
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=?`;
+
 
   const data = [friendshipRequest,friendshipAccept];
   // const data = [friendshipRequest];
@@ -231,19 +232,16 @@ const getAllFriendsByUserId= (req, res) => {
       });
     }
 
-    //to remove duplicates:
+    //to remove duplicates when union is used:
     const result2=result.filter((elem,index)=>{
-      return elem.id==friendshipAccept;
-    });
-
-    const result3=result.filter((elem,index)=>{
       return elem.id!=friendshipAccept;
     });
 
     res.status(200).json({
       success: true,
-      message: `All Friends for userId ${friendshipRequest}`,
-      result: result2.slice(result2.length-1).concat(result3),
+      message: `All Friends for userId ${friendshipRequest},£of friends is ${result2.length}`,
+      result: result2
+
     });
   });
 };
