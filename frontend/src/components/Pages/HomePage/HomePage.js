@@ -13,10 +13,10 @@ const HomePage = () => {
     return (
         <>
         <NavBar/>
-        <FriendList/>
+        <FriendList type={"current"}/>
         <Suggested/>
         <CreatePost/>
-        <ShowPost type="homePage"/>
+        <ShowPost/>
         <Adv/>
         <Footer/>
        

@@ -12,7 +12,7 @@ const MessagePageWith = () => {
         <>
         <NavBar/>
             MessageWithPage
-        <FriendList/>
+        <FriendList type={"current"}/>
         <Suggested/>
         <MessageWith/>
         <Adv/>

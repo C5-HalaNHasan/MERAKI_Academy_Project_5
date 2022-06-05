@@ -33,8 +33,7 @@ const Register = () => {
         }).then(async (result1)=>{
             
             console.log({fromregister:result1})
-            dispatch(setLogin({token:result1.data.token,userId:result1.data.userId,currentUserInfo:result1.data.userInfo
-            }));
+            dispatch(setLogin({token:result1.data.token,userId:result1.data.userId}));
             navigate("/home");
                 }).catch((error1)=>{
                     dispatch(setLogout);

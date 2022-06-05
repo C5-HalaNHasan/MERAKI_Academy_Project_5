@@ -12,10 +12,9 @@ const userSlice=createSlice({
     },
     reducers:{
         setLogin:(state,action)=>{
-            // action:{payload:{token,userId,userInfo}}
+            // action:{payload:{token,userId}}
             state.token=action.payload.token;
             state.userId=action.payload.userId;
-            state.currentUserInfo=action.payload.currentUserInfo;
             localStorage.setItem("token",`Bearer ${action.payload.token}`); 
             localStorage.setItem("userId",`${action.payload.userId}`); 
         },

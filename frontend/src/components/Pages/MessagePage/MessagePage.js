@@ -6,14 +6,21 @@ import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import Messages from "../../Messages/Messages"
 import Adv from "../../Adv/Adv"; 
+import { useSelector } from 'react-redux';
+
 
 
 const MessagePage = () => {
+    const {userId}=useSelector((state)=>{
+        return{
+            userId:state.user.userId
+        }
+    });
     return (
         <>
         <NavBar/>
             MessagePage
-        <FriendList/>
+        <FriendList id={userId}/>
         <Suggested/>
         <Messages/>
         <Adv/>
