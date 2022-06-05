@@ -78,7 +78,7 @@ let checked= currentUserFriends.filter((friend)=>{
         return friend.id==id;
     })
     return checked.length?setIsFriend(true):setIsFriend(false);
-}
+};
 
 //to re-get current userFriends:
 const getAllFriends=async()=>{
@@ -105,8 +105,9 @@ console.log(currentUserFriends)
         <button onClick={()=>removeFriend(id)}>Remove</button>:
         <button onClick={(e)=>addFriend(id)}>Add</button>
       }
+      {/* send message popup aill appear when clicking on send message button */}
        <button>Send Message</button>
-       <button>Report</button>
+       <button onClick={()=>reportUserById(id)}>Report</button>
         </div>
         </div>
     );
