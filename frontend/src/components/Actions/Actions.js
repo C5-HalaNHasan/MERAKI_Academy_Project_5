@@ -18,12 +18,14 @@ const Actions = ({id}) => {
             setVisitedUserFriends:state.user.setVisitedUserFriends
         }
     });
-//a function that reports user by id!
-const reportUserById=(id)=>{
+
+//a function that reports a user by id!
+const reportUserById=()=>{
     let reportUserUrl=`http://localhost:5000/user/remove/${id}`
     axios.put(reportUserUrl,{},{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){
             console.log({fromReportUser_result:result})
+            setIsReported("Reported");
             //!toast notification to be added "reported successfully"/a modal box asking for the reason might be added and by clicking ok after filling the box==> the user is going to be reported and the text on the button will change from report t reported!"
         }
     }).catch((error)=>{
@@ -31,21 +33,11 @@ const reportUserById=(id)=>{
     });
 };
 //a function that adds a user as a friend if not in currentUserFriends
-const addFriend=(id)=>{
+const addFriend=()=>{
     let addFriendUrl=`http://localhost:5000/user/${id}`
     axios.post(addFriendUrl,{},{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){//!toast notification to be added "added successfully"
-            let getUserUrl=`http://localhost:5000/user/${id}`;
-            // console.log({fromAddFriend_result:result})
-            axios.get(getUserUrl,{headers:{authorization:token}}).then((result1)=>{
-                console.log(result1)
-                if(result1.data.success){
-                   dispatch(addToFriendsList(result1.data.result[0]));
-                   getAllFriends();
-                }
-            }).catch((error1)=>{
-                console.log({fromAddFriend_error1:error1}) //! to be deleted and replaced by toast notification
-            })
+            dispatch(addToFriendsList(result.data.result[0]));
         }
     }).catch((error)=>{
         console.log({fromAddFriend_error:error}) //! to be deleted and replaced by toast notification
@@ -53,21 +45,11 @@ const addFriend=(id)=>{
 };
 
 //a function that removes a user from currentUserFriends if 
-const removeFriend=(id)=>{
-    let reportUserUrl=`http://localhost:5000/user/${id}`
-    axios.delete(reportUserUrl,{headers:{authorization:token}}).then((result)=>{
+const removeFriend=()=>{
+    let removeUserUrl=`http://localhost:5000/user/${id}`
+    axios.delete(removeUserUrl,{headers:{authorization:token}}).then((result)=>{
         if(result.data.success){//!toast notification to be added "added successfully"
-            let getUserUrl=`http://localhost:5000/user/${id}`
-            // console.log({fromRemoveFriend_result:result})
-            axios.get(getUserUrl,{headers:{authorization:token}}).then((result1)=>{
-                if(result1.data.success){
-                    console.log({hala:result1.data.result[0].id})
-                   dispatch(removeFromFriendsList(result1.data.result[0].id));
-                   getAllFriends();
-                }
-            }).catch((error1)=>{
-                console.log({fromRemoveFriend_error1:error1}) //! to be deleted and replaced by toast notification
-            })
+            dispatch(removeFromFriendsList(result.data.result[0].id));
         }
     }).catch((error)=>{
         console.log({fromRemoveFriend_error:error}) //! to be deleted and replaced by toast notification
@@ -75,7 +57,7 @@ const removeFriend=(id)=>{
 };
 
 //check if friends:
-const checkIfFriend=(id)=>{
+const checkIfFriend=()=>{
 let checked= currentUserFriends.filter((friend)=>{
         return friend.id==id;
     })
@@ -94,9 +76,9 @@ const getAllFriends=async()=>{
     })
 };
 useEffect(()=>{
-    checkIfFriend(id);
+    checkIfFriend();
     // getAllFriends();
-},[]);
+},[isFriend]);
 
 console.log(currentUserFriends)
     return (
@@ -104,12 +86,13 @@ console.log(currentUserFriends)
         actionsComponent
         <div className="actionButtons">
        {isFriend?
-        <button onClick={()=>removeFriend(id)}>Remove</button>:
-        <button onClick={()=>addFriend(id)}>Add</button>
+        <button onClick={()=>removeFriend()}>Remove</button>:
+        <button onClick={()=>addFriend()}>Add</button>
       }
       {/* send message popup aill appear when clicking on send message button */}
        <button>Send Message</button>
-       <button onClick={()=>reportUserById(id)}>Report</button>
+       {/* function to be added later in the backend to remove report from user */}
+       <button onClick={()=>reportUserById(id)}>{isReported}</button>
         </div>
         </div>
     );

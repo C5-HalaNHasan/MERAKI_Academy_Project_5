@@ -7,14 +7,21 @@ import UserInfo from "../../UserInfo/UserInfo";
 import ProfileImgs from "../../ProfileImgs/ProfileImgs";
 import UpdateProfile from "../../UpdateProfile/UpdateProfile";
 import Adv from "../../Adv/Adv";
+import { useSelector } from 'react-redux';
+
 
 const UpdateProfilePage = () => {
+    const {userId}=useSelector((state)=>{
+        return{
+            userId:state.user.userId
+     }
+    });
     return (
         <>
         <NavBar/>
             UpdateProfile
-        <FriendList type={"current"}/>
-        <UserInfo type={"current"}/>
+        <FriendList id={userId}/>
+        <UserInfo id={userId}/>
         <ProfileImgs/>
         <UpdateProfile/>
         <Adv/>

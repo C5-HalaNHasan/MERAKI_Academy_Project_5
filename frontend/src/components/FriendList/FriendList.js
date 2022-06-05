@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./friendList.css";
 import axios from "axios";
-import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -33,11 +32,10 @@ const FriendList = ({ id }) => {
         }
       })
       .then((response) => {
-        console.log(response.data.result);
         if (id == userId) {
-          dispatch(setCurrentUserFriends(response.data.result));
+          dispatch(setCurrentUserFriends(response.data.result));//! to be used later
         } else {
-          dispatch(setVisitedUserFriends(response.data.result));
+          dispatch(setVisitedUserFriends(response.data.result));//! to be used later
         }
       })
       .catch((err) => {
@@ -48,11 +46,15 @@ const FriendList = ({ id }) => {
     getAllFriends();
   }, []);
   console.log({ currentUserFriends });
+  console.log({ visitedUserFriends });
+
+  //! problem: id of friendship table is used not user id// to be solved in the backend
   return (
     <div className="friendListComponent">
       friendListComponent
-      <div className="freiendIcon">
-        {currentUserFriends.length &&
+      <div className="friendIcon ">
+      {userId==id?(<>
+        { currentUserFriends.length &&
           currentUserFriends.map((friend, index) => {
             return (
               <>
@@ -67,7 +69,29 @@ const FriendList = ({ id }) => {
               </>
             );
           })}
-      </div>
+          </>
+      ):(<>
+        { visitedUserFriends.length &&
+          visitedUserFriends.map((friend, index) => {
+            return (
+              <>
+                <div key={index}>
+                  <img
+                    src={friend.profileImg}
+                    id={friend.id}
+                    onClick={(e) => navigate(`/user/${e.target.id}`)}
+                  ></img>
+                  <h4>{friend.firstName}</h4>
+                </div>
+              </>
+            );
+          })}
+
+
+
+      </>
+      )}
+      </div>//!ends of friendIcon
     </div>
   );
 };

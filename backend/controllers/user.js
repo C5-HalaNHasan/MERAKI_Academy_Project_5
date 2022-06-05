@@ -1,6 +1,7 @@
 const connection = require("../models/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { connect } = require("../models/db");
 
 // a function to add a new user to the data base
 const createUser = async (req, res) => {
@@ -178,24 +179,60 @@ const updateUserProfile = async (req, res) => {
 const addFriendById = (req, res) => {
   const friendshipRequest = req.token.userId;
   const friendshipAccept = req.params.id;
-  const query = `INSERT INTO friendship(friendshipRequest,friendshipAccept) VALUES(?,?)`;
-  const data = [friendshipRequest, friendshipAccept];
-  connection.query(query, data, (error, result) => {
-    if (error) {
+  // first user is going to be checked if friend with the request or not:
+  const query=`SELECT * FROM friendship WHERE friendshipRequest=? AND friendshipAccept=? OR friendshipRequest=? AND friendshipAccept=?`
+  const data = [friendshipRequest, friendshipAccept,friendshipAccept,friendshipRequest];
+  connection.query(query,data,(error,result)=>{
+    console.log(result)
+    if(error){
       return res.status(500).json({
         success: false,
         message: error.message
       });
     }
-    {
-      res.status(201).json({
-        success: true,
-        message: `Request sent successfully`,
-        result
+    if(result.length==0){
+      const query1 = `INSERT INTO friendship(friendshipRequest,friendshipAccept) VALUES(?,?)`;
+      const data1 = [friendshipRequest, friendshipAccept];
+      connection.query(query1, data1, (error1, result1) => {
+    if (error1) {
+      return res.status(500).json({
+        success: false,
+        message: error1.message
       });
     }
+      if(result1.affectedRows==1){
+        const query2 = `SELECT * FROM user WHERE id=?`;
+        const data2 = [friendshipAccept];
+        connection.query(query2, data2, (error2, result2)=>{
+          if (error2) {
+            return res.status(500).json({
+              success: false,
+              message: error2.message
+            });
+          }
+          res.status(201).json({
+            success: true,
+            message: `friend added successfully`,
+            result:result2,
+          });
+        })
+      }else{
+        res.status(400).json({
+          success: false,
+          message: `Request can't be sent`,
+        });
+      }
   });
+    }else{
+      res.status(400).json({
+        success: false,
+        message: `user ${friendshipAccept} is already in your friendlist`,
+      });
+
+    }
+  })
 };
+
 // ______this function to removeFriendById__________
 const removeFriendById = (req, res) => {
   const friendshipAccept = req.params.id;
@@ -206,24 +243,35 @@ const removeFriendById = (req, res) => {
     if (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
-    res.status(200).json({
-      success: true,
-      message: `friend deleted successfully`,
-      result
-    });
+    if(result.affectedRows==1){//! to return deleted user to be used in the frontend
+      const query1 = `SELECT * FROM user WHERE id=? `;
+      const data1 = [friendshipAccept];
+      connection.query(query1,data1,(error1,result1)=>{
+        if (error1) {
+          return res.status(500).json({ success: false, message: error1.message });
+        }
+        res.status(200).json({
+          success: true,
+          message: `friend ${friendshipAccept} has been deleted successfully`,
+          result:result1
+        });
+      })
+    }else{
+      res.status(404).json({
+        success: false,
+        message: `friend ${friendshipAccept} is not in your friendlist`,
+      });
+    }
   });
 };
+
 // ________ this function to get all friends ____________
 const getAllFriendsByUserId= (req, res) => {
   const friendshipRequest = req.params.id;
   const friendshipAccept=friendshipRequest;
-  // const query = `SELECT * FROM user u INNER JOIN friendship f ON f.friendshipRequest=?`
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=? AND f.isDeleted=0`;
-
-
+  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`
+  // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=? AND f.isDeleted=0`;
   const data = [friendshipRequest,friendshipAccept];
-  // const data = [friendshipRequest];
-
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -232,16 +280,14 @@ const getAllFriendsByUserId= (req, res) => {
       });
     }
 
-    //to remove duplicates when union is used:
-    const result2=result.filter((elem,index)=>{
-      return elem.id!=friendshipAccept;
-    });
-
+    //to remove duplicates:
+    // const result2=result.filter((elem,index)=>{
+    //   return elem.id!=friendshipAccept;
+    // });
     res.status(200).json({
       success: true,
       message: `All Friends for userId ${friendshipRequest},£of friends is ${result2.length}`,
-      result: result2
-
+      result: result
     });
   });
 };
