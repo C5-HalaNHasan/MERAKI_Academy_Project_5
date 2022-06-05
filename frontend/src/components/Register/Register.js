@@ -17,11 +17,11 @@ const Register = () => {
     const [country,setCountry]=useState("");
     const [gender,setGender]=useState("0");
     const [birthday,setBirthday]=useState("");
-    const [role_id,setRole_id]=useState(1)
+    // const [role_id,setRole_id]=useState(1)
 
     const RegisterAction=async ()=>{ 
         //when the user clicks on the register button: the userData is going to be sent to the BE by axios!
-        let userData={firstName,lastName,email,password,country,gender,birthday,role_id}
+        let userData={firstName,lastName,email,password,country,gender,birthday,role_id:1}
         let registerUrl="http://localhost:5000/user";
         await axios.post(registerUrl,userData).then(async (result)=>{
 
@@ -88,7 +88,7 @@ const Register = () => {
     <input type="email" placeholder="email..." name="email" onChange={(e)=>setEmail(e.target.value)} autoComplete="off"></input>
     </div>
     <div className="inputField">
-    <label>PassWord:</label>
+    <label>Password:</label>
     <input type="password" placeholder="Password..." name="password" onChange={(e)=>setPassword(e.target.value)} autoComplete="off"></input>
     </div>
 
