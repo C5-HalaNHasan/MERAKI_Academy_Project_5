@@ -63,7 +63,8 @@ const ShowPost = () => {
       }
     } catch {}
   };
-  const updatePost = (id) => {
+  const updatePost = (id,postImg,postText) => {
+    
     axios
       .put(
         `http://localhost:5000/post/${id}`,
@@ -79,7 +80,10 @@ const ShowPost = () => {
         }
       )
       .then((result) => {
-        dispatch(updatePosts({ id, postText, postImg, postVideo }));
+        dispatch(updatePosts({ id, postText, postImg, postVideo })
+        );
+        getAllPosts()
+        console.log(result);
       })
       .catch((error) => {
         console.log(error);
@@ -95,6 +99,29 @@ const ShowPost = () => {
       })
       .then((result) => {
         dispatch(removeFromPosts(id));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const uploadImage = (id) => {
+    const data = new FormData();
+    
+    data.append("file", postImg)
+    // clickedVideo? data.append("file", postVideo): ""
+    
+    data.append("upload_preset", "rapulojk");
+    data.append("cloud_name", "difjgm3tp");
+
+    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+    axios
+      .post(uploadPicUrl, data)
+      .then((result) => {
+        setPostImg(result.data.url);
+        console.log(result.data);
+        updatePost(id,result.data.url)
+        setUpdateClick(false)
+        setPostImg("")
       })
       .catch((error) => {
         console.log(error);
@@ -126,7 +153,7 @@ const ShowPost = () => {
                     <>{element.firstName} </> <span> {element.createdAt}</span>
                   </div>
                   <div className="postTopRight"></div>
-                  <BsThreeDots className={element.id} onClick={(e)=>{
+                  <BsThreeDots  className={element.id} onClick={(e)=>{
                     setUpdateClick(!updateClick)
                     setCurrentPost(e.target.className)
                     console.log(currentPost.animVal);
@@ -135,9 +162,19 @@ const ShowPost = () => {
                   {currentUserInfo.id == element.author_id && updateClick && currentPost.animVal == element.id ? (
                     <>
                       {" "}
-                      <input type={"text"} />
-                      <input type={"file"} />
-                      <button>Update</button>
+                      <input type={"text"} onChange={(e)=>{
+                        setPostText(e.target.value)
+                      }}/>
+                      <input type={"file"} onChange={(e)=>{
+                        setPostImg(e.target.files[0])
+                      }}/>
+                      <button className={element.id} onClick={(e)=>{
+
+                        {postImg?uploadImage(e.target.className): updatePost(element.id,postImg,postText); setUpdateClick(false)}
+                        // setUpdateClick(false)
+                        
+
+                      }} >Update</button>
                     </>
                   ) : (
                     ""
@@ -146,7 +183,8 @@ const ShowPost = () => {
                 </div>
                 <div className="postCenter">
                   <>{element.postText}</>
-                  <img src={element.postImg} />
+                  <br></br>
+                { element.postImg? <img className="PostImg" src={element.postImg} />:""}
                 </div>
                 <div className="postBottom">
                   <div className="postBottomLeft">

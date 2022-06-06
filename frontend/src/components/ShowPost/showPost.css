@@ -18,3 +18,8 @@
     display: flex;
     justify-content: space-between;
 }
+.PostImg{
+    width: 70% ;
+    height: 80%;
+    border: none;
+}
