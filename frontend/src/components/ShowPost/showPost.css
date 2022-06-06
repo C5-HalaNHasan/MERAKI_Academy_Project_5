@@ -1,0 +1,20 @@
+.showsPostComponent{
+    background-color: white;
+    width: 100%;
+    border-radius: 0.5em;
+   
+    
+}
+.showPosts{
+    padding: 1em;
+}
+.postUserImg{
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.postTop{
+    display: flex;
+    justify-content: space-between;
+}
