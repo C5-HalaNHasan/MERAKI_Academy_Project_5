@@ -34,6 +34,7 @@ const ModalBox = () => {
     };
   });
   console.log("from modalbox", user, type, message, details, show);
+  const actionTypes = ["ok", "notOk", "alert"];
   if (show === false) {
     return null;
   }
@@ -54,7 +55,7 @@ const ModalBox = () => {
     let sendMessageToUserUrl = `http://localhost:5000/message/${user}`;
     if (enteredChar.length > 25) {
       axios
-        .put(
+        .post(
           sendMessageToUserUrl,
           { message: enteredChar },
           { headers: { authorization: token } }
@@ -94,7 +95,6 @@ const ModalBox = () => {
       setNotification("at least 30 characters must be provided!");
     }
   };
-  //   useEffect(() => {}, []);
   return (
     <div className="modalBox">
       <div className="contentsContainer">
@@ -113,7 +113,7 @@ const ModalBox = () => {
           </span>
 
           <div className="boxContent">
-            {type == "alert" && (
+            {actionTypes.includes(type) && (
               <>
                 <h1>{message}</h1>
                 <h2>{details}</h2>

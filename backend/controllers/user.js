@@ -181,7 +181,7 @@ const addFriendById = (req, res) => {
   const friendshipRequest = req.token.userId;
   const friendshipAccept = req.params.id;
   // first user is going to be checked if friend with the request or not:
-  const query = `SELECT * FROM friendship WHERE friendshipRequest=? AND friendshipAccept=? OR friendshipRequest=? AND friendshipAccept=?`;
+  const query = `SELECT * FROM friendship WHERE friendshipRequest=? AND friendshipAccept=? AND isDeleted=0 OR friendshipRequest=? AND friendshipAccept=? AND isDeleted=0 `;
   const data = [
     friendshipRequest,
     friendshipAccept,
@@ -242,8 +242,13 @@ const addFriendById = (req, res) => {
 const removeFriendById = (req, res) => {
   const friendshipAccept = req.params.id;
   const friendshipRequest = req.token.userId;
-  const query = `UPDATE friendship SET isDELETED=1 WHERE friendshipAccept=? AND friendshipRequest=? `;
-  const data = [friendshipAccept, friendshipRequest];
+  const query = `UPDATE friendship SET isDELETED=1 WHERE friendshipAccept=? AND friendshipRequest=? OR friendshipAccept=? AND friendshipRequest=? `;
+  const data = [
+    friendshipAccept,
+    friendshipRequest,
+    friendshipRequest,
+    friendshipAccept,
+  ];
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({ success: false, message: error.message });

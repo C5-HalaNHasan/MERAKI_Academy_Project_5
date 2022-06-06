@@ -12,9 +12,9 @@ import { setModalBox } from "../redux/reducers/modalBox/index";
 
 const Actions = ({ id }) => {
   const [isReported, setIsReported] = useState("Report");
-  const [isFriend, setIsFriend] = useState(false);
+  const [isFriend, setIsFriend] = useState();
   //three buttons are going to be rendered with the following actions:
-  //currentUser can addFriend(if not in  currentUserFriends) or removeFriend(if in  currentUserFriends)/reportUser/sendMessage
+  //currentUser can addFriend(if not in  currentUserFriends) or removeFriend(if in currentUserFriends)/reportUser/sendMessage
   const dispatch = useDispatch();
   //user states:
   const { token, userId, currentUserFriends } = useSelector((state) => {
@@ -70,6 +70,9 @@ const Actions = ({ id }) => {
         if (result.data.success) {
           //!toast notification to be added "added successfully"
           dispatch(addToFriendsList(result.data.result[0]));
+          setIsFriend(true);
+          getAllFriendsOfCurrentUser();
+          getAllFriendsOfVisitedUser();
         }
       })
       .catch((error) => {
@@ -86,6 +89,9 @@ const Actions = ({ id }) => {
         if (result.data.success) {
           //!toast notification to be added "added successfully"
           dispatch(removeFromFriendsList(result.data.result[0].id));
+          setIsFriend(false);
+          getAllFriendsOfCurrentUser();
+          getAllFriendsOfVisitedUser();
         }
       })
       .catch((error) => {
@@ -101,9 +107,9 @@ const Actions = ({ id }) => {
     return checked.length ? setIsFriend(true) : setIsFriend(false);
   };
 
-  //to re-get current userFriends:
-  const getAllFriends = async () => {
-    let getFriendsUrl = ` http://localhost:5000/user/friends/${id}`; //! supposed to show friend on the visited page not mine
+  //to re-render visitedUser Friends:
+  const getAllFriendsOfVisitedUser = async () => {
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${id}`;
     axios
       .get(getFriendsUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -115,10 +121,26 @@ const Actions = ({ id }) => {
         console.log({ fromGetAllFriends_error: error }); //! to be deleted and replaced by toast notification
       });
   };
+
+  //to re-render the currentUser Friends (for Add/Remove)
+  const getAllFriendsOfCurrentUser = async () => {
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${userId}`;
+    axios
+      .get(getFriendsUrl, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(setCurrentUserFriends(result.data.result));
+        }
+      })
+      .catch((error) => {
+        console.log({ fromGetAllFriends_error: error }); //! to be deleted and replaced by toast notification
+      });
+  };
   useEffect(() => {
+    getAllFriendsOfVisitedUser();
+    getAllFriendsOfCurrentUser();
     checkIfFriend();
-    // getAllFriends();
-  }, [isFriend]);
+  }, [isFriend, id]);
 
   console.log(currentUserFriends);
   return (

@@ -3,11 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 const messageSlice = createSlice({
   name: "message",
   initialState: {
-    messages: []
+    allMessages: [],
+    messagesWith: [],
   },
   reducers: {
     setAllMessages: (state, action) => {
-      state.messages = action.payload;
+      state.allMessages = action.payload;
+    },
+    setMessagesWith: (state, action) => {
+      state.messagesWith = action.payload;
     },
     addToMessages: (state, action) => {
       state.messages.push(action.payload);
@@ -16,9 +20,14 @@ const messageSlice = createSlice({
       state.messages = state.messages.filter((message, index) => {
         return message.id != action.payload;
       });
-    }
-  }
+    },
+  },
 });
 
-export const {setAllMessages,addToMessages,removeFromMessages} = messageSlice.actions;
+export const {
+  setAllMessages,
+  setMessagesWith,
+  addToMessages,
+  removeFromMessages,
+} = messageSlice.actions;
 export default messageSlice.reducer;
