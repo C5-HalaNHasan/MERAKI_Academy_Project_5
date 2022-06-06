@@ -3,6 +3,8 @@ import "./showPost.css";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { setSelector, setDispatch } from "react-redux";
+import {BsThreeDots} from "react-icons/bs"
+import {AiOutlineLike} from "react-icons/ai"
 import {
   setAllPosts,
   removeFromPosts,
@@ -38,6 +40,7 @@ const ShowPost = () => {
     };
   });
   const dispatch = useDispatch();
+  const [show,setShow]=useState(false)
   const getAllPosts = async () => {
     try {
       const res = await axios.get("http://localhost:5000/post/friends", {
@@ -45,40 +48,50 @@ const ShowPost = () => {
           Authorization: token,
         },
       });
-      console.log(res);
+      
       if (res.data.success) {
         dispatch(setAllPosts(res.data.result));
+        console.log(res.data.result);
+        setShow(true)
       }
     } catch {}
   };
   useEffect(() => {
     getAllPosts();
-  });
-  return (
-    <div className="showsPostComponent">
-      <div className="showPosts">
+  },[]);
+  return ( 
+    <>
+  
+   <div className="showsPostComponent">
+   { show && posts.map((element,index)=>{
+     return(
+      <div key={index} className="showPosts">
+        
         <div className="postTop">
           <div className="postTopLeft">
-            {/* post user img */}
-            {/* post username */}
-            {/* post date */}
+            <img className="postUserImg" src={element.profileImg}/>
+            <>{element.firstName} </> <span> {element.createdAt}</span>
+            
+            
           </div>
           <div className="postTopRight"></div>
-          {/* settings icon */}
+          <BsThreeDots/>
         </div>
         <div className="postCenter">
-          {/* post text */}
-          {/* post img */}
+          <>{element.postText}</>
+          <img src={element.postImg}/>
+         
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
-            {/* icons for likes */}
+            <AiOutlineLike/>
             {/* likes counter */}
           </div>
           <div className="postBottomLeft">{/* comment counter */}</div>
         </div>
-      </div>
+      </div> )})}
     </div>
+    </>
   );
 };
 

@@ -30,7 +30,7 @@ const NavBar = () => {
       console.log(error)
     })
   };
-console.log(currentUserInfo);
+// console.log(currentUserInfo);
   useEffect(()=>{
     getCurrentUser();
   },[])
