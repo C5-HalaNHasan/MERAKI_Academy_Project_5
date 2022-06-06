@@ -186,7 +186,10 @@ const ShowPost = () => {
                   ) : (
                     ""
                   )}
-                 {updateClick && currentPost.animVal == element.id && author !== element.author_id ? <p>Report</p>:""}
+                 {updateClick && currentPost.animVal == element.id && author !== element.author_id ? <p onClick={()=>{
+                   reportPostById(element.id)
+                   setUpdateClick(false)
+                 }}>Report</p>:""}
                 </div>
                 <div className="postCenter">
                   <>{element.postText}</>
