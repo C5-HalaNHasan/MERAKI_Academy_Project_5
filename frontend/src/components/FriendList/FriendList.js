@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setVisitedUserFriends,
-  setCurrentUserFriends
+  setCurrentUserFriends,
 } from "../redux/reducers/user/index";
 
 const FriendList = ({ id }) => {
@@ -19,7 +19,7 @@ const FriendList = ({ id }) => {
         token: state.user.token,
         userId: state.user.userId,
         currentUserFriends: state.user.currentUserFriends,
-        visitedUserFriends: state.user.visitedUserFriends
+        visitedUserFriends: state.user.visitedUserFriends,
       };
     }
   );
@@ -28,14 +28,14 @@ const FriendList = ({ id }) => {
     const response = await axios
       .get(`http://localhost:5000/user/friends/${userId}`, {
         headers: {
-          Authorization: token
-        }
+          Authorization: token,
+        },
       })
       .then((response) => {
         if (id == userId) {
-          dispatch(setCurrentUserFriends(response.data.result));//! to be used later
+          dispatch(setCurrentUserFriends(response.data.result)); //! to be used later
         } else {
-          dispatch(setVisitedUserFriends(response.data.result));//! to be used later
+          dispatch(setVisitedUserFriends(response.data.result)); //! to be used later
         }
       })
       .catch((err) => {
@@ -53,45 +53,44 @@ const FriendList = ({ id }) => {
     <div className="friendListComponent">
       friendListComponent
       <div className="friendIcon ">
-      {userId==id?(<>
-        { currentUserFriends.length &&
-          currentUserFriends.map((friend, index) => {
-            return (
-              <>
-                <div key={index}>
-                  <img
-                    src={friend.profileImg}
-                    id={friend.id}
-                    onClick={(e) => navigate(`/user/${e.target.id}`)}
-                  ></img>
-                  <h4>{friend.firstName}</h4>
-                </div>
-              </>
-            );
-          })}
+        {userId == id ? (
+          <>
+            {currentUserFriends.length &&
+              currentUserFriends.map((friend, index) => {
+                return (
+                  <>
+                    <div key={index}>
+                      <img
+                        src={friend.profileImg}
+                        id={friend.id}
+                        onClick={(e) => navigate(`/user/${e.target.id}`)}
+                      ></img>
+                      <h4>{friend.firstName}</h4>
+                    </div>
+                  </>
+                );
+              })}
           </>
-      ):(<>
-        { visitedUserFriends.length &&
-          visitedUserFriends.map((friend, index) => {
-            return (
-              <>
-                <div key={index}>
-                  <img
-                    src={friend.profileImg}
-                    id={friend.id}
-                    onClick={(e) => navigate(`/user/${e.target.id}`)}
-                  ></img>
-                  <h4>{friend.firstName}</h4>
-                </div>
-              </>
-            );
-          })}
-
-
-
-      </>
-      )}
-      </div>//!ends of friendIcon
+        ) : (
+          <>
+            {visitedUserFriends.length &&
+              visitedUserFriends.map((friend, index) => {
+                return (
+                  <>
+                    <div key={index}>
+                      <img
+                        src={friend.profileImg}
+                        id={friend.id}
+                        onClick={(e) => navigate(`/user/${e.target.id}`)}
+                      ></img>
+                      <h4>{friend.firstName}</h4>
+                    </div>
+                  </>
+                );
+              })}
+          </>
+        )}
+      </div>
     </div>
   );
 };
