@@ -1,7 +1,6 @@
 const connection = require("../models/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { connect } = require("../models/db");
 
 // a function to add a new user to the data base
 const createUser = async (req, res) => {
@@ -14,7 +13,7 @@ const createUser = async (req, res) => {
     birthday,
     country,
     gender,
-    role_id
+    role_id,
   } = req.body;
   const query = `INSERT INTO user(firstName,lastName,email,password,birthday,country,gender,role_id) VALUES(?,?,?,?,?,?,?,?)`;
   const SALT = 10;
@@ -27,7 +26,7 @@ const createUser = async (req, res) => {
     birthday,
     country,
     gender,
-    role_id
+    role_id,
   ];
   //before registration: the entered email is going to be checked if it exists in the dataBase or not:
   const query1 = `SELECT * FROM user WHERE email=?`;
@@ -36,7 +35,7 @@ const createUser = async (req, res) => {
     if (error1) {
       return res.status(500).json({
         success: false,
-        message: error1.message
+        message: error1.message,
       });
     }
     //if the result is an empty array then the email doesn't ecist in the data base
@@ -46,20 +45,20 @@ const createUser = async (req, res) => {
         if (error) {
           return res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
           });
         }
         res.status(201).json({
           success: true,
           message: `user created successfully`,
-          result: result
+          result: result,
         });
       });
     } else {
       //the entered email exists in the dataBase:
       res.status(406).json({
         success: false,
-        message: `this email exists in the dataBase`
+        message: `this email exists in the dataBase`,
       });
     }
   });
@@ -77,7 +76,7 @@ const loginUser = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
 
@@ -88,31 +87,33 @@ const loginUser = (req, res) => {
         if (error1) {
           return res.status(500).json({
             success: false,
-            message: error1.message
+            message: error1.message,
           });
         }
         if (result1) {
           const payload = {
             userId: result[0].id,
-            role_id: result[0].role_id
+            role_id: result[0].role_id,
           };
           const options = {
-            expiresIn: "700m" //! to be updated later
+            expiresIn: "700m", //! to be updated later
           };
           const secret = process.env.SECRET;
           const token = jwt.sign(payload, secret, options);
-          res.status(200).json({ token:token,userId:result[0].id,userInfo:result[0] });
+          res
+            .status(200)
+            .json({ token: token, userId: result[0].id, userInfo: result[0] });
         } else {
           res.status(403).json({
             success: false,
-            message: "Incorrect password"
+            message: "Incorrect password",
           });
         }
       });
     } else {
       res.status(404).json({
         success: false,
-        message: "This email doesn't exist in the dataBase"
+        message: "This email doesn't exist in the dataBase",
       });
     }
   });
@@ -124,19 +125,19 @@ const getAllUsers = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
     if (!result.length) {
       return res.status(404).json({
         success: false,
-        message: `No Users Found`
+        message: `No Users Found`,
       });
     } else {
       res.status(200).json({
         success: true,
         message: `all users`,
-        result
+        result,
       });
     }
   });
@@ -151,7 +152,7 @@ const updateUserProfile = async (req, res) => {
     country,
     profileImg,
     coverImg,
-    isPrivate
+    isPrivate,
   } = req.body;
   const id = req.token.userId;
   const SALT = 10;
@@ -166,7 +167,7 @@ const updateUserProfile = async (req, res) => {
     profileImg,
     coverImg,
     isPrivate,
-    id
+    id,
   ];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -180,57 +181,61 @@ const addFriendById = (req, res) => {
   const friendshipRequest = req.token.userId;
   const friendshipAccept = req.params.id;
   // first user is going to be checked if friend with the request or not:
-  const query=`SELECT * FROM friendship WHERE friendshipRequest=? AND friendshipAccept=? OR friendshipRequest=? AND friendshipAccept=?`
-  const data = [friendshipRequest, friendshipAccept,friendshipAccept,friendshipRequest];
-  connection.query(query,data,(error,result)=>{
-    console.log(result)
-    if(error){
+  const query = `SELECT * FROM friendship WHERE friendshipRequest=? AND friendshipAccept=? OR friendshipRequest=? AND friendshipAccept=?`;
+  const data = [
+    friendshipRequest,
+    friendshipAccept,
+    friendshipAccept,
+    friendshipRequest,
+  ];
+  connection.query(query, data, (error, result) => {
+    console.log(result);
+    if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
-    if(result.length==0){
+    if (result.length == 0) {
       const query1 = `INSERT INTO friendship(friendshipRequest,friendshipAccept) VALUES(?,?)`;
       const data1 = [friendshipRequest, friendshipAccept];
       connection.query(query1, data1, (error1, result1) => {
-    if (error1) {
-      return res.status(500).json({
-        success: false,
-        message: error1.message
-      });
-    }
-      if(result1.affectedRows==1){
-        const query2 = `SELECT * FROM user WHERE id=?`;
-        const data2 = [friendshipAccept];
-        connection.query(query2, data2, (error2, result2)=>{
-          if (error2) {
-            return res.status(500).json({
-              success: false,
-              message: error2.message
-            });
-          }
-          res.status(201).json({
-            success: true,
-            message: `friend added successfully`,
-            result:result2,
+        if (error1) {
+          return res.status(500).json({
+            success: false,
+            message: error1.message,
           });
-        })
-      }else{
-        res.status(400).json({
-          success: false,
-          message: `Request can't be sent`,
-        });
-      }
-  });
-    }else{
+        }
+        if (result1.affectedRows == 1) {
+          const query2 = `SELECT * FROM user WHERE id=?`;
+          const data2 = [friendshipAccept];
+          connection.query(query2, data2, (error2, result2) => {
+            if (error2) {
+              return res.status(500).json({
+                success: false,
+                message: error2.message,
+              });
+            }
+            res.status(201).json({
+              success: true,
+              message: `friend added successfully`,
+              result: result2,
+            });
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: `Request can't be sent`,
+          });
+        }
+      });
+    } else {
       res.status(400).json({
         success: false,
         message: `user ${friendshipAccept} is already in your friendlist`,
       });
-
     }
-  })
+  });
 };
 
 // ______this function to removeFriendById__________
@@ -243,20 +248,23 @@ const removeFriendById = (req, res) => {
     if (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
-    if(result.affectedRows==1){//! to return deleted user to be used in the frontend
+    if (result.affectedRows == 1) {
+      //! to return deleted user to be used in the frontend
       const query1 = `SELECT * FROM user WHERE id=? `;
       const data1 = [friendshipAccept];
-      connection.query(query1,data1,(error1,result1)=>{
+      connection.query(query1, data1, (error1, result1) => {
         if (error1) {
-          return res.status(500).json({ success: false, message: error1.message });
+          return res
+            .status(500)
+            .json({ success: false, message: error1.message });
         }
         res.status(200).json({
           success: true,
           message: `friend ${friendshipAccept} has been deleted successfully`,
-          result:result1
+          result: result1,
         });
-      })
-    }else{
+      });
+    } else {
       res.status(404).json({
         success: false,
         message: `friend ${friendshipAccept} is not in your friendlist`,
@@ -266,17 +274,18 @@ const removeFriendById = (req, res) => {
 };
 
 // ________ this function to get all friends ____________
-const getAllFriendsByUserId= (req, res) => {
+const getAllFriendsByUserId = (req, res) => {
   const friendshipRequest = req.params.id;
-  const friendshipAccept=friendshipRequest;
-  const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`
+  const friendshipAccept = friendshipRequest;
+  // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=? AND f.isDeleted=0`;
-  const data = [friendshipRequest,friendshipAccept];
+  const query = `SELECT u.id,u.firstName,u.lastName,u.email,u.country,u.gender,u.profileImg,u.coverImg,u.isPrivate,u.isReported,u.isDeleted,u.role_id FROM user u INNER JOIN friendship f ON f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 OR f.friendshipAccept=? AND f.isDeleted=0`;
+  const data = [friendshipRequest, friendshipAccept];
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
 
@@ -287,7 +296,7 @@ const getAllFriendsByUserId= (req, res) => {
     res.status(200).json({
       success: true,
       message: `All Friends for userId ${friendshipRequest},£of friends is ${result.length}`,
-      result: result
+      result: result,
     });
   });
 };
@@ -302,7 +311,7 @@ const reportUserById = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
     res
@@ -314,9 +323,9 @@ const reportUserById = (req, res) => {
 //a function that removes a reported user by id by Admin only
 const removeUserByIdAdmin = (req, res) => {
   const id = req.params.id;
-  const userId=req.token.userId
+  const userId = req.token.userId;
   const query = `UPDATE user set isDeleted=1 WHERE id=? and isReported=1`;
-  const data = [id,userId];
+  const data = [id, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({});
@@ -324,7 +333,7 @@ const removeUserByIdAdmin = (req, res) => {
     res.status(200).json({
       success: true,
       message: `The reported user is deleted`,
-      result
+      result,
     });
   });
 };
@@ -350,31 +359,30 @@ const getReportedUsers = (req, res) => {
 
 // a function that returns user by id
 const getUserById = (req, res) => {
-  const userId=req.params.id
+  const userId = req.params.id;
   const query = `SELECT * FROM USER WHERE role_id =1 AND isDeleted=0 AND id=?`;
-  const data=[userId];
-  connection.query(query,data, (error, result) => {
+  const data = [userId];
+  connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
     if (!result.length) {
       return res.status(404).json({
         success: false,
-        message: `No Users Found`
+        message: `No Users Found`,
       });
     } else {
       res.status(200).json({
         success: true,
         message: `user ${userId} info`,
-        result
+        result,
       });
     }
   });
 };
-
 
 module.exports = {
   createUser,
@@ -387,5 +395,5 @@ module.exports = {
   reportUserById,
   removeUserByIdAdmin,
   getReportedUsers,
-  getUserById
+  getUserById,
 };
