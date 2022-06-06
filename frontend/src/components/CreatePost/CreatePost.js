@@ -62,6 +62,7 @@ const CreatePost = () => {
 
   return (
     <div className="createPostComponent">
+      <div className="createPost">
       <div className="topPostCreate">
         <img src={currentUserInfo.profileImg} className="userPostImg" />
         <input
@@ -78,10 +79,13 @@ const CreatePost = () => {
           }}
         />
       </div>
+      <hr/>
       <div className="bottomPostCreate">
         <div className="leftBottomPost">
           <div className="ImgUpload">
             <HiOutlinePhotograph
+           
+            className="iconImg1"
               onClick={() => {
                 setClickedImg(!clickedImg);
               }}
@@ -102,7 +106,7 @@ const CreatePost = () => {
             )}
           </div>
           <div className="ImgUpload">
-            <BsFillCameraVideoFill
+            <BsFillCameraVideoFill className="iconImg2"
               onClick={() => {
                 setClickedVideo(!clickedVideo);
               }}
@@ -122,7 +126,8 @@ const CreatePost = () => {
             )}
           </div>
         </div>
-        <button
+        <button 
+        className="postButton"
           onClick={() => {
             // submit();
             setClear("");
@@ -134,6 +139,7 @@ const CreatePost = () => {
         >
           Post
         </button>
+      </div>
       </div>
     </div>
   );

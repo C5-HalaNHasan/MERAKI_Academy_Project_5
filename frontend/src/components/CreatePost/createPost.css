@@ -3,6 +3,23 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 1em;
+    -webkit-box-shadow: 0px 0px 21px -9px rgba(0,0,0,0.62); 
+box-shadow: 0px 0px 21px -9px rgba(0,0,0,0.62);
+
+}
+.createPost{
+    padding: 0.25em;
+    height: 95%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.topPostCreate{
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
 }
 .userPostImg{
     padding: 0.1em;
@@ -34,5 +51,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2em;
     
+}
+.iconImg1{
+    font-size: 2.5vw;
+    color: tomato;
+}
+.iconImg2{
+    font-size: 2.5vw;
+    color:blue;
+}
+hr{
+    width: 70%;
+}
+.postButton{
+    border: none;
+    padding:0.5em ;
+    color: white;
+    background-color: green;
+    border-radius: 0.5em;
+    cursor: pointer;
+    margin-right: 1em;
 }
