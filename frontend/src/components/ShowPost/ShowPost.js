@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./showPost.css";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { setSelector, setDispatch } from "react-redux";
+
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
 import {
@@ -45,9 +45,9 @@ const ShowPost = () => {
   const [postText, setPostText] = useState("");
   const [postImg, setPostImg] = useState("");
   const [postVideo, setPostVideo] = useState("");
-  const [updateClick,setUpdateClick]= useState(false);
-  const [currentPost,setCurrentPost]=useState("")
-  const author=currentUserInfo.id
+  const [updateClick, setUpdateClick] = useState(false);
+  const [currentPost, setCurrentPost] = useState("");
+  const author = currentUserInfo.id;
   console.log(author);
 
   const getAllPosts = async () => {
@@ -65,8 +65,8 @@ const ShowPost = () => {
       }
     } catch {}
   };
-  const updatePost = (id,postImg,postText) => {
-    
+
+  const updatePost = (id, postImg, postText) => {
     axios
       .put(
         `http://localhost:5000/post/${id}`,
@@ -82,10 +82,8 @@ const ShowPost = () => {
         }
       )
       .then((result) => {
-        dispatch(updatePosts({ id, postText, postImg, postVideo })
-        );
-        getAllPosts()
-        console.log(result);
+        dispatch(updatePosts({ id, postText, postImg, postVideo }));
+        getAllPosts();
       })
       .catch((error) => {
         console.log(error);
@@ -108,10 +106,10 @@ const ShowPost = () => {
   };
   const uploadImage = (id) => {
     const data = new FormData();
-    
-    data.append("file", postImg)
+
+    data.append("file", postImg);
     // clickedVideo? data.append("file", postVideo): ""
-    
+
     data.append("upload_preset", "rapulojk");
     data.append("cloud_name", "difjgm3tp");
 
@@ -121,9 +119,9 @@ const ShowPost = () => {
       .then((result) => {
         setPostImg(result.data.url);
         console.log(result.data);
-        updatePost(id,result.data.url)
-        setUpdateClick(false)
-        setPostImg("")
+        updatePost(id, result.data.url);
+        setUpdateClick(false);
+        setPostImg("");
       })
       .catch((error) => {
         console.log(error);
@@ -155,46 +153,80 @@ const ShowPost = () => {
                     <>{element.firstName} </> <span> {element.createdAt}</span>
                   </div>
                   <div className="postTopRight"></div>
-                  <BsThreeDots  className={element.id} onClick={(e)=>{
-                    setUpdateClick(!updateClick)
-                    setCurrentPost(e.target.className)
-                    console.log(currentPost.animVal);
-                    
-
-                  }} />
+                  <BsThreeDots
+                    className={element.id}
+                    onClick={(e) => {
+                      setUpdateClick(!updateClick);
+                      setCurrentPost(e.target.className);
+                      console.log(currentPost.animVal);
+                    }}
+                  />
                   {/* {setAuthor(element.author_id)} */}
-                  {currentUserInfo.id == element.author_id && updateClick && currentPost.animVal == element.id ? (
+                  {currentUserInfo.id == element.author_id &&
+                  updateClick &&
+                  currentPost.animVal == element.id ? (
                     <>
                       {" "}
-                      <input type={"text"} onChange={(e)=>{
-                        setPostText(e.target.value)
-                      }}/>
-                      <input type={"file"} onChange={(e)=>{
-                        setPostImg(e.target.files[0])
-                      }}/>
-                      <button className={element.id} onClick={(e)=>{
-
-                        {postImg?uploadImage(e.target.className): updatePost(element.id,postImg,postText); setUpdateClick(false)}
-                        // setUpdateClick(false)
-                        
-
-                      }} >Update</button>
-                      <button onClick={()=>{
-                        deletePostById(element.id)
-                      }}>delete</button>
+                      <input
+                        type={"text"}
+                        onChange={(e) => {
+                          setPostText(e.target.value);
+                        }}
+                      />
+                      <input
+                        type={"file"}
+                        onChange={(e) => {
+                          setPostImg(e.target.files[0]);
+                        }}
+                      />
+                      <button
+                        className={element.id}
+                        onClick={(e) => {
+                          {
+                            postImg
+                              ? uploadImage(e.target.className)
+                              : updatePost(element.id, postImg, postText);
+                            setUpdateClick(false);
+                          }
+                          // setUpdateClick(false)
+                        }}
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => {
+                          deletePostById(element.id);
+                        }}
+                      >
+                        delete
+                      </button>
                     </>
                   ) : (
                     ""
                   )}
-                 {updateClick && currentPost.animVal == element.id && author !== element.author_id ? <p onClick={()=>{
-                   reportPostById(element.id)
-                   setUpdateClick(false)
-                 }}>Report</p>:""}
+                  {updateClick &&
+                  currentPost.animVal == element.id &&
+                  author !== element.author_id ? (
+                    <p
+                      onClick={() => {
+                        reportPostById(element.id);
+                        setUpdateClick(false);
+                      }}
+                    >
+                      Report
+                    </p>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="postCenter">
                   <>{element.postText}</>
                   <br></br>
-                { element.postImg? <img className="PostImg" src={element.postImg} />:""}
+                  {element.postImg ? (
+                    <img className="PostImg" src={element.postImg} />
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="postBottom">
                   <div className="postBottomLeft">

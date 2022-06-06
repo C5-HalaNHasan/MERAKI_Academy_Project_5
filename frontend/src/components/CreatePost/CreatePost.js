@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./createPost.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addToPosts } from "../redux/reducers/post";
+import { addToPosts, setAllPosts } from "../redux/reducers/post";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { BsFillCameraVideoFill } from "react-icons/bs";
+
 import axios from "axios";
 const CreatePost = () => {
   const [postText, setPostText] = useState("");
@@ -20,13 +21,26 @@ const CreatePost = () => {
       token: state.user.token,
     };
   });
+  const getAllPosts = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/post/friends", {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (res.data.success) {
+        dispatch(setAllPosts(res.data.result));
+        console.log(res.data.result);
+        // setShow(true);
+      }
+    } catch {}
+  };
   const submit = (url) => {
     axios
       .post(
         "http://localhost:5000/post",
-        { postText, 
-            postVideo:null,
-             postImg:url },
+        { postText, postVideo: null, postImg: url },
         {
           headers: {
             Authorization: token,
@@ -34,15 +48,17 @@ const CreatePost = () => {
         }
       )
       .then((result) => {
-        dispatch(addToPosts(postText));
+        dispatch(addToPosts({ postText, postVideo, postImg }));
+        getAllPosts();
       });
   };
+
   const uploadImage = () => {
     const data = new FormData();
-    
-    clickedImg? data.append("file", postImg): data.append("file", postVideo)
+
+    clickedImg ? data.append("file", postImg) : data.append("file", postVideo);
     // clickedVideo? data.append("file", postVideo): ""
-    
+
     data.append("upload_preset", "rapulojk");
     data.append("cloud_name", "difjgm3tp");
 
@@ -52,94 +68,89 @@ const CreatePost = () => {
       .then((result) => {
         // setPostImg(result.data.url);
         console.log(result.data);
-        submit(result.data.url)
+        submit(result.data.url);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-
   return (
     <div className="createPostComponent">
       <div className="createPost">
-      <div className="topPostCreate">
-        <img src={currentUserInfo.profileImg} className="userPostImg" />
-        <input
-          value={clear}
-          onClick={() => {
-            setClear();
-          }}
-          autoComplete="off"
-          type={"text"}
-          className="userPostInput"
-          placeholder={"What is in your mind " + currentUserInfo.firstName}
-          onChange={(e) => {
-            setPostText(e.target.value);
-          }}
-        />
-      </div>
-      <hr/>
-      <div className="bottomPostCreate">
-        <div className="leftBottomPost">
-          <div className="ImgUpload">
-            <HiOutlinePhotograph
-           
-            className="iconImg1"
-              onClick={() => {
-                setClickedImg(!clickedImg);
-              }}
-            />
-            {clickedImg ? (
-              <>
-                <input
-                  type={"file"}
-                  onChange={(e) => {
-                    setPostImg(e.target.files[0]);
-                  }}
-                />
-
-                
-              </>
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="ImgUpload">
-            <BsFillCameraVideoFill className="iconImg2"
-              onClick={() => {
-                setClickedVideo(!clickedVideo);
-              }}
-            />
-            {clickedVideo ? (
-              <>
-                <input
-                  type={"file"}
-                  onChange={(e) => {
-                    setPostVideo(e.target.files[0]);
-                  }}
-                />
-               
-              </>
-            ) : (
-              ""
-            )}
-          </div>
+        <div className="topPostCreate">
+          <img src={currentUserInfo.profileImg} className="userPostImg" />
+          <input
+            value={clear}
+            onClick={() => {
+              setClear();
+            }}
+            autoComplete="off"
+            type={"text"}
+            className="userPostInput"
+            placeholder={"What is in your mind " + currentUserInfo.firstName}
+            onChange={(e) => {
+              setPostText(e.target.value);
+            }}
+          />
         </div>
-        <button 
-        className="postButton"
-          onClick={() => {
-            // submit();
-            setClear("");
-            setClickedImg(false);
-            setClickedVideo(false);
-            uploadImage();
-
-          }}
-        >
-          Post
-        </button>
-      </div>
+        <hr />
+        <div className="bottomPostCreate">
+          <div className="leftBottomPost">
+            <div className="ImgUpload">
+              <HiOutlinePhotograph
+                className="iconImg1"
+                onClick={() => {
+                  setClickedImg(!clickedImg);
+                }}
+              />
+              {clickedImg ? (
+                <>
+                  <input
+                    type={"file"}
+                    onChange={(e) => {
+                      setPostImg(e.target.files[0]);
+                    }}
+                  />
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="ImgUpload">
+              <BsFillCameraVideoFill
+                className="iconImg2"
+                onClick={() => {
+                  setClickedVideo(!clickedVideo);
+                }}
+              />
+              {clickedVideo ? (
+                <>
+                  <input
+                    type={"file"}
+                    onChange={(e) => {
+                      setPostVideo(e.target.files[0]);
+                    }}
+                  />
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+          <button
+            className="postButton"
+            onClick={() => {
+              // submit();
+              setClear("");
+              setClickedImg(false);
+              setClickedVideo(false);
+              clickedImg || clickedVideo ? uploadImage() : submit();
+            }}
+          >
+            Post
+          </button>
+        </div>
       </div>
     </div>
   );
