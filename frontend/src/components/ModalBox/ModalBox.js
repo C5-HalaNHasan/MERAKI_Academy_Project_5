@@ -53,7 +53,7 @@ const ModalBox = () => {
 
   const sendMessage = () => {
     let sendMessageToUserUrl = `http://localhost:5000/message/${user}`;
-    if (enteredChar.length > 25) {
+    if (enteredChar.length > 10) {
       axios
         .post(
           sendMessageToUserUrl,
@@ -78,7 +78,7 @@ const ModalBox = () => {
   //to be removed from Actions component
   const reportUser = () => {
     let reportUserUrl = `http://localhost:5000/user/remove/${user}`;
-    if (enteredChar.length > 25) {
+    if (enteredChar.length > 10) {
       axios
         .put(reportUserUrl, {}, { headers: { authorization: token } })
         .then((result) => {
