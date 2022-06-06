@@ -103,11 +103,10 @@ const updatePostById = (req, res) => {
         error: error,
       });
     } else {
-      const query = `UPDATE post SET postText=?, postImg=?, postVideo=? WHERE id=? `;
+      const query = `UPDATE post SET postText=?, postImg=? WHERE id=? ;`;
       const data = [
         postText || result[0].postText,
         postImg || result[0].postImg,
-        postVideo || result[0].postVideo,
         id,
       ];
       connection.query(query, data, (err, result) => {
