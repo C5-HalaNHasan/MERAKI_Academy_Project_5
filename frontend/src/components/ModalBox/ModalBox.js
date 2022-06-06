@@ -12,9 +12,10 @@ import { setModalBox } from "../redux/reducers/modalBox/index";
 //! box is not closing on click
 const ModalBox = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   //to ensure that the user has entered enough charcters to send a message or report a user:
   const [enteredChar, setEnteredChar] = useState("");
+  const [notification, setNotification] = useState("");
   //to use user token for axios calls
   const { token, userId } = useSelector((state) => {
     return {
@@ -32,19 +33,21 @@ const ModalBox = () => {
       show: state.modalBox.show,
     };
   });
-
+  console.log("from modalbox", user, type, message, details, show);
   if (show === false) {
     return null;
   }
 
   const clearModalBox = () => {
-    setModalBox({
-      user: "",
-      type: "",
-      message: "",
-      details: "",
-      show: false,
-    });
+    dispatch(
+      setModalBox({
+        user: "",
+        type: "",
+        message: "",
+        details: "",
+        show: false,
+      })
+    );
   };
 
   const sendMessage = () => {
@@ -67,7 +70,7 @@ const ModalBox = () => {
           console.log({ fromSendMessage_error: error }); //! to be deleted and replaced by toast notification
         });
     } else {
-      setModalBox({ details: "at least 30 characters must be provided!" });
+      setNotification("at least 30 characters must be provided!");
     }
   };
 
@@ -88,7 +91,7 @@ const ModalBox = () => {
           console.log({ fromReportUser_error: error }); //! to be deleted and replaced by toast notification
         });
     } else {
-      setModalBox({ details: "at least 30 characters must be provided!" });
+      setNotification("at least 30 characters must be provided!");
     }
   };
   //   useEffect(() => {}, []);
