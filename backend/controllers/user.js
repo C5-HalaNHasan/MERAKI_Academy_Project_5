@@ -286,7 +286,7 @@ const getAllFriendsByUserId= (req, res) => {
     // });
     res.status(200).json({
       success: true,
-      message: `All Friends for userId ${friendshipRequest},£of friends is ${result2.length}`,
+      message: `All Friends for userId ${friendshipRequest},£of friends is ${result.length}`,
       result: result
     });
   });

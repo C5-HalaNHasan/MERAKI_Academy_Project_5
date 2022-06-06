@@ -37,9 +37,23 @@ const ShowPost = () => {
       commentsReactions: state.post.commentsReactions,
     };
   });
-  const dispatch = useDispatch()
-  const getAllPosts = () => {};
-
+  const dispatch = useDispatch();
+  const getAllPosts = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/post/friends", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(res);
+      if (res.data.success) {
+        dispatch(setAllPosts(res.data.result));
+      }
+    } catch {}
+  };
+  useEffect(() => {
+    getAllPosts();
+  });
   return (
     <div className="showsPostComponent">
       <div className="showPosts">
