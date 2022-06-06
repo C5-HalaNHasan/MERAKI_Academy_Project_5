@@ -47,6 +47,8 @@ const ShowPost = () => {
   const [postVideo, setPostVideo] = useState("");
   const [updateClick,setUpdateClick]= useState(false);
   const [currentPost,setCurrentPost]=useState("")
+  const author=currentUserInfo.id
+  console.log(author);
 
   const getAllPosts = async () => {
     try {
@@ -157,8 +159,10 @@ const ShowPost = () => {
                     setUpdateClick(!updateClick)
                     setCurrentPost(e.target.className)
                     console.log(currentPost.animVal);
+                    
 
                   }} />
+                  {/* {setAuthor(element.author_id)} */}
                   {currentUserInfo.id == element.author_id && updateClick && currentPost.animVal == element.id ? (
                     <>
                       {" "}
@@ -175,11 +179,14 @@ const ShowPost = () => {
                         
 
                       }} >Update</button>
+                      <button onClick={()=>{
+                        deletePostById(element.id)
+                      }}>delete</button>
                     </>
                   ) : (
                     ""
                   )}
-                 {updateClick && currentPost.animVal == element.id? <p>Report</p>:""}
+                 {updateClick && currentPost.animVal == element.id && author !== element.author_id ? <p>Report</p>:""}
                 </div>
                 <div className="postCenter">
                   <>{element.postText}</>
