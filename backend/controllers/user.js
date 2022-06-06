@@ -278,8 +278,7 @@ const getAllFriendsByUserId = (req, res) => {
   const friendshipRequest = req.params.id;
   const friendshipAccept = friendshipRequest;
   // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`;
-  // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 UNION SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipRequest=u.id WHERE f.friendshipAccept=? AND f.isDeleted=0`;
-  const query = `SELECT u.id,u.firstName,u.lastName,u.email,u.country,u.gender,u.profileImg,u.coverImg,u.isPrivate,u.isReported,u.isDeleted,u.role_id FROM user u INNER JOIN friendship f ON f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 OR f.friendshipAccept=? AND f.isDeleted=0`;
+  const query = `SELECT u.id,u.firstName,u.lastName,u.email,u.country,u.gender,u.profileImg,u.coverImg,u.isPrivate,u.isReported,u.isDeleted,u.role_id FROM user u INNER JOIN friendship f ON f.friendshipAccept=u.id WHERE f.friendshipRequest=? AND f.isDeleted=0 UNION SELECT u.id,u.firstName,u.lastName,u.email,u.country,u.gender,u.profileImg,u.coverImg,u.isPrivate,u.isReported,u.isDeleted,u.role_id FROM user u INNER JOIN friendship f ON f.friendshipRequest=u.id WHERE f.friendshipAccept=? AND f.isDeleted=0 `;
   const data = [friendshipRequest, friendshipAccept];
   connection.query(query, data, (error, result) => {
     if (error) {
