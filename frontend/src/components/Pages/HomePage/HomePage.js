@@ -18,8 +18,8 @@ const HomePage = () => {
   });
   return (
     <>
-      <NavBar />
       <ModalBox />
+      <NavBar />
       <FriendList id={userId} />
       <Suggested />
       <CreatePost />

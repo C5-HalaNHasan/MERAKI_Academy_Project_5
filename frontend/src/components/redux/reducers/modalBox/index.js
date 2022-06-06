@@ -16,7 +16,7 @@ const modalBoxSlice = createSlice({
       state.type = action.payload.type || state.type;
       state.message = action.payload.message || state.message;
       state.details = action.payload.details || state.details;
-      state.show = action.payload.show || state.show;
+      state.show = action.payload.show;
     },
   },
 });
