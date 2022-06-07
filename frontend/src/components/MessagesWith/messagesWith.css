@@ -1,0 +1,6 @@
+.messageCard .rightSide button{
+    /* this styling not to be adopted! only for testing */
+    position: fixed;
+    right:28vw;
+    width:5vw;
+}

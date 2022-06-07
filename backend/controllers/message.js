@@ -38,7 +38,7 @@ const getAllMessagesFromUserById = (req, res) => {
     if (result.length > 0) {
       res.status(200).json({
         success: true,
-        message: `user ${receivedBy}: you have ${result.length} messages in your inbox`,
+        message: `user ${sentBy}: you have ${result.length} messages in your inbox`,
         result: result,
       });
     } else if (result.length == 0) {
@@ -53,6 +53,7 @@ const getAllMessagesFromUserById = (req, res) => {
 // a function that returns all messages for the logged in user:
 const getAllUserMessages = (req, res) => {
   const userId = req.token.userId;
+  // const query = `SELECT m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.isDeleted=0 UNION SELECT m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=? AND m.isDeleted=0`;
   const query = `SELECT * FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.isDeleted=0 UNION SELECT * FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=? AND m.isDeleted=0`;
   const data = [userId, userId];
   connection.query(query, data, (error, result) => {
