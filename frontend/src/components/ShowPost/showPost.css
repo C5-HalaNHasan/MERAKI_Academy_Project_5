@@ -23,3 +23,60 @@
     height: 80%;
     border: none;
 }
+.commentBtn {
+    background-color: rgb(38, 78, 61);
+    width: 6em;
+    float: right;
+    padding: 0.8em;
+    border-radius: 2em;
+    color: white;
+    font-size: 0.7rem;
+  }
+  .comments{
+      display: flex;
+      flex-direction: column;
+     
+      height: 100%;
+      justify-content: space-between;
+      
+  }
+  .commentsDet{
+      /* display: flex;
+      flex-direction: column;
+      justify-content: space-between; */
+      border: 1px solid;
+      border-radius: 2em;
+   
+      margin-bottom: 1em;
+      padding: 0.5em;
+      font-size: 1vw;
+  }
+  .commenterPicAndName{
+      display: flex;
+      justify-content: space-between;
+      gap:0.7em
+  }
+  .displayCont{
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+  }
+  .commenterPic{
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .comment{
+      font-size: 1vw;
+  }
+  .commentBox{
+      width: 80%;
+      border-radius: 2em;
+      padding: 0.5em;
+
+  }
+.settingComments{
+    float: right;
+    margin-right: 0px;
+}
