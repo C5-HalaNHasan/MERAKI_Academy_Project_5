@@ -47,6 +47,7 @@ const ShowPost = () => {
   const [postVideo, setPostVideo] = useState("");
   const [updateClick, setUpdateClick] = useState(false);
   const [currentPost, setCurrentPost] = useState("");
+  const [comment,setComment]=useState("")
   const author = currentUserInfo.id;
   console.log(author);
 
@@ -133,12 +134,32 @@ const ShowPost = () => {
       .put(`http://localhost:5000/post/remove/${id}`)
       .then((result) => {
         dispatch(updatePosts({ id, isReported }));
+
       })
       .catch((error) => {});
   };
+  const addComment =(id)=>{
+    axios.post(`http://localhost:5000/comment/post/${id}`,{
+      comment,
+    },{
+      headers: {
+        Authorization: token,
+      },
+    }).then((result)=>{
+      dispatch(addToComments(comment))
+      getAllPosts();
+
+
+
+    }).catch((error)=>{
+
+    })
+  }
+
 
   useEffect(() => {
     getAllPosts();
+    
   }, []);
   return (
     <>
@@ -235,6 +256,51 @@ const ShowPost = () => {
                   </div>
                   <div className="postBottomLeft">{/* comment counter */}</div>
                 </div>
+                <div className="comments" >
+                  
+                {element.comments ? (
+                  
+                element.comments.map((comment, i) => {
+                  return (
+                    <div className="commentsDet">
+                    <div className="commenterPicAndName">
+                      <div >
+                        <img  className="commenterPic" src={comment.profileImg}/>
+                      </div>
+                      <div className="commenterName">
+                        <>{comment.firstName}</>
+                      </div>
+                      <div className="createdTime">{comment.createdAt}</div>
+                    </div>
+                    <div className="userComment">
+                    <p className="comment" key={i}>
+                      {comment.comment}
+                    </p>
+                    </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <></>
+              )}
+                </div>
+                <div>
+              <textarea
+                className="commentBox"
+                placeholder="comment..."
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
+              />
+              <button id={element.id}
+                className="commentBtn"
+                onClick={(e) => {
+                  addComment(e.target.id);
+                }}
+              >
+                Add comment
+              </button>
+            </div>
               </div>
             );
           })}

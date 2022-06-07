@@ -52,6 +52,7 @@ const getAllPosts = (req, res) => {
         message: error.message,
       });
     }
+    
     res.status(201).json({
       success: true,
       message: `All posts`,
@@ -244,7 +245,7 @@ const getReportedPosts = (req, res) => {
 // this function will get friends posts with the logged user posts
 const getFriendsPosts = (req, res) => {
   const friendshipRequest = req.token.userId;
-  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.author_id =? OR post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0)`;
+  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.author_id =? OR post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0) AND post.isDeleted=0  `;
   const data = [friendshipRequest, friendshipRequest];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -254,12 +255,27 @@ const getFriendsPosts = (req, res) => {
         error: error,
       });
     }
-
-    res.status(201).json({
+    const query2 = `SELECT comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0`;
+    connection.query(query2, (error, result2) => {
+      
+      result2.forEach((comment) => {
+        result.forEach((post) => {
+          if (post.id == comment.post_id) {
+            if (post.comments) {
+              post.comments.push(comment);
+            } else {
+              post.comments = [comment];
+            }
+          }
+        });
+      });
+    
+    res.status(200).json({
       success: true,
-      message: `All friends posts`,
+      massage: "All the posts",
       result: result,
     });
+  });
   });
 };
 // this function will get friends posts

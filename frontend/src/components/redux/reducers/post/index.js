@@ -31,13 +31,12 @@ const postSlice = createSlice({
             postText: action.payload.postText,
             postImg: action.payload.postImg,
             postVideo: action.payload.postVideo,
-            
           };
         }
-        
-        if(element.id == action.payload.id && action.payload.isReported){
-       return {...element,isReported: action.payload.isReported}   
-      }
+
+        if (element.id == action.payload.id && action.payload.isReported) {
+          return { ...element, isReported: action.payload.isReported };
+        }
         return element;
       });
     },
@@ -60,12 +59,11 @@ const postSlice = createSlice({
           return {
             ...element,
             comment: action.payload.comment,
-            
           };
         }
-        if(element.id == action.payload.id && action.payload.isReported){
-          return {...element,isReported: action.payload.isReported}   
-         }
+        if (element.id == action.payload.id && action.payload.isReported) {
+          return { ...element, isReported: action.payload.isReported };
+        }
         return element;
       });
     },
