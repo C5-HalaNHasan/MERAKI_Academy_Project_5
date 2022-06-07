@@ -3,11 +3,7 @@ import "./messagesWith.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setMessagesWith,
-  addToMessages,
-  removeFromMessages,
-} from "../redux/reducers/message/index";
+import { setMessagesWith } from "../redux/reducers/message/index";
 
 const MessagesWith = ({ id }) => {
   const dispatch = useDispatch();
@@ -53,7 +49,6 @@ const MessagesWith = ({ id }) => {
           { headers: { authorization: token } }
         )
         .then((result) => {
-          dispatch(addToMessages(result.data.result[0]));
           getMessagesWith();
           console.log({ sendMessageTo_result: result.data.result });
         })
@@ -69,7 +64,6 @@ const MessagesWith = ({ id }) => {
     axios
       .put(removeMessageFromUrl, {}, { headers: { authorization: token } })
       .then((result) => {
-        dispatch(removeFromMessages(result.data.result[0]));
         getMessagesWith();
         console.log({ removeSentMessage_result: result.data.result });
       })
