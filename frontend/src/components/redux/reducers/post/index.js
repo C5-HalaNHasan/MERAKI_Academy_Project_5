@@ -54,11 +54,12 @@ const postSlice = createSlice({
     },
 
     updateComments: (state, action) => {
+      
       state.comments = state.comments.map((element, index) => {
         if (element.id == action.payload.id) {
           return {
             ...element,
-            comment: action.payload.comment,
+            comment: action.payload.newComment,
           };
         }
         if (element.id == action.payload.id && action.payload.isReported) {

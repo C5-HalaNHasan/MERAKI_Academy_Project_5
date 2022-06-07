@@ -255,7 +255,7 @@ const getFriendsPosts = (req, res) => {
         error: error,
       });
     }
-    const query2 = `SELECT comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0`;
+    const query2 = `SELECT comment.author_id, comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0`;
     connection.query(query2, (error, result2) => {
       
       result2.forEach((comment) => {

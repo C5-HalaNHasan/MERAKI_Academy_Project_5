@@ -49,11 +49,17 @@
    
       margin-bottom: 1em;
       padding: 0.5em;
-      font-size: 2vw;
+      font-size: 1vw;
   }
   .commenterPicAndName{
       display: flex;
+      justify-content: space-between;
       gap:0.7em
+  }
+  .displayCont{
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
   }
   .commenterPic{
     width: 1em;
@@ -62,11 +68,15 @@
     object-fit: cover;
   }
   .comment{
-      font-size: 2vw;
+      font-size: 1vw;
   }
   .commentBox{
       width: 80%;
       border-radius: 2em;
       padding: 0.5em;
-      
+
   }
+.settingComments{
+    float: right;
+    margin-right: 0px;
+}
