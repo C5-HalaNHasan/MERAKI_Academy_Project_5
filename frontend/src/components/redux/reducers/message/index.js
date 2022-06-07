@@ -14,10 +14,12 @@ const messageSlice = createSlice({
       state.messagesWith = action.payload;
     },
     addToMessages: (state, action) => {
-      state.messages.push(action.payload);
+      //! to be deleted if not used
+      state.messagesWith.push(action.payload);
     },
     removeFromMessages: (state, action) => {
-      state.messages = state.messages.filter((message, index) => {
+      //! to be deleted if not used
+      state.messagesWith = state.messagesWith.filter((message, index) => {
         return message.id != action.payload;
       });
     },

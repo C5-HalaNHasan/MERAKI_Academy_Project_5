@@ -11,8 +11,6 @@ import {
 
 const MessagesWith = ({ id }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [list, setList] = useState([]);
   const [sentMessage, setSentMessage] = useState("");
   //user states:
   //to use user token for axios calls
@@ -47,35 +45,36 @@ const MessagesWith = ({ id }) => {
   // a function that sends message to a user:
   const sendMessageTo = () => {
     let sendMessageToUrl = `http://localhost:5000/message/${id}`;
-    axios
-      .post(
-        sendMessageToUrl,
-        { sentMessage },
-        { headers: { authorization: token } }
-      )
-      .then((result) => {
-        // dispatch(addToMessages(result.data.result)); //! to be updated in BE to get message id
-        getMessagesWith();
-        console.log({ sendMessageTo_result: result.data.result });
-      })
-      .catch((error) => {
-        console.log({ sendMessageTo_error: error.message });
-      });
+    if (sentMessage.length > 0) {
+      axios
+        .post(
+          sendMessageToUrl,
+          { message: sentMessage },
+          { headers: { authorization: token } }
+        )
+        .then((result) => {
+          dispatch(addToMessages(result.data.result[0]));
+          getMessagesWith();
+          console.log({ sendMessageTo_result: result.data.result });
+        })
+        .catch((error) => {
+          console.log({ sendMessageTo_error: error.message });
+        });
+    }
   };
 
   // a function that removes sent message:
   const removeSentMessage = (messageId) => {
-    //! message id to be returned from BE
     let removeMessageFromUrl = `http://localhost:5000/message/${messageId}`;
     axios
-      .put(removeMessageFromUrl, { headers: { authorization: token } })
+      .put(removeMessageFromUrl, {}, { headers: { authorization: token } })
       .then((result) => {
-        // dispatch(removeFromMessages(result.data.result)); //! to be updated in BE to get message
+        dispatch(removeFromMessages(result.data.result[0]));
         getMessagesWith();
         console.log({ removeSentMessage_result: result.data.result });
       })
       .catch((error) => {
-        console.log({ removeSentMessage_error: error.message });
+        console.log({ removeSentMessage_error: error });
       });
   };
 
@@ -83,7 +82,7 @@ const MessagesWith = ({ id }) => {
     getMessagesWith();
   }, []);
 
-  console.log(`all messages from user ${id} :`, messagesWith);
+  console.log(`all messages from user ${id} :`, messagesWith[4]);
 
   return (
     <div className="messagesWithComponent">
@@ -92,7 +91,6 @@ const MessagesWith = ({ id }) => {
           return (
             <>
               <div className="messageCard">
-                {/* from others */}
                 {message.sentBy != userId && (
                   <div className="messageCard leftSide">
                     <img src={message.profileImg} />
@@ -116,7 +114,11 @@ const MessagesWith = ({ id }) => {
                         {message.createdAt.split(".000Z")[0].replace("T", "@")}
                       </h6>
                     </div>
-                    <button onClick={() => removeSentMessage(message.id)}>
+                    {/* query in the backend to be updated to get message id */}
+                    <button
+                      id={message.id}
+                      onClick={(e) => removeSentMessage(e.target.id)}
+                    >
                       remove
                     </button>
                   </div>
