@@ -27,7 +27,7 @@ const UsersPage = () => {
       <Suggested />
       <Users type={type} name={name} />
       <Adv />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

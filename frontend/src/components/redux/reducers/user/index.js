@@ -45,10 +45,12 @@ const userSlice = createSlice({
       state.allUsers = action.payload;
     },
     addToFriendsList: (state, action) => {
+      //! to be deleted if not used
       // action:{payload:{}}
       state.currentUserFriends.push(action.payload);
     },
     removeFromFriendsList: (state, action) => {
+      //! to be deleted if not used
       // action:{payload:id of removed user from friendlist}
       state.currentUserFriends = state.currentUserFriends.filter(
         (friend, index) => {

@@ -1,0 +1,28 @@
+.imgContainer{
+    display: grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-template-rows:repeat(3, 1fr);
+    grid-template-areas: "c c c""c p1 c""e p2 e";
+}
+
+.coverImg{
+    grid-area: c;
+}
+
+.profileImg{
+    grid-area: p1/p2;
+
+}
+
+.coverImg img{
+    width:600px;
+    height:100px;
+    cursor: pointer;
+
+}
+.profileImg img{
+    width:200px;
+    height:70px;
+    cursor: pointer;
+}
+

@@ -81,6 +81,8 @@ const Messages = () => {
     return filtered;
   };
 
+  console.log({ filtered_messages_to_be_rendered: list });
+
   useEffect(() => {
     getAllMessages();
     filteredMessages();
