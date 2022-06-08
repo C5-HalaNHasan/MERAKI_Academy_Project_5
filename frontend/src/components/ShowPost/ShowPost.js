@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
-import {BiComment} from "react-icons/bi"
+import { BiComment } from "react-icons/bi";
 import {
   setAllPosts,
   removeFromPosts,
@@ -40,7 +40,7 @@ const ShowPost = () => {
       comments: state.post.comments,
       postsReaction: state.post.postsReaction,
       commentsReactions: state.post.commentsReactions,
-      counter:state.post.counter,
+      counter: state.post.counter,
     };
   });
   const dispatch = useDispatch();
@@ -54,10 +54,10 @@ const ShowPost = () => {
   const [currentPost, setCurrentPost] = useState("");
   const [currentComment, setCurrentComment] = useState("");
   const [comment, setComment] = useState("");
-  const [newComment,setNewComment]=useState("")
-  const [clear,setClear]=useState()
-  const [showComments,setShowComments]= useState(false)
-  const [postId,setPostId]=useState("")
+  const [newComment, setNewComment] = useState("");
+  const [clear, setClear] = useState();
+  const [showComments, setShowComments] = useState(false);
+  const [postId, setPostId] = useState("");
   const author = currentUserInfo.id;
 
   const getAllPosts = async () => {
@@ -164,61 +164,77 @@ const ShowPost = () => {
         getAllPosts();
 
         getCounterNumber();
-
       })
       .catch((error) => {});
   };
-  const deleteCommentById =(id)=>{
-    axios.delete(`http://localhost:5000/comment/${id}`,{
-      headers: {
-        Authorization: token,
-      },
-    }).then((result)=>{
-dispatch(removeFromComments(id))
-getAllPosts()
-    }).catch((error)=>{
-
-    })
-  }
-  const reportCommentById =(id)=>{
-    axios.put(`http://localhost:5000/comment/remove/${id}`).then((res)=>{
-
-    }).catch((error)=>{
-      dispatch(updateComments({id,isReported}))
-    })
-  }
-  const updateCommentById =(id)=>{
-    axios.put(`http://localhost:5000/comment/${id}`,{
-      comment:newComment
-    },{
-      headers: {
-        Authorization: token,
-      },
-    }).then((result)=>{
-      dispatch(updateComments({id,newComment}))
-      getAllPosts();
-
-    }).catch((error)=>{
-
-    })
-  }
-const getCounterNumber = ()=>{
-  axios.get( "http://localhost:5000/comment/").then((result)=>{
-    
-dispatch(setCounter(result.data.result))
-
-
-  }).catch((error)=>{
-    console.log(error);
-  })
-}
-const addReactionToPost =(id)=>{
-  axios.post(`http://localhost:5000/reaction/post/${id}`)
-}
+  const deleteCommentById = (id) => {
+    axios
+      .delete(`http://localhost:5000/comment/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(removeFromComments(id));
+        getAllPosts();
+      })
+      .catch((error) => {});
+  };
+  const reportCommentById = (id) => {
+    axios
+      .put(`http://localhost:5000/comment/remove/${id}`)
+      .then((res) => {})
+      .catch((error) => {
+        dispatch(updateComments({ id, isReported }));
+      });
+  };
+  const updateCommentById = (id) => {
+    axios
+      .put(
+        `http://localhost:5000/comment/${id}`,
+        {
+          comment: newComment,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((result) => {
+        dispatch(updateComments({ id, newComment }));
+        getAllPosts();
+      })
+      .catch((error) => {});
+  };
+  const getCounterNumber = () => {
+    axios
+      .get("http://localhost:5000/comment/")
+      .then((result) => {
+        dispatch(setCounter(result.data.result));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const addReactionToPost = (id) => {
+    axios
+      .post(`http://localhost:5000/reaction/post/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        getCounterNumber();
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
-
   }, []);
   return (
     <>
@@ -310,138 +326,167 @@ const addReactionToPost =(id)=>{
                 </div>
                 <div className="postBottom">
                   <div className="postBottomLeft">
-                    <AiOutlineLike onClick={()=>{
-
-                    }} />
-                   {counter && counter.map((count,ind)=>{
-                     return (
-                       <> 
-                       {count.id==element.id? (<>{count["COUNT(distinct post_reaction.id)"]}</>):""}
-                       </>
-                     )
-          })}
-          <BiComment className={element.id} onClick={(e)=>{
-            setShowComments(!showComments)
-            setPostId(e.target.className)
-            console.log(e.target.className);
-            console.log(showComments);
-          }}/>
-          {counter && counter.map((count,ind)=>{
-                     return (
-                       <> 
-                       {count.id==element.id? (<>{count["COUNT(distinct comment.id)"]}</>):""}
-                       </>
-                     )
-          })}
+                    <AiOutlineLike
+                      onClick={() => {
+                        addReactionToPost(element.id);
+                      }}
+                    />
+                    {counter &&
+                      counter.map((count, ind) => {
+                        return (
+                          <>
+                            {count.id == element.id ? (
+                              <>{count["COUNT(distinct post_reaction.id)"]}</>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      })}
+                    <BiComment
+                      className={element.id}
+                      onClick={(e) => {
+                        setShowComments(!showComments);
+                        setPostId(e.target.className);
+                        console.log(e.target.className);
+                        console.log(showComments);
+                      }}
+                    />
+                    {counter &&
+                      counter.map((count, ind) => {
+                        return (
+                          <>
+                            {count.id == element.id ? (
+                              <>{count["COUNT(distinct comment.id)"]}</>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      })}
                   </div>
-                 
                 </div>
-               {showComments && postId.baseVal==element.id? <><div className="comments">
-                  {element.comments ? (
-                    element.comments.map((comment, i) => {
-                      return (
-                        <div className="commentsDet">
-                          <div className="commenterPicAndName">
-                            <div className="displayCont">
-                              <div>
-                                <img
-                                  className="commenterPic"
-                                  src={comment.profileImg}
-                                />
-                              </div>
-                              <div className="commenterName">
-                                <>{comment.firstName}</>
-                              </div>
-                              <div className="createdTime">
-                                {comment.createdAt}
-                              </div>
-                            </div>
-                            <div className="settingComments">
-                              <BsThreeDots
-                                id={comment.id}
-                                onClick={(e) => {
-                                  setUpdateClickComment(!updateClickComment);
-                                  setCurrentComment(e.target.id);
-                                  console.log(e.target.id);
-                                }}
-                              />
-                              {currentUserInfo.id == comment.author_id &&
-                              updateClickComment &&
-                              currentComment == comment.id ? (
-                                <>
-                                  {" "}
-                                  <input
-                                  value={clear}
-                                  onClick={()=>{
-                                    setClear()
-                                  }}
-
-                                    type={"text"}
-                                    onChange={(e) => {
-                                      setNewComment(e.target.value)
+                {showComments && postId.baseVal == element.id ? (
+                  <>
+                    <div className="comments">
+                      {element.comments ? (
+                        element.comments.map((comment, i) => {
+                          return (
+                            <div className="commentsDet">
+                              <div className="commenterPicAndName">
+                                <div className="displayCont">
+                                  <div>
+                                    <img
+                                      className="commenterPic"
+                                      src={comment.profileImg}
+                                    />
+                                  </div>
+                                  <div className="commenterName">
+                                    <>{comment.firstName}</>
+                                  </div>
+                                  <div className="createdTime">
+                                    {comment.createdAt}
+                                  </div>
+                                </div>
+                                <div className="settingComments">
+                                  <BsThreeDots
+                                    id={comment.id}
+                                    onClick={(e) => {
+                                      setUpdateClickComment(
+                                        !updateClickComment
+                                      );
+                                      setCurrentComment(e.target.id);
+                                      console.log(e.target.id);
                                     }}
                                   />
-                                  <button
-                                    className={element.id}
-                                    onClick={(e) => {
-                                      {
-                                        updateCommentById(comment.id)
-                                        setClear("")
-                                      }
-                                    }}
-                                  >
-                                    Update
-                                  </button>
-                                  <button onClick={() => {
-                                    deleteCommentById(comment.id)
-                                  }}>delete</button>
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {updateClickComment &&
-                              currentComment == comment.id &&
-                              author !== comment.author_id ? (
-                                <p onClick={() => {
-                                  reportCommentById(comment.id)
-                                }}>Report</p>
-                              ) : (
-                                ""
-                              )}
+                                  {currentUserInfo.id == comment.author_id &&
+                                  updateClickComment &&
+                                  currentComment == comment.id ? (
+                                    <>
+                                      {" "}
+                                      <input
+                                        value={clear}
+                                        onClick={() => {
+                                          setClear();
+                                        }}
+                                        type={"text"}
+                                        onChange={(e) => {
+                                          setNewComment(e.target.value);
+                                        }}
+                                      />
+                                      <button
+                                        className={element.id}
+                                        onClick={(e) => {
+                                          {
+                                            updateCommentById(comment.id);
+                                            setClear("");
+                                          }
+                                        }}
+                                      >
+                                        Update
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          deleteCommentById(comment.id);
+                                        }}
+                                      >
+                                        delete
+                                      </button>
+                                    </>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {updateClickComment &&
+                                  currentComment == comment.id &&
+                                  author !== comment.author_id ? (
+                                    <p
+                                      onClick={() => {
+                                        reportCommentById(comment.id);
+                                      }}
+                                    >
+                                      Report
+                                    </p>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              </div>
+                              <div className="userComment">
+                                <p className="comment" key={i}>
+                                  {comment.comment}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                          <div className="userComment">
-                            <p className="comment" key={i}>
-                              {comment.comment}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <div>
-                  <textarea 
-                  value={clear}
-                    className="commentBox"
-                    placeholder="comment..."
-                    onChange={(e) => {
-                      setComment(e.target.value);
-                    }}
-                  />
-                  <button
-                    id={element.id}
-                    className="commentBtn"
-                    onClick={(e) => {
-                      addComment(e.target.id);
-                      setClear("")
-                    }}
-                  >
-                    Add comment
-                  </button>
-                </div></> :''}
+                          );
+                        })
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <div>
+                      <textarea
+                        value={clear}
+                        className="commentBox"
+                        placeholder="comment..."
+                        onChange={(e) => {
+                          setComment(e.target.value);
+                        }}
+                      />
+                      <button
+                        id={element.id}
+                        className="commentBtn"
+                        onClick={(e) => {
+                          addComment(e.target.id);
+                          setClear("");
+                        }}
+                      >
+                        Add comment
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
             );
           })}
