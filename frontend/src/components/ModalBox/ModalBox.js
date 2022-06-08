@@ -8,6 +8,7 @@ import notOk from "../assets/notOk.jpg";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
+import { setCurrentUserInfo } from "../redux/reducers/user";
 
 //! box is not closing on click
 const ModalBox = () => {
@@ -17,10 +18,11 @@ const ModalBox = () => {
   const [enteredChar, setEnteredChar] = useState("");
   const [notification, setNotification] = useState("");
   //to use user token for axios calls
-  const { token, userId } = useSelector((state) => {
+  const { token, userId, currentUserInfo } = useSelector((state) => {
     return {
       token: state.user.token,
       userId: state.user.userId,
+      currentUserInfo: state.user.currentUserInfo,
     };
   });
   //to use & set modalBox states:
@@ -95,6 +97,11 @@ const ModalBox = () => {
       setNotification("at least 30 characters must be provided!");
     }
   };
+
+  //a function that updates currentUser profileImg
+  const updateProfileImg = () => {};
+  //a function that updates currentUser CoverImg
+  const updateCoverImg = () => {};
   return (
     <div className="modalBox">
       <div className="contentsContainer">

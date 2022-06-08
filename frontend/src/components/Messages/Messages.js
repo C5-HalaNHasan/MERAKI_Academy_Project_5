@@ -54,12 +54,13 @@ const Messages = () => {
             })
           );
         } else {
+          let x = filteredMessages();
           dispatch(
             //modalBox pops-up:
             setModalBox({
               user: "",
               type: "ok",
-              message: `you have ${result.data.result.length} conversations!`,
+              message: `you have ${x.length} conversations!`, //!
               details: "",
               show: true,
             })
@@ -71,11 +72,16 @@ const Messages = () => {
       .catch((error) => {});
   };
   const filteredMessages = () => {
-    const filtered = allMessages.filter((conv, ind) => {
+    //! duplicates to be removed
+    let filtered = allMessages.filter((conv, ind) => {
       return conv.sentBy != userId || conv.receivedBy != userId;
     });
+
     setList(filtered);
+    return filtered;
   };
+
+  console.log({ filtered_messages_to_be_rendered: list });
 
   useEffect(() => {
     getAllMessages();

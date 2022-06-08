@@ -69,7 +69,7 @@ const Actions = ({ id }) => {
       .then((result) => {
         if (result.data.success) {
           //!toast notification to be added "added successfully"
-          dispatch(addToFriendsList(result.data.result[0]));
+          dispatch(addToFriendsList(result.data.result[0])); //! to be deleted if not used
           setIsFriend(true);
           getAllFriendsOfCurrentUser();
           getAllFriendsOfVisitedUser();
@@ -88,7 +88,7 @@ const Actions = ({ id }) => {
       .then((result) => {
         if (result.data.success) {
           //!toast notification to be added "added successfully"
-          dispatch(removeFromFriendsList(result.data.result[0].id));
+          dispatch(removeFromFriendsList(result.data.result[0].id)); //! to be deleted if not used
           setIsFriend(false);
           getAllFriendsOfCurrentUser();
           getAllFriendsOfVisitedUser();

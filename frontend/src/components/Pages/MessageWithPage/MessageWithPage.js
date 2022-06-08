@@ -7,9 +7,11 @@ import Suggested from "../../Suggested/Suggested";
 import MessageWith from "../../MessagesWith/MessagesWith";
 import Adv from "../../Adv/Adv";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import ModalBox from "../../ModalBox/ModalBox";
 
 const MessagePageWith = () => {
+  const { id } = useParams();
   const { userId } = useSelector((state) => {
     return {
       userId: state.user.userId,
@@ -22,9 +24,9 @@ const MessagePageWith = () => {
       MessageWithPage
       <FriendList id={userId} />
       <Suggested />
-      <MessageWith />
+      <MessageWith id={id} />
       <Adv />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

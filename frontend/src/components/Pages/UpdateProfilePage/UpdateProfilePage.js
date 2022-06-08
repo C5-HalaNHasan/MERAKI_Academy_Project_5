@@ -26,7 +26,7 @@ const UpdateProfilePage = () => {
       <ProfileImgs />
       <UpdateProfile />
       <Adv />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

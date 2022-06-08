@@ -25,7 +25,7 @@ const HomePage = () => {
       <CreatePost />
       <ShowPost />
       <Adv />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

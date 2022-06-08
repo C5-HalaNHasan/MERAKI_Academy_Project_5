@@ -29,12 +29,12 @@ const UserProfilePage = () => {
       UserProfile
       <FriendList id={usedId} />
       <UserInfo id={usedId} />
-      <ProfileImgs />
+      {/* <ProfileImgs id={usedId} /> */}
       {/* later:user can add posts on other walls! (extra) */}
       {id == userId && <CreatePost />}
       <ShowPost />
       {id == userId ? <Adv /> : <Actions id={id} />}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

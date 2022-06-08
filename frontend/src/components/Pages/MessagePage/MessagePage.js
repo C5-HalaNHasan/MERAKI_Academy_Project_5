@@ -24,7 +24,7 @@ const MessagePage = () => {
       <Suggested />
       <Messages />
       <Adv />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
