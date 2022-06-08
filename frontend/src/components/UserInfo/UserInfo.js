@@ -56,7 +56,7 @@ const UserInfo = ({ id }) => {
   return (
     <div className="userInfoComponent">
       userInfoComponent
-      {currentUserInfo.id ? (
+      {id===userId? (
         <div className="currentUser">
           <h4>
             {currentUserInfo.firstName}.{currentUserInfo.lastName}
