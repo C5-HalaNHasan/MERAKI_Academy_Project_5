@@ -56,6 +56,8 @@ const ShowPost = () => {
   const [comment, setComment] = useState("");
   const [newComment,setNewComment]=useState("")
   const [clear,setClear]=useState()
+  const [showComments,setShowComments]= useState(false)
+  const [postId,setPostId]=useState("")
   const author = currentUserInfo.id;
 
   const getAllPosts = async () => {
@@ -210,6 +212,9 @@ dispatch(setCounter(result.data.result))
     console.log(error);
   })
 }
+const addReactionToPost =(id)=>{
+  axios.post(`http://localhost:5000/reaction/post/${id}`)
+}
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
@@ -305,7 +310,9 @@ dispatch(setCounter(result.data.result))
                 </div>
                 <div className="postBottom">
                   <div className="postBottomLeft">
-                    <AiOutlineLike />
+                    <AiOutlineLike onClick={()=>{
+
+                    }} />
                    {counter && counter.map((count,ind)=>{
                      return (
                        <> 
@@ -313,7 +320,12 @@ dispatch(setCounter(result.data.result))
                        </>
                      )
           })}
-          <BiComment/>
+          <BiComment className={element.id} onClick={(e)=>{
+            setShowComments(!showComments)
+            setPostId(e.target.className)
+            console.log(e.target.className);
+            console.log(showComments);
+          }}/>
           {counter && counter.map((count,ind)=>{
                      return (
                        <> 
@@ -324,7 +336,7 @@ dispatch(setCounter(result.data.result))
                   </div>
                  
                 </div>
-                <div className="comments">
+               {showComments && postId.baseVal==element.id? <><div className="comments">
                   {element.comments ? (
                     element.comments.map((comment, i) => {
                       return (
@@ -429,7 +441,7 @@ dispatch(setCounter(result.data.result))
                   >
                     Add comment
                   </button>
-                </div>
+                </div></> :''}
               </div>
             );
           })}
