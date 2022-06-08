@@ -5,6 +5,13 @@
    
     
 }
+.liked{
+    color:blue;
+    
+}
+.notLiked{
+    color:black
+}
 .showPosts{
     padding: 1em;
 }

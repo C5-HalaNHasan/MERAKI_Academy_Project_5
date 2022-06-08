@@ -46,11 +46,13 @@ const createComment = (req, res) => {
 
 // function to get all comments
 const getAllComments = (req, res) => {
-  const query = `select post.id, COUNT(distinct comment.id), COUNT(distinct post_reaction.id)
+  const query = `select post.id, COUNT(distinct post_reaction.id)
   from post
-  left join comment on post.id = comment.post_id 
-  left join post_reaction on post.id = post_reaction.post_id WHERE post.isDeleted=0 AND comment.isDeleted=0
+  left join post_reaction on post.id = post_reaction.post_id
+   WHERE post.isDeleted=0 AND post_reaction.isDeleted=0
   group by post.id `;
+  const query2 = `SELECT post.id, count(distinct comment.id) from post
+  LEFT JOIN comment on post.id = comment.post_id WHERE post.isDeleted=0 AND comment.isDeleted=0 group by post.id`
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -58,12 +60,21 @@ const getAllComments = (req, res) => {
         message: error.message,
       });
     }
+    connection.query(query2,(error2,result2)=>{
+      if (error2) {
+        return res.status(500).json({
+          success: false,
+          message: error2.message,
+        });
+      }
+    
     res.status(201).json({
       success: true,
       message: `All comments`,
-      result: result,
+      reactionCounter: result,
+      commentCounter:result2
     });
-  });
+  });})
 };
 // const getCounterNumber=(req,res)=>{
 //   const query= `SELECT COUNT(post_id) AS postCounter FROM comment WHERE isDeleted=0`

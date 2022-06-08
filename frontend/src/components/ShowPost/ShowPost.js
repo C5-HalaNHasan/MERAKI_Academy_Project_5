@@ -20,7 +20,8 @@ import {
   setAllCommentsReactions,
   addToCommentsReactions,
   removeFromCommentsReactions,
-  setCounter,
+  setCommentCounter,
+  setReactionCounter,
 } from "../redux/reducers/post";
 
 const ShowPost = () => {
@@ -31,7 +32,8 @@ const ShowPost = () => {
     comments,
     postsReaction,
     commentsReactions,
-    counter,
+    reactionCounter,
+    commentCounter,
   } = useSelector((state) => {
     return {
       currentUserInfo: state.user.currentUserInfo,
@@ -40,7 +42,8 @@ const ShowPost = () => {
       comments: state.post.comments,
       postsReaction: state.post.postsReaction,
       commentsReactions: state.post.commentsReactions,
-      counter: state.post.counter,
+      commentCounter: state.post.commentCounter,
+      reactionCounter: state.post.reactionCounter,
     };
   });
   const dispatch = useDispatch();
@@ -58,6 +61,7 @@ const ShowPost = () => {
   const [clear, setClear] = useState();
   const [showComments, setShowComments] = useState(false);
   const [postId, setPostId] = useState("");
+  const [likeColor, setLikeColor] = useState("notLiked");
   const author = currentUserInfo.id;
 
   const getAllPosts = async () => {
@@ -70,7 +74,7 @@ const ShowPost = () => {
 
       if (res.data.success) {
         dispatch(setAllPosts(res.data.result));
-        console.log(res.data.result);
+        
         setShow(true);
       }
     } catch {}
@@ -128,7 +132,7 @@ const ShowPost = () => {
       .post(uploadPicUrl, data)
       .then((result) => {
         setPostImg(result.data.url);
-        console.log(result.data);
+        
         updatePost(id, result.data.url);
         setUpdateClick(false);
         setPostImg("");
@@ -211,7 +215,9 @@ const ShowPost = () => {
     axios
       .get("http://localhost:5000/comment/")
       .then((result) => {
-        dispatch(setCounter(result.data.result));
+        
+        dispatch(setCommentCounter(result.data.commentCounter));
+        dispatch(setReactionCounter(result.data.reactionCounter));
       })
       .catch((error) => {
         console.log(error);
@@ -219,22 +225,60 @@ const ShowPost = () => {
   };
   const addReactionToPost = (id) => {
     axios
-      .post(`http://localhost:5000/reaction/post/${id}`, {
+      .post(
+        `http://localhost:5000/reaction/post/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((result) => {
+        getCounterNumber();
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const removeReactionFromPost = (id) => {
+    axios
+      .delete(`http://localhost:5000/reaction/post/${id} `, {
         headers: {
           Authorization: token,
         },
       })
       .then((result) => {
         getCounterNumber();
-        console.log(result);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error) => {});
+  };
+  const getAllPostsReactions = () => {
+    axios
+      .get("http://localhost:5000/reaction/post", {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(setAllPostsReactions(result.data.result));
+      })
+      .catch((error) => {});
+  };
+  const checkIfLiked = (post, author) => {
+    
+      postsReaction.map((element, index) => {
+        if (element.author_id == author && element.post_id == post && element.isDeleted==0) {
+          return removeReactionFromPost(post);
+        }
       });
+    return addReactionToPost(post);
   };
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
+    getAllPostsReactions();
   }, []);
   return (
     <>
@@ -254,7 +298,7 @@ const ShowPost = () => {
                     onClick={(e) => {
                       setUpdateClick(!updateClick);
                       setCurrentPost(e.target.className);
-                      console.log(currentPost.animVal);
+                     
                     }}
                   />
                   {/* {setAuthor(element.author_id)} */}
@@ -327,12 +371,13 @@ const ShowPost = () => {
                 <div className="postBottom">
                   <div className="postBottomLeft">
                     <AiOutlineLike
+                      className={likeColor}
                       onClick={() => {
-                        addReactionToPost(element.id);
+                        checkIfLiked(element.id, element.author_id);
                       }}
                     />
-                    {counter &&
-                      counter.map((count, ind) => {
+                    {reactionCounter &&
+                      reactionCounter.map((count, ind) => {
                         return (
                           <>
                             {count.id == element.id ? (
@@ -348,16 +393,14 @@ const ShowPost = () => {
                       onClick={(e) => {
                         setShowComments(!showComments);
                         setPostId(e.target.className);
-                        console.log(e.target.className);
-                        console.log(showComments);
                       }}
                     />
-                    {counter &&
-                      counter.map((count, ind) => {
+                    {commentCounter &&
+                      commentCounter.map((count, ind) => {
                         return (
                           <>
                             {count.id == element.id ? (
-                              <>{count["COUNT(distinct comment.id)"]}</>
+                              <>{count["count(distinct comment.id)"]}</>
                             ) : (
                               ""
                             )}
@@ -396,7 +439,7 @@ const ShowPost = () => {
                                         !updateClickComment
                                       );
                                       setCurrentComment(e.target.id);
-                                      console.log(e.target.id);
+                                     
                                     }}
                                   />
                                   {currentUserInfo.id == comment.author_id &&
