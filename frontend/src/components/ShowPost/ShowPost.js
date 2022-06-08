@@ -22,6 +22,7 @@ import {
   removeFromCommentsReactions,
   setCommentCounter,
   setReactionCounter,
+  setCommentReactionCounter,
 } from "../redux/reducers/post";
 
 const ShowPost = () => {
@@ -34,6 +35,7 @@ const ShowPost = () => {
     commentsReactions,
     reactionCounter,
     commentCounter,
+    commentReactionsCounter,
   } = useSelector((state) => {
     return {
       currentUserInfo: state.user.currentUserInfo,
@@ -44,6 +46,7 @@ const ShowPost = () => {
       commentsReactions: state.post.commentsReactions,
       commentCounter: state.post.commentCounter,
       reactionCounter: state.post.reactionCounter,
+      commentReactionsCounter:state.post.commentReactionsCounter
     };
   });
   const dispatch = useDispatch();
@@ -223,6 +226,15 @@ const ShowPost = () => {
         console.log(error);
       });
   };
+  const getCommentReactionsCount =()=>{
+    axios.get(`http://localhost:5000/reaction/comment/counter`,{headers: {
+      Authorization: token,
+    },}).then((result)=>{
+dispatch(setCommentReactionCounter(result.data.result))
+    }).catch((error)=>{
+
+    })
+  }
   const addReactionToPost = (id) => {
     axios
       .post(
@@ -267,18 +279,57 @@ const ShowPost = () => {
       .catch((error) => {});
   };
   const checkIfLiked = (post, author) => {
-    
-      postsReaction.map((element, index) => {
+    if(postsReaction.length==0){
+      return addReactionToPost(post);
+    }
+    postsReaction.map((element, index) => {
         if (element.author_id == author && element.post_id == post && element.isDeleted==0) {
           return removeReactionFromPost(post);
         }
       });
     return addReactionToPost(post);
   };
+  const addReactionToComment =(id)=>{
+    axios.post(`http://localhost:5000/reaction/comment/${id}`,{},{
+      headers: {
+        Authorization: token,
+      },
+    }).then((result)=>{
+      getCommentReactionsCount();
+
+    }).catch((error)=>{
+
+    })
+  }
+  const removeReactionFromComment =(id)=>{
+    axios.delete(`http://localhost:5000/reaction/comment/${id}`,{
+      headers: {
+        Authorization: token,
+      },
+    }).then((result)=>{
+      getCommentReactionsCount();
+
+    }).catch((error)=>{
+
+    })
+  }
+  const checkCommentsLiked = (comment, author) => {
+    console.log(commentReactionsCounter,"commentReactionsCounter");
+    if(commentReactionsCounter.length==0){
+      return addReactionToComment(comment);
+    }
+    commentReactionsCounter.map((element, index) => {
+        if (element.author_id == author && element.comment_id == comment && element.isDeleted==0) {
+          return removeReactionFromComment(comment);
+        }
+      });
+    return addReactionToComment(comment);
+  };
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
     getAllPostsReactions();
+    getCommentReactionsCount();
   }, []);
   return (
     <>
@@ -373,7 +424,7 @@ const ShowPost = () => {
                     <AiOutlineLike
                       className={likeColor}
                       onClick={() => {
-                        checkIfLiked(element.id, element.author_id);
+                        checkIfLiked(element.id, currentUserInfo.id);
                       }}
                     />
                     {reactionCounter &&
@@ -499,6 +550,24 @@ const ShowPost = () => {
                                   {comment.comment}
                                 </p>
                               </div>
+                              <div><AiOutlineLike onClick={()=>{
+checkCommentsLiked(comment.id,currentUserInfo.id)
+                              }} />
+                               {commentReactionsCounter &&
+                      commentReactionsCounter.map((count, ind) => {
+                        return (
+                          <>
+                            {count.id == comment.id ? (
+                              <>{count["COUNT(distinct comment_reaction.id)"]}</>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        );
+                      })}
+
+                              </div>
+                             
                             </div>
                           );
                         })
