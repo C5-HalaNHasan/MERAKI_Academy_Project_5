@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./profileImgs.css";
-import ok from "../assets/ok.png"; //! for testing
-import alert from "../assets/alert.png"; //! for testing
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
-import ModalBox from "../ModalBox/ModalBox";
 import { setCurrentUserInfo, setVisitedUserInfo } from "../redux/reducers/user";
 import axios from "axios";
 
@@ -25,14 +22,17 @@ const ProfileImgs = ({ id }) => {
 
   //a function that will get current page user to render ProfileImgs:
   const getUserInfo = () => {
-    let getUserById = `http://localhost:5000/user/friends/${id}`;
+    let getUserByIdUrl = `http://localhost:5000/user/${id}`;
+    console.log({ problemId: getUserByIdUrl }); //!
     axios
-      .get(getUserById, { headers: { authorization: token } })
+      .get(getUserByIdUrl, { headers: { authorization: token } })
       .then((result) => {
-        if (result.success) {
-          if (id == userId) {
+        if (result.data.success == true) {
+          if (result.data.result[0].id == userId) {
+            console.log({ currentUserFromImgsComponent: currentUserInfo }); //!
             dispatch(setCurrentUserInfo(result.data.result[0]));
           } else {
+            console.log({ visitedUserInfo: visitedUserInfo }); //!not showing visited user info
             dispatch(setVisitedUserInfo(result.data.result[0]));
           }
         }
@@ -41,8 +41,8 @@ const ProfileImgs = ({ id }) => {
         console.log({ from_getUserInfo_ProfileImgs_error: error });
       });
   };
+  console.log({ visitedUserInfo: visitedUserInfo }); //!
 
-  //! updating profile imgs will be handelled in the modal box component:
   //to use & set modalBox states:
   const { user, type, message, details, show } = useSelector((state) => {
     return {
@@ -58,7 +58,7 @@ const ProfileImgs = ({ id }) => {
       setModalBox({
         user: userId,
         type: "profileImg",
-        message: "",
+        message: "Upload your profile photo",
         details: "",
         show: true,
       })
@@ -69,26 +69,41 @@ const ProfileImgs = ({ id }) => {
       setModalBox({
         user: userId,
         type: "coverImg",
-        message: "",
+        message: "Upload your cover photo",
         details: "",
         show: true,
       })
     );
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getUserInfo();
+  }, [id]);
   return (
     <div className="profileImgsComponent">
       profileImgsComponent
       <div className="imgContainer">
-        <div className="coverImg" onCick={() => updateCoverImg()}>
-          <img src={ok} />
+        <div className="coverImg">
+          {id == userId ? (
+            <img
+              src={currentUserInfo.coverImg}
+              onClick={() => updateCoverImg()}
+            />
+          ) : (
+            <img src={visitedUserInfo.coverImg} />
+          )}
         </div>
         <div className="profileImg">
-          <img src={alert} onCick={() => updateProfileImg()} />
+          {id == userId ? (
+            <img
+              src={currentUserInfo.profileImg}
+              onClick={() => updateProfileImg()}
+            />
+          ) : (
+            <img src={visitedUserInfo.profileImg} />
+          )}
         </div>
       </div>
-      ;
     </div>
   );
 };
