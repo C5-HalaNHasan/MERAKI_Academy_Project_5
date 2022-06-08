@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
+import {BiComment} from "react-icons/bi"
 import {
   setAllPosts,
   removeFromPosts,
@@ -19,6 +20,7 @@ import {
   setAllCommentsReactions,
   addToCommentsReactions,
   removeFromCommentsReactions,
+  setCounter,
 } from "../redux/reducers/post";
 
 const ShowPost = () => {
@@ -29,6 +31,7 @@ const ShowPost = () => {
     comments,
     postsReaction,
     commentsReactions,
+    counter,
   } = useSelector((state) => {
     return {
       currentUserInfo: state.user.currentUserInfo,
@@ -37,6 +40,7 @@ const ShowPost = () => {
       comments: state.post.comments,
       postsReaction: state.post.postsReaction,
       commentsReactions: state.post.commentsReactions,
+      counter:state.post.counter,
     };
   });
   const dispatch = useDispatch();
@@ -156,6 +160,9 @@ const ShowPost = () => {
       .then((result) => {
         dispatch(addToComments(comment));
         getAllPosts();
+
+        getCounterNumber();
+
       })
       .catch((error) => {});
   };
@@ -193,9 +200,20 @@ getAllPosts()
 
     })
   }
+const getCounterNumber = ()=>{
+  axios.get( "http://localhost:5000/comment/").then((result)=>{
+    
+dispatch(setCounter(result.data.result))
 
+
+  }).catch((error)=>{
+    console.log(error);
+  })
+}
   useEffect(() => {
     getAllPosts();
+    getCounterNumber();
+
   }, []);
   return (
     <>
@@ -288,9 +306,23 @@ getAllPosts()
                 <div className="postBottom">
                   <div className="postBottomLeft">
                     <AiOutlineLike />
-                    {/* likes counter */}
+                   {counter && counter.map((count,ind)=>{
+                     return (
+                       <> 
+                       {count.id==element.id? (<>{count["COUNT(distinct post_reaction.id)"]}</>):""}
+                       </>
+                     )
+          })}
+          <BiComment/>
+          {counter && counter.map((count,ind)=>{
+                     return (
+                       <> 
+                       {count.id==element.id? (<>{count["COUNT(distinct comment.id)"]}</>):""}
+                       </>
+                     )
+          })}
                   </div>
-                  <div className="postBottomLeft">{/* comment counter */}</div>
+                 
                 </div>
                 <div className="comments">
                   {element.comments ? (
@@ -379,7 +411,8 @@ getAllPosts()
                   )}
                 </div>
                 <div>
-                  <textarea
+                  <textarea 
+                  value={clear}
                     className="commentBox"
                     placeholder="comment..."
                     onChange={(e) => {
@@ -391,6 +424,7 @@ getAllPosts()
                     className="commentBtn"
                     onClick={(e) => {
                       addComment(e.target.id);
+                      setClear("")
                     }}
                   >
                     Add comment

@@ -7,8 +7,16 @@ const postSlice = createSlice({
     comments: [],
     postsReaction: [],
     commentsReactions: [],
+    counter :[]
   },
   reducers: {
+    setCounter:(state,action)=>{
+      state.counter= action.payload;
+
+    },
+    addToCounter: (state, action) => {
+      state.counter.push(action.payload);
+    },
     setAllPosts: (state, action) => {
       state.posts = action.payload;
     },
@@ -110,5 +118,7 @@ export const {
   setAllCommentsReactions,
   addToCommentsReactions,
   removeFromCommentsReactions,
+  setCounter,
+  addToCounter
 } = postSlice.actions;
 export default postSlice.reducer;

@@ -61,6 +61,7 @@ const getAllPosts = (req, res) => {
   });
 };
 
+
 // create function to get posts by use
 
 const getPostByUserId = (req, res) => {
