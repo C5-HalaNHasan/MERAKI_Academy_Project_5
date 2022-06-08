@@ -19,7 +19,24 @@ const getAllPostsReactions = (req, res) => {
     });
   });
 };
-
+const getCommentReactionsCount =(req,res)=>{
+  const query = `SELECT comment.id, COUNT(distinct comment_reaction.id)
+  FROM comment LEFT JOIN comment_reaction ON comment.id = comment_reaction.comment_id WHERE comment.isDeleted =0 AND comment_reaction.isDeleted =0 group by comment.id `
+  connection.query(query, (error, result) => {
+    if (error) {
+      return res.status(404).json({
+        success: false,
+        massage: `Server error`,
+        error: error,
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: `All Reported comments`,
+      result: result,
+    });
+  });
+}
 //a function that creates a reaction on a specific post by post_id
 const addReactionToPost = (req, res) => { //! user can react only one time on a post
   const query = `SELECT * FROM post_reaction WHERE author_id=? AND post_id=?`;
@@ -244,5 +261,6 @@ module.exports={
     removeReactionFromPost,
     getAllCommentsReactions,
     addReactionToComment,
-    removeReactionFromComment
+    removeReactionFromComment,
+    getCommentReactionsCount
 }

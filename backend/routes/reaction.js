@@ -1,6 +1,6 @@
 //create the reactionRouter and its endpoints
 const express=require("express");
-const {getAllPostsReactions,addReactionToPost,removeReactionFromPost,getAllCommentsReactions,addReactionToComment,removeReactionFromComment}=require("../controllers/reaction");
+const {getAllPostsReactions,addReactionToPost,removeReactionFromPost,getAllCommentsReactions,addReactionToComment,removeReactionFromComment,getCommentReactionsCount}=require("../controllers/reaction");
 const {authentication}=require("../middlewares/authentication");
 
 const reactionRouter=express.Router();
@@ -22,6 +22,9 @@ reactionRouter.post("/comment/:id",authentication,addReactionToComment);
 
 //endpoint for GET request ==> http://localhost:5000/reaction/comment/:id ==> removeReactionFromComment
 reactionRouter.delete("/comment/:id",authentication,removeReactionFromComment);
+
+//endpoint for GET request ==> http://localhost:5000/reaction/comment/counter ==> getCommentReactionsCount
+reactionRouter.get("/comment/counter",authentication,getCommentReactionsCount);
 
 
 
