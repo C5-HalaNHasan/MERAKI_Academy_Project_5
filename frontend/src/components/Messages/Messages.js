@@ -76,6 +76,13 @@ const Messages = () => {
     let filtered = allMessages.filter((conv, ind) => {
       return conv.sentBy != userId || conv.receivedBy != userId;
     });
+    // const filtered2 = allMessages.filter(
+    //   (conv, ind, self) =>
+    //     ind ==
+    //     self.findIndex(
+    //       (t) => t.sentBy !== conv.receivedBy && t.receivedBy !== conv.sentBy
+    //     )
+    // );
 
     setList(filtered);
     return filtered;

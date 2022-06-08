@@ -38,7 +38,9 @@ const sendMessageToUserById = (req, res) => {
 const getAllMessagesFromUserById = (req, res) => {
   const sentBy = req.token.userId;
   const receivedBy = req.params.id;
+  // const query = `SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id  WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0 UNION SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0`;
   const query = `SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id  WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0 UNION SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0`;
+
   const data = [receivedBy, sentBy, sentBy, receivedBy];
   connection.query(query, data, (error, result) => {
     if (error) {
