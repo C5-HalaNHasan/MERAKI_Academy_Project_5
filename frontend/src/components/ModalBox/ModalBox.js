@@ -17,6 +17,9 @@ const ModalBox = () => {
   //to ensure that the user has entered enough charcters to send a message or report a user:
   const [enteredChar, setEnteredChar] = useState("");
   const [notification, setNotification] = useState("");
+  //state to update profile images:
+  const [updatedImg, setUpdatedImg] = useState("");
+  const [previewImg, setPreviewImg] = useState("");
   //to use user token for axios calls
   const { token, userId, currentUserInfo } = useSelector((state) => {
     return {
@@ -36,7 +39,7 @@ const ModalBox = () => {
     };
   });
   console.log("from modalbox", user, type, message, details, show);
-  const actionTypes = ["ok", "notOk", "alert"];
+  const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
   if (show === false) {
     return null;
   }
@@ -53,6 +56,7 @@ const ModalBox = () => {
     );
   };
 
+  //a function to send messages to users:
   const sendMessage = () => {
     let sendMessageToUserUrl = `http://localhost:5000/message/${user}`;
     if (enteredChar.length > 10) {
@@ -77,7 +81,7 @@ const ModalBox = () => {
     }
   };
 
-  //to be removed from Actions component
+  //a function to report  users with only if reasons are provided:
   const reportUser = () => {
     let reportUserUrl = `http://localhost:5000/user/remove/${user}`;
     if (enteredChar.length > 10) {
@@ -98,10 +102,48 @@ const ModalBox = () => {
     }
   };
 
-  //a function that updates currentUser profileImg
-  const updateProfileImg = () => {};
-  //a function that updates currentUser CoverImg
-  const updateCoverImg = () => {};
+  //! update profile & cover photos from here
+  //a function that updates currentUser profileImg OR cover Img:
+  const changeUserImgs = (e) => {
+    setUpdatedImg(e.target.files[0]);
+    const data = new FormData();
+    data.append("file", e.target.files[0]);
+    data.append("upload_preset", "rapulojk");
+    data.append("cloud_name", "difjgm3tp");
+    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+    axios
+      .post(uploadPicUrl, data)
+      .then((result) => {
+        setUpdatedImg(result.data.url);
+        setPreviewImg(result.data.url);
+        console.log(result.data.url);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const updateUserImgs = () => {
+    let updateImgUrl = `http://localhost:5000/user`;
+    let update = type == "profileImg" ? "profileImg" : "coverImg";
+    axios
+      .put(
+        updateImgUrl,
+        { [type]: updatedImg },
+        { headers: { authorization: token } }
+      )
+      .then((result) => {
+        if (result.data.success) {
+          console.log("updated successfully");
+          setCurrentUserInfo(result.data.result);
+          clearModalBox();
+        }
+      })
+      .catch((error) => {
+        console.log({ error_from_updatedProfileImgs: error });
+      });
+  };
+  //! till here
+  //! updated image to be set wheneve the user uploads a photo
   return (
     <div className="modalBox">
       <div className="contentsContainer">
@@ -109,6 +151,20 @@ const ModalBox = () => {
         {type === "ok" && <img src={ok} alt="ok" />}
         {type === "notOk" && <img src={notOk} alt="notOk" />}
         {type === "alert" && <img src={alert} alt="alert" />}
+        {type === "profileImg" && (
+          <img
+            src={currentUserInfo.profileImg}
+            alt="profileImg"
+            style={{ borderRadius: "50%", height: "100px" }}
+          />
+        )}
+        {type === "coverImg" && (
+          <img
+            src={currentUserInfo.coverImg}
+            alt="profileImg"
+            style={{ borderRadius: "50%", height: "100px" }}
+          />
+        )}
 
         <div className="modalRight">
           <span class="closeModalBox">
@@ -125,15 +181,36 @@ const ModalBox = () => {
                 <h1>{message}</h1>
                 <h2>{details}</h2>
                 <div className="actionButtonsContainer">
-                  <button
-                    className="actionButton"
-                    onClick={() => clearModalBox()}
-                  >
-                    Ok
-                  </button>
+                  {/* start of  update profile & cover images */}
+                  {type === "profileImg" && (
+                    <input type="file" onChange={changeUserImgs}></input>
+                  )}
+
+                  {type === "coverImg" && (
+                    <input type="file" onChange={changeUserImgs}></input>
+                  )}
+
+                  {/* end of  update profile & cover images */}
+
+                  {type !== "coverImg" && type !== "profileImg" ? (
+                    <button
+                      className="actionButton"
+                      onClick={() => clearModalBox()}
+                    >
+                      Ok
+                    </button>
+                  ) : (
+                    <button
+                      className="actionButton"
+                      onClick={() => updateUserImgs()}
+                    >
+                      Update
+                    </button>
+                  )}
                 </div>
               </>
             )}
+
             {/* a state is going to be used to count the letters to ensure that it's filled */}
             {type == "sendMessage" && (
               <div className="boxContent">

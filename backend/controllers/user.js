@@ -157,6 +157,10 @@ const updateUserProfile = async (req, res) => {
   const id = req.token.userId;
   const SALT = 10;
   let hashedPassword = await bcrypt.hash(password, SALT);
+  // let hashedPassword;
+  // bcrypt.hash(password, SALT, (err, hashed) => {
+  //   hashedPassword = hashed;
+  // });
   const query = `UPDATE user SET firstName=COALESCE(?,firstName),lastName=COALESCE(?,lastName),password=COALESCE(?,password),birthday=COALESCE(?,birthday),country=COALESCE(?,country),profileImg=COALESCE(?,profileImg),coverImg=COALESCE(?,coverImg),isPrivate=COALESCE(?,isPrivate) WHERE id=?`;
   const data = [
     firstName,
@@ -173,7 +177,19 @@ const updateUserProfile = async (req, res) => {
     if (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
-    res.status(200).json({ result });
+    if (result.affectedRows) {
+      //another query to get the user updated info to be set in the bckend
+      const quer1 = `SELECT * FROM user WHERE id=?`;
+      const data1 = [id];
+      connection.query(quer1, data1, (error1, result1) => {
+        if (error1) {
+        }
+        res.status(200).json({
+          success: true,
+          result: result1,
+        });
+      });
+    }
   });
 };
 //___ a function to add a new friend to the data base________
@@ -254,7 +270,7 @@ const removeFriendById = (req, res) => {
       return res.status(500).json({ success: false, message: error.message });
     }
     if (result.affectedRows == 1) {
-      //! to return deleted user to be used in the frontend
+      //to return deleted user to be used in the frontend
       const query1 = `SELECT * FROM user WHERE id=? `;
       const data1 = [friendshipAccept];
       connection.query(query1, data1, (error1, result1) => {

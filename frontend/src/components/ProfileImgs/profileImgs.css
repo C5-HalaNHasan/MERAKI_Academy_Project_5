@@ -2,7 +2,8 @@
     display: grid;
     grid-template-columns:repeat(3, 1fr);
     grid-template-rows:repeat(3, 1fr);
-    grid-template-areas: "c c c""c p1 c""e p2 e";
+    grid-template-areas: "c c c""c c c""p p p";
+    row-gap: 0px;
 }
 
 .coverImg{
@@ -10,8 +11,9 @@
 }
 
 .profileImg{
-    grid-area: p1/p2;
-
+    grid-area: p;
+    display: flex;
+   justify-content: center;
 }
 
 .coverImg img{
@@ -23,6 +25,7 @@
 .profileImg img{
     width:200px;
     height:70px;
+    border-radius: 50%;
     cursor: pointer;
 }
 
