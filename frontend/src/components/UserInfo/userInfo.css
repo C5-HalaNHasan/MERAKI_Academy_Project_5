@@ -1,0 +1,19 @@
+.userInfoComponent {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.currentUser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.visitUser{
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
