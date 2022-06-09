@@ -13,7 +13,7 @@ const createUser = async (req, res) => {
     birthday,
     country,
     gender,
-    role_id,
+    role_id
   } = req.body;
   const query = `INSERT INTO user(firstName,lastName,email,password,birthday,country,gender,role_id) VALUES(?,?,?,?,?,?,?,?)`;
   const SALT = 10;
@@ -26,7 +26,7 @@ const createUser = async (req, res) => {
     birthday,
     country,
     gender,
-    role_id,
+    role_id
   ];
   //before registration: the entered email is going to be checked if it exists in the dataBase or not:
   const query1 = `SELECT * FROM user WHERE email=?`;
@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
     if (error1) {
       return res.status(500).json({
         success: false,
-        message: error1.message,
+        message: error1.message
       });
     }
     //if the result is an empty array then the email doesn't ecist in the data base
@@ -45,20 +45,20 @@ const createUser = async (req, res) => {
         if (error) {
           return res.status(500).json({
             success: false,
-            message: error.message,
+            message: error.message
           });
         }
         res.status(201).json({
           success: true,
           message: `user created successfully`,
-          result: result,
+          result: result
         });
       });
     } else {
       //the entered email exists in the dataBase:
       res.status(406).json({
         success: false,
-        message: `this email exists in the dataBase`,
+        message: `this email exists in the dataBase`
       });
     }
   });
@@ -76,7 +76,7 @@ const loginUser = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
 
@@ -87,16 +87,16 @@ const loginUser = (req, res) => {
         if (error1) {
           return res.status(500).json({
             success: false,
-            message: error1.message,
+            message: error1.message
           });
         }
         if (result1) {
           const payload = {
             userId: result[0].id,
-            role_id: result[0].role_id,
+            role_id: result[0].role_id
           };
           const options = {
-            expiresIn: "700m", //! to be updated later
+            expiresIn: "700m" //! to be updated later
           };
           const secret = process.env.SECRET;
           const token = jwt.sign(payload, secret, options);
@@ -106,14 +106,14 @@ const loginUser = (req, res) => {
         } else {
           res.status(403).json({
             success: false,
-            message: "Incorrect password",
+            message: "Incorrect password"
           });
         }
       });
     } else {
       res.status(404).json({
         success: false,
-        message: "This email doesn't exist in the dataBase",
+        message: "This email doesn't exist in the dataBase"
       });
     }
   });
@@ -125,19 +125,19 @@ const getAllUsers = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
     if (!result.length) {
       return res.status(404).json({
         success: false,
-        message: `No Users Found`,
+        message: `No Users Found`
       });
     } else {
       res.status(200).json({
         success: true,
         message: `all users`,
-        result,
+        result
       });
     }
   });
@@ -152,7 +152,7 @@ const updateUserProfile = async (req, res) => {
     country,
     profileImg,
     coverImg,
-    isPrivate,
+    isPrivate
   } = req.body;
   const id = req.token.userId;
   const SALT = 10;
@@ -171,7 +171,7 @@ const updateUserProfile = async (req, res) => {
     profileImg,
     coverImg,
     isPrivate,
-    id,
+    id
   ];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -186,7 +186,7 @@ const updateUserProfile = async (req, res) => {
         }
         res.status(200).json({
           success: true,
-          result: result1,
+          result: result1
         });
       });
     }
@@ -202,14 +202,14 @@ const addFriendById = (req, res) => {
     friendshipRequest,
     friendshipAccept,
     friendshipAccept,
-    friendshipRequest,
+    friendshipRequest
   ];
   connection.query(query, data, (error, result) => {
     console.log(result);
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
     if (result.length == 0) {
@@ -219,7 +219,7 @@ const addFriendById = (req, res) => {
         if (error1) {
           return res.status(500).json({
             success: false,
-            message: error1.message,
+            message: error1.message
           });
         }
         if (result1.affectedRows == 1) {
@@ -229,26 +229,26 @@ const addFriendById = (req, res) => {
             if (error2) {
               return res.status(500).json({
                 success: false,
-                message: error2.message,
+                message: error2.message
               });
             }
             res.status(201).json({
               success: true,
               message: `friend added successfully`,
-              result: result2,
+              result: result2
             });
           });
         } else {
           res.status(400).json({
             success: false,
-            message: `Request can't be sent`,
+            message: `Request can't be sent`
           });
         }
       });
     } else {
       res.status(400).json({
         success: false,
-        message: `user ${friendshipAccept} is already in your friendlist`,
+        message: `user ${friendshipAccept} is already in your friendlist`
       });
     }
   });
@@ -263,7 +263,7 @@ const removeFriendById = (req, res) => {
     friendshipAccept,
     friendshipRequest,
     friendshipRequest,
-    friendshipAccept,
+    friendshipAccept
   ];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -282,13 +282,13 @@ const removeFriendById = (req, res) => {
         res.status(200).json({
           success: true,
           message: `friend ${friendshipAccept} has been deleted successfully`,
-          result: result1,
+          result: result1
         });
       });
     } else {
       res.status(404).json({
         success: false,
-        message: `friend ${friendshipAccept} is not in your friendlist`,
+        message: `friend ${friendshipAccept} is not in your friendlist`
       });
     }
   });
@@ -305,7 +305,7 @@ const getAllFriendsByUserId = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
 
@@ -316,7 +316,7 @@ const getAllFriendsByUserId = (req, res) => {
     res.status(200).json({
       success: true,
       message: `All Friends for userId ${friendshipRequest},£of friends is ${result.length}`,
-      result: result,
+      result: result
     });
   });
 };
@@ -331,7 +331,7 @@ const reportUserById = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
     res
@@ -353,7 +353,7 @@ const removeUserByIdAdmin = (req, res) => {
     res.status(200).json({
       success: true,
       message: `The reported user is deleted`,
-      result,
+      result
     });
   });
 };
@@ -366,13 +366,13 @@ const getReportedUsers = (req, res) => {
       return res.status(404).json({
         success: false,
         massage: `Server error`,
-        error: error,
+        error: error
       });
     }
     res.status(201).json({
       success: true,
       message: `All Reported users`,
-      result: result,
+      result: result
     });
   });
 };
@@ -386,21 +386,33 @@ const getUserById = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
     if (!result.length) {
       return res.status(404).json({
         success: false,
-        message: `No Users Found`,
+        message: `No Users Found`
       });
     } else {
       res.status(200).json({
         success: true,
         message: `user ${userId} info`,
-        result,
+        result
       });
     }
+  });
+};
+const getSuggestedUser = (req, res) => {
+  const query = `SELECT *,user.id FROM user INNER JOIN friendship WHERE user.id!=friendship.friendshipAccept;`;
+  connection.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).json({});
+    }
+    res.status(200).json({ success: true,
+      message: `suggested friends `,
+      result});
   });
 };
 
@@ -416,4 +428,5 @@ module.exports = {
   removeUserByIdAdmin,
   getReportedUsers,
   getUserById,
+  getSuggestedUser
 };
