@@ -1,5 +1,7 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { setAllUsers } from '../redux/reducers/user';
 import "./users.css";
 
 //Users component will take two props:type(search or friendlist) & name (name of the searched user)
