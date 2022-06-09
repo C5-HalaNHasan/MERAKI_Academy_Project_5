@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { updateUserInfo } from "../redux/reducers/user/index";
 import "./updateProfile.css";
 
 const UpdateProfile = () => {
@@ -119,6 +120,16 @@ const UpdateProfile = () => {
       <div className="updateBut">
         <button
           onClick={() => {
+            dispatch(
+              updateUserInfo(
+                firstName,
+                lastName,
+                hashedPassword,
+                birthday,
+                country,
+                isPrivate
+              )
+            );
             navigate("/user/:id");
           }}
         >
