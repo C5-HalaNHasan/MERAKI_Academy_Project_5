@@ -496,11 +496,49 @@ const ShowPost = () => {
                                       src={comment.profileImg}
                                     />
                                   </div>
-                                  <div className="commenterName">
-                                    <>{comment.firstName}</>
-                                  </div>
+                                  <div className="mainComment">
+                                  <div className="commenterNameAndPost">
+                                  <div className="commenterName">{comment.firstName} {comment.lastName}</div>{" "}
+                                  
+                                  <div className="userComment">
+                                <p className="comment" key={i}>
+                                  {comment.comment}
+                                </p>
+                              </div>
+                              </div>
+                              <div className="dateAndLike">
                                   <div className="createdTime">
                                     {comment.createdAt.toString().split("T")[0]}
+                                  </div>
+<div>
+                                  <AiOutlineLike
+                                  onClick={() => {
+                                    checkCommentsLiked(
+                                      comment.id,
+                                      currentUserInfo.id
+                                    );
+                                  }}
+                                />
+                                {commentReactionsCounter &&
+                                  commentReactionsCounter.map((count, ind) => {
+                                    return (
+                                      <>
+                                        {count.id == comment.id ? (
+                                          <>
+                                            {
+                                              count[
+                                                "COUNT(distinct comment_reaction.id)"
+                                              ]
+                                            }
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </>
+                                    );
+                                  })}
+</div>
+</div>
                                   </div>
                                 </div>
                                 <div className="settingComments">
@@ -565,38 +603,9 @@ const ShowPost = () => {
                                   )}
                                 </div>
                               </div>
-                              <div className="userComment">
-                                <p className="comment" key={i}>
-                                  {comment.comment}
-                                </p>
-                              </div>
+                             
                               <div>
-                                <AiOutlineLike
-                                  onClick={() => {
-                                    checkCommentsLiked(
-                                      comment.id,
-                                      currentUserInfo.id
-                                    );
-                                  }}
-                                />
-                                {commentReactionsCounter &&
-                                  commentReactionsCounter.map((count, ind) => {
-                                    return (
-                                      <>
-                                        {count.id == comment.id ? (
-                                          <>
-                                            {
-                                              count[
-                                                "COUNT(distinct comment_reaction.id)"
-                                              ]
-                                            }
-                                          </>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </>
-                                    );
-                                  })}
+                               
                               </div>
                             </div>
                           );
