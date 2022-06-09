@@ -67,7 +67,11 @@ const getAllMessagesFromUserById = (req, res) => {
 const getAllUserMessages = (req, res) => {
   const userId = req.token.userId;
   // const query = `SELECT m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.isDeleted=0 UNION SELECT m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=? AND m.isDeleted=0`;
-  const query = `SELECT * FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.isDeleted=0 UNION SELECT * FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=? AND m.isDeleted=0`;
+  // const query = `SELECT * FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.isDeleted=0 UNION SELECT * FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=? AND m.isDeleted=0`;
+
+  const query = `SELECT m.id, m.sentBy,m.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM message m  INNER JOIN user u1 ON m.sentBy=u1.id INNER JOIN user u2 ON m.receivedBy=u2.id WHERE (m.sentBy =? OR m.receivedBy =?) AND m.isDeleted=0 GROUP BY m.sentBy,m.receivedBy`;
+  // const query = `SELECT * FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.isDeleted=0 UNION SELECT * FROM message m INNER JOIN user u ON m.receivedBy=u.id WHERE m.sentBy=? AND m.isDeleted=0`;
+
   const data = [userId, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
