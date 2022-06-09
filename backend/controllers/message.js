@@ -38,10 +38,9 @@ const sendMessageToUserById = (req, res) => {
 const getAllMessagesFromUserById = (req, res) => {
   const sentBy = req.token.userId;
   const receivedBy = req.params.id;
-  // const query = `SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id  WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0 UNION SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0`;
-  const query = `SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id  WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0 UNION SELECT *,m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted FROM message m INNER JOIN user u ON m.sentBy=u.id WHERE m.receivedBy=? AND m.sentBy=? AND m.isDeleted=0`;
+  const query = `SELECT m.id,m.message,m.sentBy,m.receivedBy,m.createdAt,m.isDeleted,u1.firstName,u1.profileImg,u2.firstName AS u2f,u2.profileImg AS u2Img FROM message m INNER JOIN user u1 ON m.sentBy=u1.id INNER JOIN user u2 ON m.receivedBy=u2.id WHERE (m.sentBy=? AND m.receivedBy =? AND m.isDeleted=0) OR(m.receivedBy=? AND m.sentBy =? AND m.isDeleted=0) ORDER BY m.createdAt`;
 
-  const data = [receivedBy, sentBy, sentBy, receivedBy];
+  const data = [receivedBy, sentBy, receivedBy, sentBy];
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(500).json({
