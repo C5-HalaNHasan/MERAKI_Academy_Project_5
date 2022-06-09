@@ -21,6 +21,7 @@ const NavBar = () => {
 
   const [find, setFind] = useState("");
 
+
   //!useEffect to be used to dispatch(setCurrentUserInf(data from BE))
   const getCurrentUser=()=>{
     let getCurrentUserUrl=`http://localhost:5000/user/${userId}`;
@@ -54,14 +55,20 @@ const NavBar = () => {
           <input
             placeholder="Search for a friend.."
             className="inputSearch"
-            onClick={() => {
-              navigate(`/users/search/`);
-            }}
+            onKeyPress={(e) => {
+                        if (e.key === "Enter"){
+                         
+            navigate(`/users/search/${find}`)
+
+                        }}}
             onChange={(e) => {
               setFind(e.target.value);
-              navigate(`/users/search/${find}`);
+
+              
             }}
+
           />
+
           {/* to be updated after users/search is done */}
         </div>
       </div>
@@ -96,7 +103,7 @@ const NavBar = () => {
             navigate(`/user/${userId}`);
           }}
         />
-        {/* ! to be update after reg */}
+       
       </div>
     </div>
   );
