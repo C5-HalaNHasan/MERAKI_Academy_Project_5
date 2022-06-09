@@ -54,9 +54,7 @@ const NavBar = () => {
           <input
             placeholder="Search for a friend.."
             className="inputSearch"
-            onClick={() => {
-              navigate(`/users/search/`);
-            }}
+            
             onChange={(e) => {
               setFind(e.target.value);
               navigate(`/users/search/${find}`);
@@ -96,7 +94,7 @@ const NavBar = () => {
             navigate(`/user/${userId}`);
           }}
         />
-        {/* ! to be update after reg */}
+       
       </div>
     </div>
   );
