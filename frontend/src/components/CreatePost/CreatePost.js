@@ -94,7 +94,7 @@ const CreatePost = () => {
             }}
           />
         </div>
-        <hr />
+        
         <div className="bottomPostCreate">
           <div className="leftBottomPost">
             <div className="ImgUpload">
