@@ -251,6 +251,7 @@ const ShowPost = () => {
       )
       .then((result) => {
         getCounterNumber();
+        getAllPostsReactions();
       })
       .catch((error) => {
         console.log(error);
@@ -282,6 +283,7 @@ const ShowPost = () => {
   };
 
   const checkIfLiked = (post, author) => {
+    console.log(post,author,postsReaction);
     if (postsReaction.length == 0) {
       return addReactionToPost(post);
     }
@@ -382,7 +384,7 @@ dispatch(setAllCommentsReactions(result.data.result))
   return (
     <>
       <div className="showsPostComponent">
-        {show &&
+        {show && posts &&
           posts.map((element, index) => {
             return (
               <div key={index} className="showPosts">
@@ -391,7 +393,7 @@ dispatch(setAllCommentsReactions(result.data.result))
                     <img className="postUserImg" src={element.profileImg} /></div>
                     <div className="nameAndDate">
                     <div className="name">{element.firstName} {element.lastName}</div>{" "}
-                    <span className="date"> {element.createdAt.toString().split("T")[0]}</span>
+                    <span className="date"> {element.createdAt? element.createdAt.split("T")[0]:""}</span>
                   </div></div>
                   <div className="postTopRight"></div>
                   <BsThreeDots
@@ -560,10 +562,11 @@ className="likeColor"
                               </div>
                               <div className="dateAndLike">
                                   <div className="createdTime">
-                                    {comment.createdAt.toString().split("T")[0]}
+                                    {comment.createdAt?comment.createdAt.toString().split("T")[0]:""}
                                   </div>
 <div>
                                   <AiOutlineLike
+                                  className="commentLike"
                                   onClick={() => {
                                     checkCommentsLiked(
                                       comment.id,
