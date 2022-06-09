@@ -46,7 +46,7 @@ const ShowPost = () => {
       commentsReactions: state.post.commentsReactions,
       commentCounter: state.post.commentCounter,
       reactionCounter: state.post.reactionCounter,
-      commentReactionsCounter:state.post.commentReactionsCounter
+      commentReactionsCounter: state.post.commentReactionsCounter,
     };
   });
   const dispatch = useDispatch();
@@ -77,7 +77,7 @@ const ShowPost = () => {
 
       if (res.data.success) {
         dispatch(setAllPosts(res.data.result));
-        
+
         setShow(true);
       }
     } catch {}
@@ -135,7 +135,7 @@ const ShowPost = () => {
       .post(uploadPicUrl, data)
       .then((result) => {
         setPostImg(result.data.url);
-        
+
         updatePost(id, result.data.url);
         setUpdateClick(false);
         setPostImg("");
@@ -218,7 +218,6 @@ const ShowPost = () => {
     axios
       .get("http://localhost:5000/comment/")
       .then((result) => {
-        
         dispatch(setCommentCounter(result.data.commentCounter));
         dispatch(setReactionCounter(result.data.reactionCounter));
       })
@@ -226,17 +225,20 @@ const ShowPost = () => {
         console.log(error);
       });
   };
-  const getCommentReactionsCount =()=>{
-    axios.get(`http://localhost:5000/reaction/comment/counter`,{headers: {
-      Authorization: token,
-    },}).then((result)=>{
-dispatch(setCommentReactionCounter(result.data.result))
-    }).catch((error)=>{
-
-    })
-  }
-  const addReactionToPost = (id) => {
+  const getCommentReactionsCount = () => {
     axios
+      .get(`http://localhost:5000/reaction/comment/counter`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(setCommentReactionCounter(result.data.result));
+      })
+      .catch((error) => {});
+  };
+  const addReactionToPost = async (id) => {
+   await axios
       .post(
         `http://localhost:5000/reaction/post/${id}`,
         {},
@@ -248,14 +250,13 @@ dispatch(setCommentReactionCounter(result.data.result))
       )
       .then((result) => {
         getCounterNumber();
-        
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const removeReactionFromPost = (id) => {
-    axios
+  const removeReactionFromPost = async (id) => {
+  await  axios
       .delete(`http://localhost:5000/reaction/post/${id} `, {
         headers: {
           Authorization: token,
@@ -279,50 +280,62 @@ dispatch(setCommentReactionCounter(result.data.result))
       .catch((error) => {});
   };
   const checkIfLiked = (post, author) => {
-    if(postsReaction.length==0){
+    if (postsReaction.length == 0) {
       return addReactionToPost(post);
     }
     postsReaction.map((element, index) => {
-        if (element.author_id == author && element.post_id == post && element.isDeleted==0) {
-          return removeReactionFromPost(post);
-        }
-      });
+      if (
+        element.author_id == author &&
+        element.post_id == post &&
+        element.isDeleted == 0
+      ) {
+        return removeReactionFromPost(post);
+      }
+    });
     return addReactionToPost(post);
   };
-  const addReactionToComment =(id)=>{
-    axios.post(`http://localhost:5000/reaction/comment/${id}`,{},{
-      headers: {
-        Authorization: token,
-      },
-    }).then((result)=>{
-      getCommentReactionsCount();
-
-    }).catch((error)=>{
-
-    })
-  }
-  const removeReactionFromComment =(id)=>{
-    axios.delete(`http://localhost:5000/reaction/comment/${id}`,{
-      headers: {
-        Authorization: token,
-      },
-    }).then((result)=>{
-      getCommentReactionsCount();
-
-    }).catch((error)=>{
-
-    })
-  }
+  const addReactionToComment = (id) => {
+    axios
+      .post(
+        `http://localhost:5000/reaction/comment/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((result) => {
+        getCommentReactionsCount();
+      })
+      .catch((error) => {});
+  };
+  const removeReactionFromComment = (id) => {
+    axios
+      .delete(`http://localhost:5000/reaction/comment/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        getCommentReactionsCount();
+      })
+      .catch((error) => {});
+  };
   const checkCommentsLiked = (comment, author) => {
-    console.log(commentReactionsCounter,"commentReactionsCounter");
-    if(commentReactionsCounter.length==0){
+    console.log(commentReactionsCounter, "commentReactionsCounter");
+    if (commentReactionsCounter.length == 0) {
       return addReactionToComment(comment);
     }
     commentReactionsCounter.map((element, index) => {
-        if (element.author_id == author && element.comment_id == comment && element.isDeleted==0) {
-          return removeReactionFromComment(comment);
-        }
-      });
+      if (
+        element.author_id == author &&
+        element.comment_id == comment &&
+        element.isDeleted == 0
+      ) {
+        return removeReactionFromComment(comment);
+      }
+    });
     return addReactionToComment(comment);
   };
   useEffect(() => {
@@ -339,17 +352,18 @@ dispatch(setCommentReactionCounter(result.data.result))
             return (
               <div key={index} className="showPosts">
                 <div className="postTop">
-                  <div className="postTopLeft">
-                    <img className="postUserImg" src={element.profileImg} />
-                    <>{element.firstName} </> <span> {element.createdAt}</span>
-                  </div>
+                  <div className="postTopLeft"><div>
+                    <img className="postUserImg" src={element.profileImg} /></div>
+                    <div className="nameAndDate">
+                    <div className="name">{element.firstName} {element.lastName}</div>{" "}
+                    <span className="date"> {element.createdAt.toString().split("T")[0]}</span>
+                  </div></div>
                   <div className="postTopRight"></div>
                   <BsThreeDots
                     className={element.id}
                     onClick={(e) => {
                       setUpdateClick(!updateClick);
                       setCurrentPost(e.target.className);
-                     
                     }}
                   />
                   {/* {setAuthor(element.author_id)} */}
@@ -411,7 +425,7 @@ dispatch(setCommentReactionCounter(result.data.result))
                   )}
                 </div>
                 <div className="postCenter">
-                  <>{element.postText}</>
+                  <p className="postText">{element.postText}</p>
                   <br></br>
                   {element.postImg ? (
                     <img className="PostImg" src={element.postImg} />
@@ -420,9 +434,11 @@ dispatch(setCommentReactionCounter(result.data.result))
                   )}
                 </div>
                 <div className="postBottom">
-                  <div className="postBottomLeft">
+
+                  <div>
                     <AiOutlineLike
                       className={likeColor}
+
                       onClick={() => {
                         checkIfLiked(element.id, currentUserInfo.id);
                       }}
@@ -439,6 +455,10 @@ dispatch(setCommentReactionCounter(result.data.result))
                           </>
                         );
                       })}
+                        <span className="tags">  Like</span>
+
+                      </div>
+                      <div>
                     <BiComment
                       className={element.id}
                       onClick={(e) => {
@@ -458,7 +478,8 @@ dispatch(setCommentReactionCounter(result.data.result))
                           </>
                         );
                       })}
-                  </div>
+                      <span className="tags">  Comment</span>
+                 </div>
                 </div>
                 {showComments && postId.baseVal == element.id ? (
                   <>
@@ -479,7 +500,7 @@ dispatch(setCommentReactionCounter(result.data.result))
                                     <>{comment.firstName}</>
                                   </div>
                                   <div className="createdTime">
-                                    {comment.createdAt}
+                                    {comment.createdAt.toString().split("T")[0]}
                                   </div>
                                 </div>
                                 <div className="settingComments">
@@ -490,7 +511,6 @@ dispatch(setCommentReactionCounter(result.data.result))
                                         !updateClickComment
                                       );
                                       setCurrentComment(e.target.id);
-                                     
                                     }}
                                   />
                                   {currentUserInfo.id == comment.author_id &&
@@ -550,24 +570,34 @@ dispatch(setCommentReactionCounter(result.data.result))
                                   {comment.comment}
                                 </p>
                               </div>
-                              <div><AiOutlineLike onClick={()=>{
-checkCommentsLiked(comment.id,currentUserInfo.id)
-                              }} />
-                               {commentReactionsCounter &&
-                      commentReactionsCounter.map((count, ind) => {
-                        return (
-                          <>
-                            {count.id == comment.id ? (
-                              <>{count["COUNT(distinct comment_reaction.id)"]}</>
-                            ) : (
-                              ""
-                            )}
-                          </>
-                        );
-                      })}
-
+                              <div>
+                                <AiOutlineLike
+                                  onClick={() => {
+                                    checkCommentsLiked(
+                                      comment.id,
+                                      currentUserInfo.id
+                                    );
+                                  }}
+                                />
+                                {commentReactionsCounter &&
+                                  commentReactionsCounter.map((count, ind) => {
+                                    return (
+                                      <>
+                                        {count.id == comment.id ? (
+                                          <>
+                                            {
+                                              count[
+                                                "COUNT(distinct comment_reaction.id)"
+                                              ]
+                                            }
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </>
+                                    );
+                                  })}
                               </div>
-                             
                             </div>
                           );
                         })
