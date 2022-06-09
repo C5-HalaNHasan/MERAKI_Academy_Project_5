@@ -1,0 +1,40 @@
+.updateProfileComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.input label {
+  font-weight: bold;
+}
+.input input {
+  width: 250px;
+  border: outset;
+  border-radius: 3px;
+  color: black;
+}
+.checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.checkbox label {
+  font-weight: bold;
+}
+.updateBut button {
+  width: 150px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: cornflowerblue;
+  color: black;
+  font: caption;
+}
+.updateBut button:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}

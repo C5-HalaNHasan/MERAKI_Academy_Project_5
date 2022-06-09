@@ -6,8 +6,10 @@ import {
   setVisitedUserInfo
 } from "../redux/reducers/user/index";
 import "./userInfo.css";
+import { useNavigate } from "react-router-dom";
 
 const UserInfo = ({ id }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token, userId, visitedUserInfo, currentUserInfo } = useSelector(
     (state) => {
@@ -29,13 +31,13 @@ const UserInfo = ({ id }) => {
       })
       .then((respon) => {
         let result = respon.data.result[0];
-        console.log(result[0]);
+        result.birthday = result.birthday.split("T")[0];
         if (id == userId) {
-          // console.log(id)
-          // console.log(userId);;
+          console.log(result.birthday);
           dispatch(setCurrentUserInfo(result));
-          // console.log(result);
         } else {
+          console.log(result.birthday);
+
           dispatch(setVisitedUserInfo(result));
           console.log(id);
           console.log(userId);
@@ -54,13 +56,20 @@ const UserInfo = ({ id }) => {
   return (
     <div className="userInfoComponent">
       userInfoComponent
-      {currentUserInfo.id ? (
+      {id===userId? (
         <div className="currentUser">
           <h4>
             {currentUserInfo.firstName}.{currentUserInfo.lastName}
           </h4>
           <h4>{currentUserInfo.birthday}</h4>
           <h4>{currentUserInfo.country}</h4>
+          <button
+            onClick={(e) => {
+              navigate(`/user/update/${id}`);
+            }}
+          >
+            update
+          </button>
         </div>
       ) : (
         <div className="visitUser">
