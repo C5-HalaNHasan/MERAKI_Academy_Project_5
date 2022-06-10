@@ -82,7 +82,8 @@
     /* margin-bottom: 2vh; */
     padding: 1%;
     border-radius: 4vw;
-    background-color: var(--mainText);
+    background-color:  rgb(54, 54, 237);;
+    /* background-color: var(--mainText); */
     color: var(--spanColor);
     border: none;
     font-size: 1.3rem;
