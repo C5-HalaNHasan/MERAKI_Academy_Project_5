@@ -128,3 +128,16 @@
   background-color: red;
   grid-area: rs1/rs1;
 }
+
+.adminDashBoardComponent {
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: m1/m2/m3/m3;
+}
+
+.adminSideBarComponent{
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: ls1/ls1/ls2/ls2;
+
+}
