@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import "./userProfilePage.css";
 import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
+import Footer from "../../Footer/Footer"; //! to be deleted
 import FriendList from "../../FriendList/FriendList";
 import UserInfo from "../../UserInfo/UserInfo";
 import ProfileImgs from "../../ProfileImgs/ProfileImgs";

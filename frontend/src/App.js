@@ -10,7 +10,8 @@ import UpdateProfilePage from "./components/Pages/UpdateProfilePage/UpdateProfil
 import MessagePage from "./components/Pages/MessagePage/MessagePage";
 import MessageWithPage from "./components/Pages/MessageWithPage/MessageWithPage";
 import UsersPage from "./components/Pages/UsersPage/UsersPage";
-import AdminPage from "./components/Pages/AdminPage/AdminPage";
+import AdminMainPage from "./components/Pages/AdminPages/AdminMainPage";
+import AdminSubPage from "./components/Pages/AdminPages/AdminSubPage";
 
 function App() {
   return (
@@ -25,7 +26,8 @@ function App() {
         <Route path="/message" element={<MessagePage />} />
         <Route path="/message/:id" element={<MessageWithPage />} />
         <Route path="/users/:type/:name" element={<UsersPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin" element={<AdminMainPage />} />
+        <Route path="/admin/:type" element={<AdminSubPage />} />
       </Routes>
     </div>
   );
