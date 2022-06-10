@@ -66,8 +66,9 @@ const ShowPost = ({ type, id }) => {
   const [postId, setPostId] = useState("");
   const [likeColor, setLikeColor] = useState(false);
   const author = currentUserInfo.id;
-
-  const getAllPosts = async () => {
+  let getAllPosts;
+  if(type == "home" ){
+  getAllPosts = async () => {
     try {
       const res = await axios.get("http://localhost:5000/post/friends", {
         headers: {
@@ -81,7 +82,23 @@ const ShowPost = ({ type, id }) => {
         setShow(true);
       }
     } catch {}
-  };
+  }} else if(id != undefined) {
+     getAllPosts = async ()=>{
+      try {
+        const res = await axios.get(` http://localhost:5000/post/user/${id}`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+  
+        if (res.data.success) {
+          dispatch(setAllPosts(res.data.result));
+  
+          setShow(true);
+        }
+      } catch {}
+    }
+  }
 
   const updatePost = (id, postImg, postText) => {
     axios
