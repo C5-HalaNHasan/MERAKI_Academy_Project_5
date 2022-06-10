@@ -1,5 +1,5 @@
 import React from "react";
-import "./adminPages.css";
+import "./adminMainPage.css";
 import NavBar from "../../NavBar/NavBar";
 import { useParams } from "react-router-dom";
 import ModalBox from "../../ModalBox/ModalBox";

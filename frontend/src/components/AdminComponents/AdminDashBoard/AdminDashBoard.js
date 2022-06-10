@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./adminDashBoard.css";
 import { TiUserDelete } from "react-icons/ti";
 import { MdDeleteForever } from "react-icons/md";
@@ -9,8 +9,15 @@ import { setAllPosts } from "../../redux/reducers/post/index";
 import axios from "axios";
 
 const AdminDashBoard = ({ type }) => {
-  //to use user token for axios calls
+  //to set a limited number of pages each time;pagination is going to be used;
+  // users pagination
+  const [pageNumbers, setPageNumbers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage, setUsersPerPage] = useState(5);
+  const [currentUsers, setCurrentusers] = useState([]);
+
   const dispatch = useDispatch();
+  //to use user token for axios calls
   const { token, userId, allUsers } = useSelector((state) => {
     return {
       token: state.user.token,
@@ -46,7 +53,7 @@ const AdminDashBoard = ({ type }) => {
       });
   };
 
-  //to remove user from dataBase:
+  //to remove a user from dataBase:
   const removeUser = (id) => {
     let removeUserUrl = `http://localhost:5000/user/remove/${id}`;
     axios
@@ -85,7 +92,7 @@ const AdminDashBoard = ({ type }) => {
       });
   };
 
-  //to remove pots from dataBase:
+  //to remove a post from dataBase:
   const removePost = (id) => {
     let removeUserUrl = `http://localhost:5000/oost/remove/${id}`;
     axios
@@ -112,27 +119,66 @@ const AdminDashBoard = ({ type }) => {
       showCharts();
     }
   };
-  console.log(allUsers);
+
+  //users pagination:
+  const usersPagination = () => {
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    setCurrentusers(allUsers.slice(indexOfFirstUser, indexOfLastUser));
+    pagination(allUsers.length, usersPerPage);
+  };
+  const pagination = (total, perPage) => {
+    for (let i = 1; i < Math.ceil(total / perPage); i++) {
+      setPageNumbers((old) => [...old, i]);
+    }
+  };
+  const changePage = (number) => {
+    setCurrentPage(number);
+  };
+
+  console.log({ currentUsers: pageNumbers });
   useEffect(() => {
+    getAllUsers();
+    // getAllPosts();
+    usersPagination();
     action();
-  }, []);
+  }, [currentPage]);
   return (
     <div className="adminDashBoardComponent">
       {/* all usersDiv starts here */}
       <div className="adminResultUsers">
         {type == "allUsers" &&
-          allUsers.length &&
-          allUsers.map((user) => {
+          currentUsers.length &&
+          currentUsers.map((user) => {
             return (
               <div className="adminUserInfo">
                 <img src={user.profileImg} />
                 <p>{user.firstName + " " + user.lastName}</p>
                 <p>{user.birthday.split("T")[0].split("")}</p>
+                <p>{user.country.toUpperCase()}</p>
                 <TiUserDelete className="icon" onClick={() => removeUser()} />
               </div>
             );
           })}
       </div>
+      {/* pagination bar */}
+      <div className="paginationBar">
+        <ul className="pageNumbers">
+          {pageNumbers.map((number) => {
+            return (
+              <li
+                onClick={() => {
+                  changePage(number);
+                }}
+              >
+                {number}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      {/* end of pagination bar */}
+
       {/* all usersDiv starts here above */}
     </div>
   );

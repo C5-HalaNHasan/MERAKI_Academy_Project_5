@@ -1,5 +1,5 @@
 import React from "react";
-import "./adminPages.css";
+import "./adminMainPage.css";
 import NavBar from "../../NavBar/NavBar";
 import ModalBox from "../../ModalBox/ModalBox";
 import AdminSideBar from "../../AdminComponents/AdminSideBar/AdminSideBar";

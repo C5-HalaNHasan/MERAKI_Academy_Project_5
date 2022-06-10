@@ -26,7 +26,17 @@
 
 .icon{
     /* gap: 4.5em; */
-    margin-left: 8em;
+    /* margin-left: 8em; */
     font-size: 1.3em;
     cursor: pointer;
+}
+
+.paginationBar ul {
+display: flex;
+gap:.3vw;
+}
+.paginationBar ul li{
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline;
 }
