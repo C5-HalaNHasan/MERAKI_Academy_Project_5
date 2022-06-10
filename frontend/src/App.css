@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;500;600&display=swap');
-
 /* darkMode & lightMode*/
 :root {
   --mainText: #003049;
@@ -8,7 +6,7 @@
   --spanColor: rgba(255, 255, 255, 0.9);
   --lightBgColor: rgba(255, 255, 255, 0.7);
   --onHover: rgba(255, 226, 76, 0.6);
-  --mainBgImg: url("");
+  /* --mainBgImg: url("../src/components/assets/bgReg.jpg"); */
 }
 
 
@@ -19,12 +17,18 @@
   /* color: var(--mainText); */
   text-decoration: none;
   list-style: none;
-  /* font-family: 'Hind Siliguri', sans-serif; */
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 #root {
-  width: 100vw;
+  /* background setting */
+  /* background: var(--mainBgImg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; */
+
   height: 100vh;
+  width: 100vw;
 }
 
 .componentsContainer {

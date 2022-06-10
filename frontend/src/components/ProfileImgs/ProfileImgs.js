@@ -105,15 +105,11 @@ const ProfileImgs = ({ id }) => {
         <div className="profileName">
           {id == userId ? (
             <h3>
-              {currentUserInfo.firstName.toUpperCase() +
-                " " +
-                currentUserInfo.lastName.toUpperCase()}
+              {currentUserInfo.firstName + " " + currentUserInfo.lastName}
             </h3>
           ) : (
             <h3>
-              {visitedUserInfo.firstName.toUpperCase() +
-                " " +
-                visitedUserInfo.lastName.toUpperCase()}
+              {visitedUserInfo.firstName + " " + visitedUserInfo.lastName}
             </h3>
           )}
         </div>
