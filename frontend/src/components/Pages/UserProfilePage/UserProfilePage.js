@@ -32,7 +32,7 @@ const UserProfilePage = () => {
       <ProfileImgs id={usedId} />
       {/* later:user can add posts on other walls! (extra) */}
       {/* {id == userId && <CreatePost />} */}
-      <ShowPost />
+      <ShowPost id={usedId} />
       {id == userId ? <Adv /> : <Actions id={id} />}
       {/* <Footer /> */}
     </>

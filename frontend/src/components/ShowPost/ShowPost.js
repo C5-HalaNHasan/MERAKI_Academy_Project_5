@@ -25,7 +25,7 @@ import {
   setCommentReactionCounter,
 } from "../redux/reducers/post";
 
-const ShowPost = () => {
+const ShowPost = ({ type, id }) => {
   const {
     currentUserInfo,
     token,
@@ -36,7 +36,6 @@ const ShowPost = () => {
     reactionCounter,
     commentCounter,
     commentReactionsCounter,
-    
   } = useSelector((state) => {
     return {
       currentUserInfo: state.user.currentUserInfo,
@@ -239,7 +238,7 @@ const ShowPost = () => {
       .catch((error) => {});
   };
   const addReactionToPost = async (id) => {
-   await axios
+    await axios
       .post(
         `http://localhost:5000/reaction/post/${id}`,
         {},
@@ -258,7 +257,7 @@ const ShowPost = () => {
       });
   };
   const removeReactionFromPost = async (id) => {
-  await  axios
+    await axios
       .delete(`http://localhost:5000/reaction/post/${id} `, {
         headers: {
           Authorization: token,
@@ -283,7 +282,7 @@ const ShowPost = () => {
   };
 
   const checkIfLiked = (post, author) => {
-    console.log(post,author,postsReaction);
+    console.log(post, author, postsReaction);
     if (postsReaction.length == 0) {
       return addReactionToPost(post);
     }
@@ -299,17 +298,18 @@ const ShowPost = () => {
     return addReactionToPost(post);
   };
 
-const getAllCommentsReactions =()=>{
-  axios.get("http://localhost:5000/reaction/comment",{
-    headers: {
-      Authorization: token,
-    },
-  }).then((result)=>{
-dispatch(setAllCommentsReactions(result.data.result))
-  }).catch((error)=>{
-
-  })
-}
+  const getAllCommentsReactions = () => {
+    axios
+      .get("http://localhost:5000/reaction/comment", {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(setAllCommentsReactions(result.data.result));
+      })
+      .catch((error) => {});
+  };
   const addReactionToComment = (id) => {
     axios
       .post(
@@ -323,8 +323,7 @@ dispatch(setAllCommentsReactions(result.data.result))
       )
       .then((result) => {
         getCommentReactionsCount();
-    getAllCommentsReactions();
-
+        getAllCommentsReactions();
       })
       .catch((error) => {});
   };
@@ -337,14 +336,11 @@ dispatch(setAllCommentsReactions(result.data.result))
       })
       .then((result) => {
         getCommentReactionsCount();
-    getAllCommentsReactions();
-
+        getAllCommentsReactions();
       })
       .catch((error) => {});
   };
   const checkCommentsLiked = (comment, author) => {
-    
-    
     if (commentsReactions.length == 0) {
       return addReactionToComment(comment);
     }
@@ -357,23 +353,23 @@ dispatch(setAllCommentsReactions(result.data.result))
         return removeReactionFromComment(comment);
       }
     });
-   
+
     return addReactionToComment(comment);
   };
-  const colorFunc =(author,post)=>{
+  const colorFunc = (author, post) => {
     if (postsReaction.length == 0) {
-      return setLikeColor(false)
+      return setLikeColor(false);
     }
-    postsReaction.map((element,index)=>{
+    postsReaction.map((element, index) => {
       if (
         element.author_id == author &&
         element.post_id == post &&
         element.isDeleted == 0
       ) {
-        setLikeColor(true)
+        setLikeColor(true);
       }
-    })
-  }
+    });
+  };
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
@@ -384,17 +380,28 @@ dispatch(setAllCommentsReactions(result.data.result))
   return (
     <>
       <div className="showsPostComponent">
-        {show && posts &&
+        {show &&
+          posts &&
           posts.map((element, index) => {
             return (
               <div key={index} className="showPosts">
                 <div className="postTop">
-                  <div className="postTopLeft"><div>
-                    <img className="postUserImg" src={element.profileImg} /></div>
+                  <div className="postTopLeft">
+                    <div>
+                      <img className="postUserImg" src={element.profileImg} />
+                    </div>
                     <div className="nameAndDate">
-                    <div className="name">{element.firstName} {element.lastName}</div>{" "}
-                    <span className="date"> {element.createdAt? element.createdAt.split("T")[0]:""}</span>
-                  </div></div>
+                      <div className="name">
+                        {element.firstName} {element.lastName}
+                      </div>{" "}
+                      <span className="date">
+                        {" "}
+                        {element.createdAt
+                          ? element.createdAt.split("T")[0]
+                          : ""}
+                      </span>
+                    </div>
+                  </div>
                   <div className="postTopRight"></div>
                   <BsThreeDots
                     className={element.id}
@@ -471,30 +478,21 @@ dispatch(setAllCommentsReactions(result.data.result))
                   )}
                 </div>
                 <div className="postBottom">
-
                   <div>
+                    <AiOutlineLike
+                      // style={{color:`${ currentUserInfo.id?"blue":"red"}`}}
 
-    
+                      // if current user id liked the post -- blue else false
+                      // we need function to check if user liked the post
+                      // call function and send current user and post id
+                      // check reactionspost array if included
+                      // if return blue then class name = liked else not liked
+                      className="likeColor"
+                      onClick={() => {
+                        checkIfLiked(element.id, currentUserInfo.id);
+                      }}
+                    />
 
-       <AiOutlineLike
-                // style={{color:`${ currentUserInfo.id?"blue":"red"}`}} 
-                 
-                   // if current user id liked the post -- blue else false
-                   // we need function to check if user liked the post 
-                   // call function and send current user and post id
-                   // check reactionspost array if included 
-                   // if return blue then class name = liked else not liked 
-className="likeColor"
-                   onClick={() => {
-                     checkIfLiked(element.id, currentUserInfo.id);
-                   }}
-                 />
-
-                
-             
-    
-
-                 
                     {reactionCounter &&
                       reactionCounter.map((count, ind) => {
                         return (
@@ -507,17 +505,15 @@ className="likeColor"
                           </>
                         );
                       })}
-                        <span className="tags">  Like</span>
-
-                      </div>
-                      <div>
+                    <span className="tags"> Like</span>
+                  </div>
+                  <div>
                     <BiComment
-                    className="commentIcon"
+                      className="commentIcon"
                       id={element.id}
                       onClick={(e) => {
                         setShowComments(!showComments);
                         setPostId(e.target.id);
-                       
                       }}
                     />
                     {commentCounter &&
@@ -532,8 +528,8 @@ className="likeColor"
                           </>
                         );
                       })}
-                      <span className="tags">  Comment</span>
-                 </div>
+                    <span className="tags"> Comment</span>
+                  </div>
                 </div>
                 {showComments && postId == element.id ? (
                   <>
@@ -551,49 +547,56 @@ className="likeColor"
                                     />
                                   </div>
                                   <div className="mainComment">
-                                  <div className="commenterNameAndPost">
-                                  <div className="commenterName">{comment.firstName} {comment.lastName}</div>{" "}
-                                  
-                                  <div className="userComment">
-                                <p className="comment" key={i}>
-                                  {comment.comment}
-                                </p>
-                              </div>
-                              </div>
-                              <div className="dateAndLike">
-                                  <div className="createdTime">
-                                    {comment.createdAt?comment.createdAt.toString().split("T")[0]:""}
-                                  </div>
-<div>
-                                  <AiOutlineLike
-                                  className="commentLike"
-                                  onClick={() => {
-                                    checkCommentsLiked(
-                                      comment.id,
-                                      currentUserInfo.id
-                                    );
-                                  }}
-                                />
-                                {commentReactionsCounter &&
-                                  commentReactionsCounter.map((count, ind) => {
-                                    return (
-                                      <>
-                                        {count.id == comment.id ? (
-                                          <>
-                                            {
-                                              count[
-                                                "COUNT(distinct comment_reaction.id)"
-                                              ]
+                                    <div className="commenterNameAndPost">
+                                      <div className="commenterName">
+                                        {comment.firstName} {comment.lastName}
+                                      </div>{" "}
+                                      <div className="userComment">
+                                        <p className="comment" key={i}>
+                                          {comment.comment}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="dateAndLike">
+                                      <div className="createdTime">
+                                        {comment.createdAt
+                                          ? comment.createdAt
+                                              .toString()
+                                              .split("T")[0]
+                                          : ""}
+                                      </div>
+                                      <div>
+                                        <AiOutlineLike
+                                          className="commentLike"
+                                          onClick={() => {
+                                            checkCommentsLiked(
+                                              comment.id,
+                                              currentUserInfo.id
+                                            );
+                                          }}
+                                        />
+                                        {commentReactionsCounter &&
+                                          commentReactionsCounter.map(
+                                            (count, ind) => {
+                                              return (
+                                                <>
+                                                  {count.id == comment.id ? (
+                                                    <>
+                                                      {
+                                                        count[
+                                                          "COUNT(distinct comment_reaction.id)"
+                                                        ]
+                                                      }
+                                                    </>
+                                                  ) : (
+                                                    ""
+                                                  )}
+                                                </>
+                                              );
                                             }
-                                          </>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </>
-                                    );
-                                  })}
-</div>
-</div>
+                                          )}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="settingComments">
@@ -658,10 +661,8 @@ className="likeColor"
                                   )}
                                 </div>
                               </div>
-                             
-                              <div>
-                               
-                              </div>
+
+                              <div></div>
                             </div>
                           );
                         })
