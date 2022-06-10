@@ -10,6 +10,7 @@
 
 .coverImg{
     width: 80%;
+    height: 100%;
 }
 
 .coverImg img{
@@ -26,8 +27,6 @@
     border-radius: 50%;
     margin-top: -50%;
     border: solid 5px white;
-
-
 }
 
 .profileName h3{

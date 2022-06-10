@@ -40,10 +40,12 @@ const Login = () => {
     <div className="registerComponent">
       <div className="loginBox">
         <h3>Login</h3>
-        Not a member yet?
-        <span>
-          <Link to="/register">Register</Link>
-        </span>
+        <div>
+          Not a member yet?
+          <span>
+            <Link to="/register">Register</Link>
+          </span>
+        </div>
         <div className="inputField">
           <label>Email:</label>
           <input
