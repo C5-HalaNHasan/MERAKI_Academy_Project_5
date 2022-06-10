@@ -23,7 +23,7 @@ const HomePage = () => {
       <FriendList id={userId} />
       <Suggested />
       <CreatePost />
-      <ShowPost />
+      <ShowPost type={"home"} />
       <Adv />
       {/* <Footer /> */}
     </>
