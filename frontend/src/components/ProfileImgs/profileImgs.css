@@ -1,31 +1,35 @@
 .imgContainer{
-    display: grid;
-    grid-template-columns:repeat(3, 1fr);
-    grid-template-rows:repeat(3, 1fr);
-    grid-template-areas: "c c c""c c c""p p p";
-    row-gap: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    min-height: 100px;
+    text-align: center;
+    cursor: pointer;
 }
 
 .coverImg{
-    grid-area: c;
-}
-
-.profileImg{
-    grid-area: p;
-    display: flex;
-   justify-content: center;
+    width: 90%;
 }
 
 .coverImg img{
-    width:600px;
-    height:100px;
-    cursor: pointer;
+    border-radius: 1vw;
+    width: 100%;
+    height: 300px;
+}
+
+.profileImg{
 
 }
+
 .profileImg img{
-    width:200px;
-    height:70px;
+    width: 150px;
     border-radius: 50%;
-    cursor: pointer;
+    margin-top: -50%;
+    border: solid 5px white;
+}
+
+.profileName h3{
+    text-decoration: none;
 }
 

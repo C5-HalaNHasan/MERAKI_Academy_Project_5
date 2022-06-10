@@ -1,0 +1,5 @@
+.adminSideBarComponent h3{
+    text-decoration: none;
+    cursor: pointer;
+    margin:1vh 0;
+}

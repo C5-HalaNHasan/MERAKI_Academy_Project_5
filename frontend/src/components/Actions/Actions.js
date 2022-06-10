@@ -145,7 +145,6 @@ const Actions = ({ id }) => {
   console.log(currentUserFriends);
   return (
     <div className="actionsComponent">
-      actionsComponent
       <div className="actionButtons">
         {isFriend ? (
           <button onClick={() => removeFriend()}>Remove</button>

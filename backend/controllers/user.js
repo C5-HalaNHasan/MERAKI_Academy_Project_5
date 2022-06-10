@@ -120,7 +120,7 @@ const loginUser = (req, res) => {
 };
 // a function that gets all users
 const getAllUsers = (req, res) => {
-  const query = `SELECT * FROM USER WHERE ROLE_id =1 AND isDeleted=0`;
+  const query = `SELECT * FROM USER WHERE role_id=1 AND isDeleted=0`;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -136,7 +136,7 @@ const getAllUsers = (req, res) => {
     } else {
       res.status(200).json({
         success: true,
-        message: `all users`,
+        message: `all users:${result.length} users`,
         result,
       });
     }

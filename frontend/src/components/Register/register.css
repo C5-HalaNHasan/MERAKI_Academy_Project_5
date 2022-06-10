@@ -1,15 +1,26 @@
 .loginBox {
     display: flex;
     flex-direction: column;
-    gap: 2vh;
+    align-items: center;
+    gap: 1.5vh;
     border-radius: 1vw;
-    background-color: var(--lightBgColor);
-    padding: 5%;
+    background-color: var(--spanColor);
+    padding: 5% 1%;
 }
 
 .loginBox span a {
     text-decoration: underline;
     display: inline;
+    font-size: 1.1rem;
+    padding-left: 10px;
+}
+.loginBox h3 {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.loginBox label {
+font-weight: 600;
 }
 
 .inputField {
@@ -42,13 +53,18 @@
 
 
 .loginBox .btn {
-    background-color: var(--mainText);
+    /* background-color: var(--mainText); */
+    background-color:  rgb(54, 54, 237);;
     color: var(--spanColor);
     font-size: 1.1rem;
     font-weight: 400;
     cursor: pointer;
-    padding: 0.7vh;
+    padding: 1vh 2vw;
     border-radius: 2vh;
+    transition:0.5s ease;
+    width: 70%;
+    border: none;
+    margin-top: 1.5vh;
 }
 
 .loginBox .btn:hover {

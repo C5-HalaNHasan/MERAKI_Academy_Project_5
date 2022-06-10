@@ -1,7 +1,7 @@
 import React from "react";
 import "./messagePage.css";
 import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
+import Footer from "../../Footer/Footer"; //! to be deleted
 import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import Messages from "../../Messages/Messages";

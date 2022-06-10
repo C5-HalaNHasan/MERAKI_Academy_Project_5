@@ -81,7 +81,6 @@ const ProfileImgs = ({ id }) => {
   }, [id]);
   return (
     <div className="profileImgsComponent">
-      profileImgsComponent
       <div className="imgContainer">
         <div className="coverImg">
           {id == userId ? (
@@ -101,6 +100,17 @@ const ProfileImgs = ({ id }) => {
             />
           ) : (
             <img src={visitedUserInfo.profileImg} />
+          )}
+        </div>
+        <div className="profileName">
+          {id == userId ? (
+            <h3>
+              {currentUserInfo.firstName + " " + currentUserInfo.lastName}
+            </h3>
+          ) : (
+            <h3>
+              {visitedUserInfo.firstName + " " + visitedUserInfo.lastName}
+            </h3>
           )}
         </div>
       </div>
