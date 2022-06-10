@@ -26,12 +26,10 @@ const UserProfilePage = () => {
     <>
       <ModalBox />
       <NavBar />
-      UserProfile
       <FriendList id={usedId} />
       <UserInfo id={usedId} />
       <ProfileImgs id={usedId} />
-      {/* later:user can add posts on other walls! (extra) */}
-      {/* {id == userId && <CreatePost />} */}
+      {id == userId && <CreatePost />}
       <ShowPost id={usedId} />
       {id == userId ? <Adv /> : <Actions id={id} />}
       {/* <Footer /> */}

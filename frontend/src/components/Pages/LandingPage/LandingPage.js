@@ -12,7 +12,7 @@ const LandingPage = () => {
       <ModalBox />
       <NavBar />
       LandingPage
-      {/* <Register/> */}
+      {/* <Register /> */}
       <Login />
       <Footer />
     </>

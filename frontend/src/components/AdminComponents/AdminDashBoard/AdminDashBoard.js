@@ -139,7 +139,7 @@ const AdminDashBoard = ({ type }) => {
   console.log({ currentUsers: pageNumbers });
   useEffect(() => {
     getAllUsers();
-    // getAllPosts();
+    getAllPosts();
     usersPagination();
     action();
   }, [currentPage]);
