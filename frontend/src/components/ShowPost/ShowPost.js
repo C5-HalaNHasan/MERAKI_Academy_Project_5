@@ -159,13 +159,13 @@ const ShowPost = ({ type, id }) => {
   //     });
   // };
   //! new updatePost function:
-  const updatePost = (id) => {
+  const updatePost = (id, postImg) => {
     dispatch(
       setModalBox({
         modalId: id,
         modalType: "updatePost",
         modalMessage: "Update Post",
-        modalDetails: "",
+        modalDetails: postImg,
         modalShow: true,
       })
     );
@@ -485,7 +485,7 @@ const ShowPost = ({ type, id }) => {
                         className={element.id}
                         onClick={(e) => {
                           {
-                            updatePost(element.id);
+                            updatePost(element.id, element.postImg);
                             //   postImg
                             //     ? uploadImage(e.target.className)
                             //  : updatePost(element.id, postImg, postText);

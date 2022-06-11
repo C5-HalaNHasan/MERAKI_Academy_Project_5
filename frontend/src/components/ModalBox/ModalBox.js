@@ -28,6 +28,15 @@ const ModalBox = () => {
   const [updatedImg, setUpdatedImg] = useState("");
   const [previewImg, setPreviewImg] = useState("");
 
+  //to update profile Info:
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [country, setCountry] = useState();
+  const [isPrivate, setIsPrivate] = useState();
+  const [birthday, setBirthday] = useState();
+
   //to use user token for axios calls
   const { token, userId, currentUserInfo } = useSelector((state) => {
     return {
@@ -53,9 +62,8 @@ const ModalBox = () => {
     "alert",
     "coverImg",
     "profileImg",
-    "updatePost",
+    // "updatePost",
     "deletePost",
-    "updateComment",
     "updateProfile",
   ];
   // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
@@ -63,7 +71,6 @@ const ModalBox = () => {
   if (modalShow === false) {
     return null;
   }
-
   const clearModalBox = () => {
     dispatch(
       setModalBox({
@@ -76,7 +83,7 @@ const ModalBox = () => {
     );
     setPreviewImg("");
   };
-  //! action buttons:
+  //! action buttons in ACTION COMPONENT:
   //a function to send messages to users:
   const sendMessage = () => {
     let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
@@ -136,6 +143,34 @@ const ModalBox = () => {
         console.log({ error_from_getUserInfo: error });
       });
   };
+
+  //! a function to update current user profile:
+  const updateProfile = async () => {
+    let userData = {
+      firstName,
+      lastName,
+      password,
+      country,
+      birthday,
+      isPrivate,
+    };
+    let updateProfileUrl = `http://localhost:5000/user`;
+    await axios
+      .put(updateProfileUrl, userData, { headers: { authorization: token } })
+      .then(async (result) => {
+        console.log({ result_from_updateuserProfile: result });
+
+        if (result.data.success) {
+          dispatch(setCurrentUserInfo(result.data.result[0]));
+          getCurrentUserInfo();
+          clearModalBox();
+        }
+      })
+      .catch((error) => {
+        console.log({ error_from_updateuserProfile: error });
+      });
+  };
+  //!
   //! update profile & cover photos from here
   //a function that updates currentUser profileImg OR cover Img:
   const changeUserImgs = (e) => {
@@ -168,7 +203,6 @@ const ModalBox = () => {
       .then((result) => {
         if (result.data.success) {
           console.log("updated successfully");
-          // setCurrentUserInfo(result.data.result);
           getCurrentUserInfo();
           clearModalBox();
         }
@@ -243,8 +277,8 @@ const ModalBox = () => {
             // postVideo, //! to be checked
           })
         );
-        clearModalBox();
         getAllPosts();
+        clearModalBox();
       })
       .catch((error) => {
         console.log(error);
@@ -291,8 +325,12 @@ const ModalBox = () => {
           {modalType === "alert" && <img src={alert} alt="alert" />}
           {modalType === "deletePost" && <img src={alert} alt="alert" />}
 
+          {/* IMAGE TO BE CHECKED SINCE MODAL IS NOT CLEARED WHEN TRYING TO MODIFY ANOTHER POST WITHOUT IMAGE*/}
           {modalType === "updatePost" && (
-            <img src={previewImg ? previewImg : previewPostImg} alt="alert" />
+            <img
+              src={modalDetails ? modalDetails : previewPostImg}
+              alt="alert"
+            />
           )}
           {modalType === "profileImg" && (
             <img
@@ -313,9 +351,14 @@ const ModalBox = () => {
           {/* BOx CONTENT STARTS HERE */}
           <div className="boxContent">
             {/* add details whenevr a backend sends an error */}
+            {modalType == "ok" ||
+            modalType == "notOk" ||
+            modalType == "alert" ||
+            modalType == "deletPost" ? (
+              <h2>{modalDetails}</h2>
+            ) : null}
             {actionTypes.includes(modalType) && (
               <>
-                <h2>{modalDetails}</h2>
                 <div className="actionButtonsContainer">
                   {/* start of  update profile & cover images */}
                   {modalType === "profileImg" && (
@@ -350,7 +393,8 @@ const ModalBox = () => {
                   {modalType !== "coverImg" &&
                     modalType !== "profileImg" &&
                     modalType !== "updatePost" &&
-                    modalType !== "deletePost" && (
+                    modalType !== "deletePost" &&
+                    modalType !== "updateProfile" && (
                       <button
                         className="actionButton"
                         onClick={() => clearModalBox()}
@@ -450,7 +494,92 @@ const ModalBox = () => {
             )}
             {/* report user box and button ends here */}
           </div>
-          {/* BOx CONTENT STARTS HERE (DIV ABOVE)*/}
+          {/* BOx CONTENT ENDS HERE (DIV ABOVE)*/}
+          {/* UPDATE PROFILE STARTS HERE (DIV BELOW)*/}
+          {modalType == "updateProfile" && (
+            <>
+              <div className="modalUpdateProfile">
+                <div className="loginBox">
+                  <div className="inputField">
+                    <label>First Name:</label>
+                    <input
+                      type="text"
+                      placeholder="First Name..."
+                      name="firstName"
+                      onChange={(e) => setFirstName(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+                  <div className="inputField">
+                    <label>Last Name:</label>
+                    <input
+                      type="text"
+                      placeholder="Last Name..."
+                      name="lastName"
+                      onChange={(e) => setLastName(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <div className="inputField">
+                    <div className="dropDown">
+                      <label>Acc. Privacy:</label>
+                      <select
+                        name="isPrivate"
+                        onChange={(e) => setIsPrivate(e.target.value)}
+                      >
+                        <option value="0">Public Account</option>
+                        <option value="1">Private Account</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="inputField">
+                    <label>Birthday:</label>
+                    <input
+                      type="date"
+                      placeholder="Birthday..."
+                      name="birthday"
+                      onChange={(e) => setBirthday(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <div className="inputField">
+                    <label>Country:</label>
+                    <input
+                      type="text"
+                      placeholder="Country..."
+                      name="country"
+                      onChange={(e) => setCountry(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <div className="inputField">
+                    <label>Password:</label>
+                    <input
+                      type="password"
+                      placeholder="Password..."
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      updateProfile();
+                    }}
+                    className="btn"
+                  >
+                    Update Profile
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+          {/* UPDATE PROFILE ENDS HERE (DIV ABOVE 2 LINES FROM HERE)*/}
         </div>
       </div>
     </div>
