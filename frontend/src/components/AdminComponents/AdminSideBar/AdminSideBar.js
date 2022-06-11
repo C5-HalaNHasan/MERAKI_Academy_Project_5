@@ -14,8 +14,11 @@ const AdminSideBar = () => {
   const reportedUsers = () => {
     navigate("/reportedUsers");
   };
-  const reportedPosts = () => {
+  const getReportedPosts = () => {
     navigate(`/reportedPosts`);
+  };
+  const reportedComments = () => {
+    navigate(`/reportedComments`);
   };
   const charts = () => {
     navigate(`/charts`);
@@ -39,10 +42,17 @@ const AdminSideBar = () => {
       </h3>
       <h3
         onClick={() => {
-          reportedPosts();
+          getReportedPosts();
         }}
       >
         Get Reported Posts
+      </h3>
+      <h3
+        onClick={() => {
+          reportedComments();
+        }}
+      >
+        Get Reported Comments
       </h3>
       <h3
         onClick={() => {

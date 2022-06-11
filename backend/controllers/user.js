@@ -120,7 +120,7 @@ const loginUser = (req, res) => {
 };
 // a function that gets all users
 const getAllUsers = (req, res) => {
-  const query = `SELECT * FROM USER WHERE role_id=1 AND isDeleted=0`;
+  const query = `SELECT * FROM USER WHERE role_id=1 AND isDeleted=0`
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -138,6 +138,36 @@ const getAllUsers = (req, res) => {
         success: true,
         message: `all users:${result.length} users`,
         result,
+      });
+    }
+  });
+};
+
+//
+const getAllUsersPag = (req, res) => {
+  const limit = 4;
+  const page = req.query.page;
+  const offset = (page-1)*limit;
+  const query = "SELECT * FROM USER WHERE role_id=1 AND isDeleted=0 limit " +limit+ " OFFSET " +offset;
+  connection.query(query, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    if (!result.length) {
+      return res.status(404).json({
+        success: false,
+        message: `No Users Found`,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: `all users:${result.length} users`,
+        users_page_count:result.length,
+        page_number:page,
+        result:result,
       });
     }
   });
@@ -344,7 +374,7 @@ const reportUserById = (req, res) => {
 const removeUserByIdAdmin = (req, res) => {
   const id = req.params.id;
   const userId = req.token.userId;
-  const query = `UPDATE user set isDeleted=1 WHERE id=? and isReported=1`;
+  const query = `UPDATE user set isDeleted=1 WHERE id=? `;
   const data = [id, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -360,7 +390,10 @@ const removeUserByIdAdmin = (req, res) => {
 
 //a function that returns all reported users
 const getReportedUsers = (req, res) => {
-  const query = `SELECT * FROM user WHERE isDeleted =0 AND isReported =1`;
+  const limit = 4;
+  const page = req.query.page;
+  const offset = (page-1)*limit;
+  const query = `SELECT * FROM user WHERE isDeleted =0 AND isReported =1  limit ` +limit+ " OFFSET " +offset;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(404).json({
@@ -372,7 +405,9 @@ const getReportedUsers = (req, res) => {
     res.status(201).json({
       success: true,
       message: `All Reported users`,
-      result: result,
+      users_page_count:result.length,
+      page_number:page,
+      result:result,
     });
   });
 };
@@ -416,4 +451,5 @@ module.exports = {
   removeUserByIdAdmin,
   getReportedUsers,
   getUserById,
+  getAllUsersPag,
 };
