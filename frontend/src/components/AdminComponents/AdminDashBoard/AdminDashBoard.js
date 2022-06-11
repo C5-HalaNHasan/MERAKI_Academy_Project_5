@@ -3,7 +3,7 @@ import "./adminDashBoard.css";
 import { TiUserDelete } from "react-icons/ti";
 import { MdDeleteForever } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { setAllUsers } from "../../redux/reducers/user/index";
+import { setAllUsers,setAllReportedUsers } from "../../redux/reducers/user/index";
 import { setAllPosts } from "../../redux/reducers/post/index";
 
 import axios from "axios";
@@ -11,22 +11,41 @@ import axios from "axios";
 const AdminDashBoard = ({ type }) => {
   const dispatch = useDispatch();
   //to use user token for axios calls
-  const { token, userId, allUsers } = useSelector((state) => {
+  const { token, userId, allUsers,allReportedUsers } = useSelector((state) => {
     return {
       token: state.user.token,
       userId: state.user.userId,
       allUsers: state.user.allUsers,
       posts: state.post.posts,
+      allReportedUsers:state.user.allReportedUsers
     };
   });
 
   //to get allUsers in the dataBase:
+
   const getAllUsers = () => {
-    let allUsersUrl = `http://localhost:5000/user`;
+    let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=4`;
     axios
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllUsers(result.data.result));
+     
+console.log(arrLength);
+      })
+      .catch((error) => {
+        console.log({ fromAdminGetAllUsersError: error });
+      });
+  };
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(4);
+  const [arrLength, setArrLength] = useState(0)
+  const getAllUsersNext = (page) => {
+    let allUsersUrl = `http://localhost:5000/user/pag?page=${page}&limit=4`;
+    axios
+      .get(allUsersUrl, { headers: { authorization: token } })
+      .then((result) => {
+        dispatch(setAllUsers(result.data.result));
+        setArrLength(result.data.result.length)
       })
       .catch((error) => {
         console.log({ fromAdminGetAllUsersError: error });
@@ -35,17 +54,30 @@ const AdminDashBoard = ({ type }) => {
 
   //to get reportedUsers:
   const getReportedUsers = () => {
-    let reportedUsersUrl = `http://localhost:5000/user/remove`;
+    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=1&limit=4`;
     axios
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
-        dispatch(setAllUsers(result.data.result));
+        dispatch(setAllReportedUsers(result.data.result));
+        setArrLength(result.data.result.length)
+
       })
       .catch((error) => {
         console.log({ fromAdminGetReportedUsersError: error });
       });
   };
 
+  const getReportedUsersNext = (page) => {
+    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=${page}&limit=4`;
+    axios
+      .get(reportedUsersUrl, { headers: { authorization: token } })
+      .then((result) => {
+        dispatch(setAllReportedUsers(result.data.result));
+      })
+      .catch((error) => {
+        console.log({ fromAdminGetReportedUsersError: error });
+      });
+  };
   //to remove a user from dataBase:
   const removeUser = (id) => {
     let removeUserUrl = `http://localhost:5000/user/remove/${id}`;
@@ -117,13 +149,13 @@ const AdminDashBoard = ({ type }) => {
   // users pagination states:
   const [pageNumbers, setPageNumbers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage, setUsersPerPage] = useState(5);
-  const [currentUsers, setCurrentusers] = useState([]);
+  const [usersPerPage, setUsersPerPage] = useState(3);
+  const [currentUsers, setCurrentUsers] = useState([]);
   //function#1: this function to determine which users to be shown based on pageNumber
   const usersPagination = () => {
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    setCurrentusers(allUsers.slice(indexOfFirstUser, indexOfLastUser));
+    setCurrentUsers(allUsers.slice(indexOfFirstUser, indexOfLastUser));
     pagination(allUsers.length, usersPerPage);
   };
 
@@ -131,6 +163,7 @@ const AdminDashBoard = ({ type }) => {
   const pagination = (total, perPage) => {
     for (let i = 1; i < Math.ceil(total / perPage); i++) {
       setPageNumbers((old) => [...old, i]);
+     
     }
   };
 
@@ -141,32 +174,69 @@ const AdminDashBoard = ({ type }) => {
   //!users pagination logic ends here
 
   useEffect(() => {
+   
     getAllUsers();
+    getReportedUsers();
     getAllPosts();
     usersPagination();
     action();
-  }, [currentPage]);
+  }, []);
   return (
     <div className="adminDashBoardComponent">
       {/* all usersDiv starts here */}
       <div className="adminResultUsers">
         {type == "allUsers" &&
-          currentUsers.length &&
-          currentUsers.map((user) => {
+          allUsers.length &&
+          allUsers.map((user) => {
             return (
+              
               <div className="adminUserInfo">
                 <img src={user.profileImg} />
                 <p>{user.firstName + " " + user.lastName}</p>
                 <p>{user.birthday.split("T")[0].split("")}</p>
                 <p>{user.country.toUpperCase()}</p>
-                <TiUserDelete className="icon" onClick={() => removeUser()} />
+                <div>
+                <TiUserDelete className="icon" id = {user.id} onClick={(e) => removeUser(e.target.id)} />
+                </div>
               </div>
+              
             );
           })}
+          {type == "reportedUsers" &&
+          allReportedUsers.length &&
+          allReportedUsers.map((user) => {
+            return (
+              
+              <div className="adminUserInfo">
+                <img src={user.profileImg} />
+                <p>{user.firstName + " " + user.lastName}</p>
+                <p>{user.birthday.split("T")[0].split("")}</p>
+                <p>{user.country.toUpperCase()}</p>
+                <div>
+                <TiUserDelete className="icon" id = {user.id} onClick={(e) => removeUser(e.target.id)} />
+                </div>
+              </div>
+              
+            );
+          })}
+          
       </div>
       {/* pagination bar starts here */}
       <div className="paginationBar">
-        <ul className="pageNumbers">
+   { page == 1? "" :   <button onClick={()=>{
+        getAllUsersNext(page-1)
+        getReportedUsersNext(page-1)
+        setPage(page-1)
+
+      }} >Back</button>}
+   <button onClick={()=>{
+        getAllUsersNext(page+1)
+        getReportedUsersNext(page+1)
+        setPage(page+1)
+      
+
+      }} >Next</button>
+        {/* <ul className="pageNumbers">
           {pageNumbers.map((number) => {
             return (
               <li
@@ -178,11 +248,24 @@ const AdminDashBoard = ({ type }) => {
               </li>
             );
           })}
-        </ul>
+        </ul> */}
       </div>
       {/* pagination bar ends here  */}
 
       {/* allUsers Div ends here */}
+      {/* <button onClick={()=>{
+        getAllUsersNext(page-1)
+        setLimit(5)
+        setPage(page-1)
+
+      }} >Back</button>
+      <button onClick={()=>{
+        getAllUsersNext(page+1)
+        setPage(page+1)
+        setLimit(5)
+
+      }} >Next</button> */}
+      
     </div>
   );
 };
