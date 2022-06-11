@@ -9,7 +9,7 @@ const UpdateProfile = () => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [hashedPassword, setHashedPassword] = useState("");
+  const [Password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
   const [country, setCountry] = useState("");
   const [isPrivate, setIsPrivate] = useState(0);
@@ -20,29 +20,41 @@ const UpdateProfile = () => {
       token: state.user.token
     };
   });
-  useEffect(() => {
-    console.log(token);
+
+  const updateInfo = () => {
     axios
       .put(
         "http://localhost:5000/user",
-        { headers: { authorization: token } },
-
         {
-          firstName,
-          lastName,
-          hashedPassword,
-          birthday,
-          country,
-          isPrivate
-        }
+          firstName: firstName,
+          lastName: lastName,
+          Password: Password,
+          birthday: birthday,
+          country: country,
+          isPrivate: isPrivate
+        },
+        { headers: { authorization: token } }
       )
       .then((result) => {
-        console.log(result);
+        console.log(result.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+    dispatch(
+      updateUserInfo(
+        firstName,
+        lastName,
+        Password,
+        birthday,
+        country,
+        isPrivate
+      )
+    );
+    console.log("{fromUpdateInfo}");
+    // navigate("/user/:id");
+  };
+
   return (
     <div className="updateProfileComponent">
       updateProfileComponent
@@ -77,7 +89,7 @@ const UpdateProfile = () => {
           placeholder="password....."
           name="password"
           onChange={(e) => {
-            setHashedPassword(e.target.value);
+            setPassword(e.target.value);
             //   console.log(e.target.value);
           }}
         ></input>
@@ -120,17 +132,9 @@ const UpdateProfile = () => {
       <div className="updateBut">
         <button
           onClick={() => {
-            dispatch(
-              updateUserInfo(
-                firstName,
-                lastName,
-                hashedPassword,
-                birthday,
-                country,
-                isPrivate
-              )
-            );
-            navigate("/user/:id");
+            {
+              updateInfo();
+            }
           }}
         >
           UpdateProfile
