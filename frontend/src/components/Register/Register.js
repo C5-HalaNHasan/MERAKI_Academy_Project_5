@@ -72,7 +72,7 @@ const Register = () => {
         <div>
           already a member?
           <span>
-            <Link to="/login">Login</Link>
+            <Link to="/">Login</Link>
           </span>
         </div>
         <div className="inputField">

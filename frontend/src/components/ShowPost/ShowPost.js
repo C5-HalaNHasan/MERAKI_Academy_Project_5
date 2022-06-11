@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useSyncExternalStore } from "react";
+import React, { useEffect, useState } from "react";
 import "./showPost.css";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -25,7 +25,21 @@ import {
   setCommentReactionCounter,
 } from "../redux/reducers/post";
 
+import { setModalBox } from "../redux/reducers/modalBox/index";
+
 const ShowPost = ({ type, id }) => {
+  //! modalBox states:
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
+
   const {
     currentUserInfo,
     token,
@@ -65,88 +79,125 @@ const ShowPost = ({ type, id }) => {
   const [showComments, setShowComments] = useState(false);
   const [postId, setPostId] = useState("");
   const [likeColor, setLikeColor] = useState(false);
-  const [updateClicked, setUpdateClicked] = useState(false);
-
-
   const author = currentUserInfo.id;
-
-  const getAllPosts = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/post/friends", {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (res.data.success) {
-        dispatch(setAllPosts(res.data.result));
-
-        setShow(true);
-      }
-    } catch {}
-  };
-
-  const updatePost = (id, postImg, postText) => {
-    axios
-      .put(
-        `http://localhost:5000/post/${id}`,
-        {
-          postText,
-          postImg,
-          postVideo,
-        },
-        {
+  let getAllPosts;
+  if (type == "home") {
+    getAllPosts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/post/friends", {
           headers: {
             Authorization: token,
           },
+        });
+
+        if (res.data.success) {
+          dispatch(setAllPosts(res.data.result));
+
+          setShow(true);
         }
-      )
-      .then((result) => {
-        dispatch(updatePosts({ id, postText, postImg, postVideo }));
-        getAllPosts();
+      } catch {}
+    };
+  } else if (id != undefined) {
+    getAllPosts = async () => {
+      try {
+        const res = await axios.get(` http://localhost:5000/post/user/${id}`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (res.data.success) {
+          dispatch(setAllPosts(res.data.result));
+
+          setShow(true);
+        }
+      } catch {}
+    };
+  }
+
+  //! old updatePost & uploadImage functions:
+  // const updatePost = (id, postImg, postText) => {
+  //   axios
+  //     .put(
+  //       `http://localhost:5000/post/${id}`,
+  //       {
+  //         postText,
+  //         postImg,
+  //         postVideo,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     )
+  //     .then((result) => {
+  //       dispatch(updatePosts({ id, postText, postImg, postVideo }));
+  //       getAllPosts();
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  // const uploadImage = (id) => {
+  //   const data = new FormData();
+  //   data.append("file", postImg);
+  //   // clickedVideo? data.append("file", postVideo): ""
+  //   data.append("upload_preset", "rapulojk");
+  //   data.append("cloud_name", "difjgm3tp");
+  //   let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+  //   axios
+  //     .post(uploadPicUrl, data)
+  //     .then((result) => {
+  //       setPostImg(result.data.url);
+  //       updatePost(id, result.data.url);
+  //       setPostImg("");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  //! new updatePost function:
+  const updatePost = (id, postImg) => {
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "updatePost",
+        modalMessage: "Update Post",
+        modalDetails: postImg,
+        modalShow: true,
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    );
   };
 
+  //! new deletePost function:
   const deletePostById = (id) => {
-    axios
-      .delete(` http://localhost:5000/post/${id}`, {
-        headers: {
-          Authorization: token,
-        },
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "deletePost",
+        modalMessage: "Delete Post",
+        modalDetails: "Do you want to delete this post?",
+        modalShow: true,
       })
-      .then((result) => {
-        dispatch(removeFromPosts(id));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    );
   };
-  const uploadImage = (id) => {
-    const data = new FormData();
 
-    data.append("file", postImg);
-    // clickedVideo? data.append("file", postVideo): ""
-
-    data.append("upload_preset", "rapulojk");
-    data.append("cloud_name", "difjgm3tp");
-
-    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
-    axios
-      .post(uploadPicUrl, data)
-      .then((result) => {
-        setPostImg(result.data.url);
-
-        updatePost(id, result.data.url);
-        setUpdateClick(false);
-        setPostImg("");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const deletePostById = (id) => {
+  //   axios
+  //     .delete(` http://localhost:5000/post/${id}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     })
+  //     .then((result) => {
+  //       dispatch(removeFromPosts(id));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const reportPostById = (id) => {
     axios
@@ -407,66 +458,59 @@ const ShowPost = ({ type, id }) => {
                   </div>
                   <div className="postTopRight"></div>
                   <BsThreeDots
-                  className="settingBtn"
-                    id={element.id}
+                    className={element.id}
                     onClick={(e) => {
                       setUpdateClick(!updateClick);
-                      setCurrentPost(e.target.id);
+                      setCurrentPost(e.target.className);
                     }}
                   />
                   {/* {setAuthor(element.author_id)} */}
                   {currentUserInfo.id == element.author_id &&
                   updateClick &&
-                  currentPost == element.id ? (
+                  currentPost.animVal == element.id ? (
                     <>
-                      {" "}
-                      <input
-                        className="inputUpdateComment" 
-                        placeholder="Update your post..."
+                      {/* <input
                         type={"text"}
                         onChange={(e) => {
                           setPostText(e.target.value);
                         }}
-                      />
-                      <input
-                   
+                      /> */}
+                      {/* <input
                         type={"file"}
                         onChange={(e) => {
                           setPostImg(e.target.files[0]);
                         }}
-                      />
+                      /> */}
                       <button
-                      className="updateBtn"
-                        id={element.id}
+                        className={element.id}
                         onClick={(e) => {
                           {
-                            postImg
-                              ? uploadImage(e.target.id)
-                              : updatePost(element.id, postImg, postText);
+                            updatePost(element.id, element.postImg);
+                            //   postImg
+                            //     ? uploadImage(e.target.className)
+                            //  : updatePost(element.id, postImg, postText);
                             setUpdateClick(false);
                           }
-                          // setUpdateClick(false)
+                          // setUpdateClick(false);
                         }}
                       >
                         Update
                       </button>
                       <button
-                      className="deleteBtn"
                         onClick={() => {
                           deletePostById(element.id);
                         }}
                       >
-                        Delete
+                        delete
                       </button>
                     </>
                   ) : (
                     ""
                   )}
                   {updateClick &&
-                  currentPost == element.id &&
+                  currentPost.animVal == element.id &&
                   author !== element.author_id ? (
                     <p
-                    className="report"
                       onClick={() => {
                         reportPostById(element.id);
                         setUpdateClick(false);
@@ -611,7 +655,6 @@ const ShowPost = ({ type, id }) => {
                                 </div>
                                 <div className="settingComments">
                                   <BsThreeDots
-                                  className="settingBtn"
                                     id={comment.id}
                                     onClick={(e) => {
                                       setUpdateClickComment(
@@ -626,8 +669,6 @@ const ShowPost = ({ type, id }) => {
                                     <>
                                       {" "}
                                       <input
-                                      className="inputUpdateComment"
-                                      placeholder="updated your comment.."
                                         value={clear}
                                         onClick={() => {
                                           setClear();
@@ -638,9 +679,7 @@ const ShowPost = ({ type, id }) => {
                                         }}
                                       />
                                       <button
-                      className="updateBtn"
-
-                                        id={element.id}
+                                        className={element.id}
                                         onClick={(e) => {
                                           {
                                             updateCommentById(comment.id);
@@ -651,8 +690,6 @@ const ShowPost = ({ type, id }) => {
                                         Update
                                       </button>
                                       <button
-                      className="deleteBtn"
-
                                         onClick={() => {
                                           deleteCommentById(comment.id);
                                         }}
@@ -667,8 +704,6 @@ const ShowPost = ({ type, id }) => {
                                   currentComment == comment.id &&
                                   author !== comment.author_id ? (
                                     <p
-                    className="report"
-
                                       onClick={() => {
                                         reportCommentById(comment.id);
                                       }}

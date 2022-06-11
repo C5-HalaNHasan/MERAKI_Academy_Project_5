@@ -71,14 +71,10 @@
 }
 
 .createPostComponent {
-  border: 2px blue solid;
-  background-color: red;
   grid-area: m1;
 }
 
 .showsPostComponent {
-  border: 2px blue solid;
-  background-color: red;
   grid-area:m2/m3/m3 ;
 }
 
