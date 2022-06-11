@@ -122,7 +122,20 @@ const ModalBox = () => {
       setNotification("at least 30 characters must be provided!");
     }
   };
-
+  // a function that gets currentUserInfo sothat the cover & profile photos will be directly shown when modal box is closed:
+  const getCurrentUserInfo = () => {
+    let getCurrentUserInfoUrl = `http://localhost:5000/user/${userId}`;
+    axios
+      .get(getCurrentUserInfoUrl, { headers: { Authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(setCurrentUserInfo(result.data.result[0]));
+        }
+      })
+      .catch((error) => {
+        console.log({ error_from_getUserInfo: error });
+      });
+  };
   //! update profile & cover photos from here
   //a function that updates currentUser profileImg OR cover Img:
   const changeUserImgs = (e) => {
@@ -155,7 +168,8 @@ const ModalBox = () => {
       .then((result) => {
         if (result.data.success) {
           console.log("updated successfully");
-          setCurrentUserInfo(result.data.result);
+          // setCurrentUserInfo(result.data.result);
+          getCurrentUserInfo();
           clearModalBox();
         }
       })
