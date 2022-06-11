@@ -42,7 +42,7 @@ const Actions = ({ id }) => {
     dispatch(
       setModalBox({
         modalId: id,
-        // type: "report",
+        // modalType: "report",
         modalType: "updatePost",
         modalMessage: "Report User",
         modalDetails: "",

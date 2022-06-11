@@ -93,7 +93,7 @@ const ModalBox = () => {
           console.log({ fromSendMessage_error: error }); //! to be deleted and replaced by toast notification
         });
     } else {
-      setNotification("at least 30 characters must be provided!");
+      setNotification("at least 30 characters must be entered!"); //! by toast
     }
   };
 
@@ -199,13 +199,15 @@ const ModalBox = () => {
       });
   };
   //updatePost
+  //! new updatePost function:
   const updatePost = () => {
     axios
       .put(
         `http://localhost:5000/post/${modalId}`,
         {
-          enteredChar,
-          updatedImg,
+          postText: enteredChar,
+          postImg: updatedImg,
+          // postVideo, //! to be checked
         },
         {
           headers: {
@@ -214,7 +216,15 @@ const ModalBox = () => {
         }
       )
       .then((result) => {
-        dispatch(updatePosts({ modalId, enteredChar, updatedImg }));
+        dispatch(
+          updatePosts({
+            id: modalId,
+            postText: enteredChar,
+            postImg: updatedImg,
+            // postVideo, //! to be checked
+          })
+        );
+        clearModalBox();
         getAllPosts();
       })
       .catch((error) => {

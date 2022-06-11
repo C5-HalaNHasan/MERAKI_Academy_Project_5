@@ -25,7 +25,21 @@ import {
   setCommentReactionCounter,
 } from "../redux/reducers/post";
 
+import { setModalBox } from "../redux/reducers/modalBox/index";
+
 const ShowPost = ({ type, id }) => {
+  //! modalBox states:
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
+
   const {
     currentUserInfo,
     token,
@@ -67,61 +81,94 @@ const ShowPost = ({ type, id }) => {
   const [likeColor, setLikeColor] = useState(false);
   const author = currentUserInfo.id;
   let getAllPosts;
-  if(type == "home" ){
-  getAllPosts = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/post/friends", {
-        headers: {
-          Authorization: token,
-        },
-      });
+  if (type == "home") {
+    getAllPosts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/post/friends", {
+          headers: {
+            Authorization: token,
+          },
+        });
 
-      if (res.data.success) {
-        dispatch(setAllPosts(res.data.result));
+        if (res.data.success) {
+          dispatch(setAllPosts(res.data.result));
 
-        setShow(true);
-      }
-    } catch {}
-  }} else if(id != undefined) {
-     getAllPosts = async ()=>{
+          setShow(true);
+        }
+      } catch {}
+    };
+  } else if (id != undefined) {
+    getAllPosts = async () => {
       try {
         const res = await axios.get(` http://localhost:5000/post/user/${id}`, {
           headers: {
             Authorization: token,
           },
         });
-  
+
         if (res.data.success) {
           dispatch(setAllPosts(res.data.result));
-  
+
           setShow(true);
         }
       } catch {}
-    }
+    };
   }
 
-  const updatePost = (id, postImg, postText) => {
-    axios
-      .put(
-        `http://localhost:5000/post/${id}`,
-        {
-          postText,
-          postImg,
-          postVideo,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      )
-      .then((result) => {
-        dispatch(updatePosts({ id, postText, postImg, postVideo }));
-        getAllPosts();
+  //! old updatePost & uploadImage functions:
+  // const updatePost = (id, postImg, postText) => {
+  //   axios
+  //     .put(
+  //       `http://localhost:5000/post/${id}`,
+  //       {
+  //         postText,
+  //         postImg,
+  //         postVideo,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     )
+  //     .then((result) => {
+  //       dispatch(updatePosts({ id, postText, postImg, postVideo }));
+  //       getAllPosts();
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  // const uploadImage = (id) => {
+  //   const data = new FormData();
+  //   data.append("file", postImg);
+  //   // clickedVideo? data.append("file", postVideo): ""
+  //   data.append("upload_preset", "rapulojk");
+  //   data.append("cloud_name", "difjgm3tp");
+  //   let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+  //   axios
+  //     .post(uploadPicUrl, data)
+  //     .then((result) => {
+  //       setPostImg(result.data.url);
+  //       updatePost(id, result.data.url);
+  //       setPostImg("");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  //! new updatePost function:
+  const updatePost = (id) => {
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "updatePost",
+        modalMessage: "Update Post",
+        modalDetails: "",
+        modalShow: true,
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    );
   };
 
   const deletePostById = (id) => {
@@ -133,29 +180,6 @@ const ShowPost = ({ type, id }) => {
       })
       .then((result) => {
         dispatch(removeFromPosts(id));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const uploadImage = (id) => {
-    const data = new FormData();
-
-    data.append("file", postImg);
-    // clickedVideo? data.append("file", postVideo): ""
-
-    data.append("upload_preset", "rapulojk");
-    data.append("cloud_name", "difjgm3tp");
-
-    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
-    axios
-      .post(uploadPicUrl, data)
-      .then((result) => {
-        setPostImg(result.data.url);
-
-        updatePost(id, result.data.url);
-        setUpdateClick(false);
-        setPostImg("");
       })
       .catch((error) => {
         console.log(error);
@@ -432,29 +456,29 @@ const ShowPost = ({ type, id }) => {
                   updateClick &&
                   currentPost.animVal == element.id ? (
                     <>
-                      {" "}
-                      <input
+                      {/* <input
                         type={"text"}
                         onChange={(e) => {
                           setPostText(e.target.value);
                         }}
-                      />
-                      <input
+                      /> */}
+                      {/* <input
                         type={"file"}
                         onChange={(e) => {
                           setPostImg(e.target.files[0]);
                         }}
-                      />
+                      /> */}
                       <button
                         className={element.id}
                         onClick={(e) => {
                           {
-                            postImg
-                              ? uploadImage(e.target.className)
-                              : updatePost(element.id, postImg, postText);
+                            updatePost(element.id);
+                            //   postImg
+                            //     ? uploadImage(e.target.className)
+                            //  : updatePost(element.id, postImg, postText);
                             setUpdateClick(false);
                           }
-                          // setUpdateClick(false)
+                          // setUpdateClick(false);
                         }}
                       >
                         Update

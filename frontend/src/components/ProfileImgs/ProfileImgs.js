@@ -44,34 +44,35 @@ const ProfileImgs = ({ id }) => {
   console.log({ visitedUserInfo: visitedUserInfo }); //!
 
   //to use & set modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
-    return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
-    };
-  });
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
   const updateProfileImg = () => {
     dispatch(
       setModalBox({
-        user: userId,
-        type: "profileImg",
-        message: "Upload Profile Photo",
-        details: "",
-        show: true,
+        modalId: userId,
+        modalType: "profileImg",
+        modalMessage: "Upload Profile Photo",
+        modalDetails: "",
+        modalShow: true,
       })
     );
   };
   const updateCoverImg = () => {
     dispatch(
       setModalBox({
-        user: userId,
-        type: "coverImg",
-        message: "Upload Cover Photo",
-        details: "",
-        show: true,
+        modalId: userId,
+        modalType: "coverImg",
+        modalMessage: "Upload Cover Photo",
+        modalDetails: "",
+        modalShow: true,
       })
     );
   };
