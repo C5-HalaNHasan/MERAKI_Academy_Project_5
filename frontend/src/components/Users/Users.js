@@ -23,8 +23,20 @@ const Users = ({ type, name }) => {
       };
     }
   );
-  // 
-  if (type === "search") {
+  // const addFriend = () => {
+  //   let addFriendUrl = `http://localhost:5000/user/${id}`;
+  //   axios
+  //     .post(addFriendUrl, {}, { headers: { authorization: token } })
+  //     .then((result) => {
+  //       if (result.data.success) {
+  //         dispatch(addToFriendsList(result.data.result[0]));
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log({ fromAddFriend_error: error });
+  //     });
+  // };
+  if (type == "search") {
     useEffect(() => {
       axios
         .get(`http://localhost:5000/user`)
@@ -36,7 +48,7 @@ const Users = ({ type, name }) => {
           console.log(err);
         });
     }, []);
-  } else if (type === "friendlist") {
+  } else if (type == "friendlist") {
     useEffect(() => {
       axios
         .get(`http://localhost:5000/user/friends/:${userId}`, {
@@ -53,7 +65,7 @@ const Users = ({ type, name }) => {
   }
   return (
     <div className="usersComponent">
-      {type === "search"
+      {type == "search"
         ? allUsers.map((user, index) => {
             if (user.firstName.includes(name)) {
               return (
@@ -64,7 +76,7 @@ const Users = ({ type, name }) => {
                       {user.firstName}.{user.lastName}{" "}
                     </h3>
                   </div>
-                  <div className="action button">
+                  <div className="actionB">
                     <button
                       onClick={() => {
                         let addFriendUrl = `http://localhost:5000/user/${user.id}`;
@@ -86,13 +98,35 @@ const Users = ({ type, name }) => {
                     >
                       Add
                     </button>
-                    
+                    <button>Remove</button>
+                    <button>Send Message</button>
+                    <button>Report</button>
                   </div>
                 </>
               );
             }
           })
-        : currentUserFriends.map((friend, index) => {})}
+        : currentUserFriends.map((friend, index) => {
+            if (friend.firstName.includes(name)) {
+              return (
+                <>
+                  <div className="friendContainer">
+                    <div className="friendInfo">
+                      <img src={friend.profileImg}></img>
+                      <h3>
+                        {friend.firstName}.{friend.lastName}{" "}
+                      </h3>
+                    </div>
+                    <div className="actionButton">
+                      <button>Remove</button>
+                      <button>sendMessage</button>
+                      <button>Report</button>
+                    </div>
+                  </div>
+                </>
+              );
+            }
+          })}
       usersComponent
     </div>
   );
