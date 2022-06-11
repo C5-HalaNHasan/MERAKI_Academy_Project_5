@@ -566,20 +566,21 @@ const ModalBox = () => {
                       autoComplete="off"
                     ></input>
                   </div>
-
-                  <button
-                    onClick={() => {
-                      updateProfile();
-                    }}
-                    className="btn"
-                  >
-                    Update Profile
-                  </button>
+                  <div className="actionButtonsContainer">
+                    <button
+                      className="actionButton"
+                      onClick={() => {
+                        updateProfile();
+                      }}
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
           )}
-          {/* UPDATE PROFILE ENDS HERE (DIV ABOVE 2 LINES FROM HERE)*/}
+          {/* UPDATE PROFILE ENDS HERE (first DIV ABOVE)*/}
         </div>
       </div>
     </div>
