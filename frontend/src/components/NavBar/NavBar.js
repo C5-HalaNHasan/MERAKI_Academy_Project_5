@@ -67,14 +67,16 @@ const NavBar = () => {
         <span
           className="logo"
           onClick={() => {
-            navigate("/home");
+        if(token){
+          navigate("/home")
+        }
           }}
         >
           Facebook
         </span>
       </div>
 
-      <div className="navBarCenter">
+     {token? <> <div className="navBarCenter">
         <div className="searchBar">
           <BiSearch className="searchIcon" />
           <input
@@ -126,7 +128,7 @@ const NavBar = () => {
             navigate(`/user/${userId}`);
           }}
         />
-      </div>
+      </div> </>:""}
     </div>
   );
 };
