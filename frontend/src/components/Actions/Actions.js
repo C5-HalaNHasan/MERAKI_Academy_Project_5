@@ -41,7 +41,9 @@ const Actions = ({ id }) => {
     dispatch(
       setModalBox({
         user: id,
-        type: "report",
+        // type: "report",
+        type: "updatePost",
+
         message: "Report User",
         details: "",
         show: true,
@@ -55,7 +57,7 @@ const Actions = ({ id }) => {
       setModalBox({
         user: id,
         type: "sendMessage",
-        message: "",
+        message: "Send Message",
         details: "",
         show: true,
       })

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { HiOutlinePhotograph } from "react-icons/hi";
 import "./modalBox.css";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -9,8 +10,8 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 import { setCurrentUserInfo } from "../redux/reducers/user";
+import previewPostImg from "../assets/bgReg.jpg";
 
-//! box is not closing on click
 const ModalBox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const ModalBox = () => {
   //state to update profile images:
   const [updatedImg, setUpdatedImg] = useState("");
   const [previewImg, setPreviewImg] = useState("");
+
   //to use user token for axios calls
   const { token, userId, currentUserInfo } = useSelector((state) => {
     return {
@@ -39,7 +41,18 @@ const ModalBox = () => {
     };
   });
   console.log("from modalbox", user, type, message, details, show);
-  const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
+  const actionTypes = [
+    "ok",
+    "notOk",
+    "alert",
+    "coverImg",
+    "profileImg",
+    "updatePost",
+    "updateComment",
+    "updateProfile",
+  ];
+  // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
+
   if (show === false) {
     return null;
   }
@@ -54,8 +67,9 @@ const ModalBox = () => {
         show: false,
       })
     );
+    setPreviewImg("");
   };
-
+  //! action buttons:
   //a function to send messages to users:
   const sendMessage = () => {
     let sendMessageToUserUrl = `http://localhost:5000/message/${user}`;
@@ -144,62 +158,123 @@ const ModalBox = () => {
   };
   //! till here
   //! updated image to be set wheneve the user uploads a photo
+
+  //! to handle posts edit:(as per show post component)
+  const changePostImg = (e) => {
+    setUpdatedImg(e.target.files[0]);
+    const data = new FormData();
+    data.append("file", e.target.files[0]);
+    data.append("upload_preset", "rapulojk");
+    data.append("cloud_name", "difjgm3tp");
+    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+    axios
+      .post(uploadPicUrl, data)
+      .then((result) => {
+        setUpdatedImg(result.data.url);
+        setPreviewImg(result.data.url);
+        console.log(result.data.url);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updatePost = () => {};
   return (
     <div className="modalBox">
       <div className="contentsContainer">
-        {/* types to be modified later */}
-        {type === "ok" && <img src={ok} alt="ok" />}
-        {type === "notOk" && <img src={notOk} alt="notOk" />}
-        {type === "alert" && <img src={alert} alt="alert" />}
-        {type === "profileImg" && (
-          <img
-            src={currentUserInfo.profileImg}
-            alt="profileImg"
-            style={{ borderRadius: "50%", height: "100px" }}
+        {/* TOP TITLE STARTS HERE */}
+        <div className="boxMessage">
+          <h3>{message}</h3>
+          <AiOutlineCloseCircle
+            className="closeModalBox"
+            onClick={() => {
+              clearModalBox();
+            }}
           />
-        )}
-        {type === "coverImg" && (
-          <img
-            src={currentUserInfo.coverImg}
-            alt="profileImg"
-            style={{ borderRadius: "50%", height: "100px" }}
-          />
-        )}
+        </div>
+        {/* TOP TITLE ENDS HERE */}
 
-        <div className="modalRight">
-          <span class="closeModalBox">
-            <AiOutlineCloseCircle
-              onClick={() => {
-                clearModalBox();
-              }}
+        {/* PHOTOS DIV STARTS HERE */}
+        <div className="modalPhoto">
+          {type === "ok" && <img src={ok} alt="ok" />}
+          {type === "notOk" && <img src={notOk} alt="notOk" />}
+          {type === "alert" && <img src={alert} alt="alert" />}
+          {type === "updatePost" && (
+            <img src={previewImg ? previewImg : previewPostImg} alt="alert" />
+          )}
+          {type === "profileImg" && (
+            <img
+              src={previewImg ? previewImg : currentUserInfo.profileImg}
+              alt="profileImg"
             />
-          </span>
+          )}
+          {type === "coverImg" && (
+            <img
+              src={previewImg ? previewImg : currentUserInfo.coverImg}
+              alt="profileImg"
+            />
+          )}
+        </div>
+        {/* PHOTOS DIV ENDS HERE */}
 
+        <div className="modalBottom">
+          {/* BOx CONTENT STARTS HERE */}
           <div className="boxContent">
+            {/* add details whenevr a backend sends an error */}
             {actionTypes.includes(type) && (
               <>
-                <h1>{message}</h1>
                 <h2>{details}</h2>
                 <div className="actionButtonsContainer">
                   {/* start of  update profile & cover images */}
                   {type === "profileImg" && (
-                    <input type="file" onChange={changeUserImgs}></input>
+                    <>
+                      <label for="upload1">
+                        <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
+                      </label>
+                      <input
+                        type="file"
+                        onChange={changeUserImgs}
+                        id="upload1"
+                        style={{ display: "none" }}
+                      ></input>
+                    </>
                   )}
 
                   {type === "coverImg" && (
-                    <input type="file" onChange={changeUserImgs}></input>
+                    <>
+                      <label for="upload2">
+                        <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
+                      </label>
+                      <input
+                        type="file"
+                        onChange={changeUserImgs}
+                        id="upload2"
+                        style={{ display: "none" }}
+                      ></input>
+                    </>
                   )}
 
-                  {/* end of  update profile & cover images */}
-
-                  {type !== "coverImg" && type !== "profileImg" ? (
+                  {/* end of  update profile & cover images & post images */}
+                  {type !== "coverImg" &&
+                    type !== "profileImg" &&
+                    type !== "updatePost" && (
+                      <button
+                        className="actionButton"
+                        onClick={() => clearModalBox()}
+                      >
+                        Ok
+                      </button>
+                    )}
+                  {type == "coverImg" && (
                     <button
                       className="actionButton"
-                      onClick={() => clearModalBox()}
+                      onClick={() => updateUserImgs()}
                     >
-                      Ok
+                      Update
                     </button>
-                  ) : (
+                  )}
+                  {type == "profileImg" && (
                     <button
                       className="actionButton"
                       onClick={() => updateUserImgs()}
@@ -210,8 +285,36 @@ const ModalBox = () => {
                 </div>
               </>
             )}
+            {/* end of the big condition actionTypes */}
 
             {/* a state is going to be used to count the letters to ensure that it's filled */}
+            {/* update post box and button start here */}
+            {type == "updatePost" && (
+              <div className="boxContent">
+                <textarea
+                  placeholder="Write your updated here..."
+                  onChange={(e) => setEnteredChar(e.target.value)}
+                />
+                <div className="actionButtonsContainer">
+                  <label for="upload3">
+                    <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
+                  </label>
+                  <input
+                    type="file"
+                    onChange={changePostImg}
+                    id="upload3"
+                    style={{ display: "none" }}
+                  ></input>
+
+                  <button className="actionButton" onClick={() => updatePost()}>
+                    Update
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* update post box and button ends here */}
+
+            {/* send message box and button start here */}
             {type == "sendMessage" && (
               <div className="boxContent">
                 <textarea
@@ -228,7 +331,9 @@ const ModalBox = () => {
                 </div>
               </div>
             )}
+            {/* send message box and button end here */}
 
+            {/* report user box and button starts here */}
             {type == "report" && (
               <div className="boxContent">
                 <textarea
@@ -242,7 +347,9 @@ const ModalBox = () => {
                 </div>
               </div>
             )}
+            {/* report user box and button ends here */}
           </div>
+          {/* BOx CONTENT STARTS HERE (DIV ABOVE)*/}
         </div>
       </div>
     </div>

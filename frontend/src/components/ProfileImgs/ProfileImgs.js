@@ -58,7 +58,7 @@ const ProfileImgs = ({ id }) => {
       setModalBox({
         user: userId,
         type: "profileImg",
-        message: "Upload your profile photo",
+        message: "Upload Profile Photo",
         details: "",
         show: true,
       })
@@ -69,7 +69,7 @@ const ProfileImgs = ({ id }) => {
       setModalBox({
         user: userId,
         type: "coverImg",
-        message: "Upload your cover photo",
+        message: "Upload Cover Photo",
         details: "",
         show: true,
       })

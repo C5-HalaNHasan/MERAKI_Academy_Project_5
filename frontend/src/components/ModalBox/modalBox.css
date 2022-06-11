@@ -9,88 +9,119 @@
     right: 0;
     z-index: 200;
     background-color: var(--lightBgColor);
+    /* display: flex;
+    flex-direction: column; */
 }
 
 .modalBox .contentsContainer {
     width: 50%;
-    /* to keep the box showing while scrolling */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
-    /*flex directionto be changed later */
-    flex-direction: column;
     background-color: var(--spanColor);
     box-shadow: 0px 0px 18px 0px var(--mainBgColor);
-    border-radius: 1vh;
+    border-radius: 3vh;
+    padding: 1vw;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap:1vh
+
+}
+.boxMessage{
+    border-bottom: 2px solid;
+    display: flex;
+    justify-content: space-between;
+    height: 4vh;
+    padding-bottom:5vh ;
 }
 
-.modalBox .contentsContainer img {
-    width: 20%;
-    object-fit: cover;
-    border-radius: 1vh;
-    margin-left: 40%;
-    margin-right: auto;
-    margin-top: 2vh;
+.boxMessage h3{
+    text-decoration: none;
+    font-size:1rem;
 }
-
-.modalRight {
-    width: 100%;
-}
-
 .closeModalBox {
-    position: fixed;
-    top: 10%;
-    right: 5%;
     font-size: 2rem;
     transition: 0.5s ease;
 }
-
 .closeModalBox:hover {
     transform: scale(1.2);
     cursor: pointer;
 }
 
-.modalRight .boxContent {
+.modalPhoto img {
+    width: 150px;
+    height:150px;
+    border-radius: 50%;
+    margin-left: 40%;
+    margin-right: auto;
+    margin-top: 1vh;
+    object-fit:fill;
+}
+/* elsho3ól el9a7 mn hoon */
+
+.modalBoxIcon{
+    display: inline-block;
+    font-size: 3.5rem;
+    color:rgb(54, 54, 237);
+    cursor: pointer;
+}
+.modalBottom {
+    width: 100%;
+}
+
+.boxContent {
+    /* display: flex;
+    flex-direction: column;
+    gap:1vh; */
+}
+
+
+.modalBottom .boxContent {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    margin-top: 1%;
     padding: 1%;
 }
 
-.modalRight .boxContent textarea {
+.modalBottom .boxContent textarea {
     width:100%;
-    margin-top: 7%;
-    padding: 1%;
-    height:15vw;
-;}
+    padding: 4%;
+    font-size: 1.2rem;;
+    height:10vw;
+    border-radius:1.5vh;
+    resize: none;
+}
 
 
 .actionButtonsContainer {
     display: flex;
-    justify-content: space-evenly;
-    padding: 1% 2%;
+    justify-content: space-around;
+    margin-top: 2%;
+    /* to center the icon and the button on one line but it didn't work */
+    /* height: 5vh; */
 }
 
 
 .actionButtonsContainer .actionButton {
-    /* might be checked later with the number of buttons that are going to be rendered */
     width: 8vw;
-    /* margin-bottom: 2vh; */
-    padding: 1%;
-    border-radius: 4vw;
-    background-color:  rgb(54, 54, 237);;
+    min-height: 2.6rem;
+    /* height: 5vh; */
+    padding: 0.1vh;
+    border-radius: 3vw;
+    background-color:  rgb(54, 54, 237);
     /* background-color: var(--mainText); */
     color: var(--spanColor);
     border: none;
     font-size: 1.3rem;
+    font-weight: 500;
     transition: 0.2s ease;
+    /* line-height:5vh; */
 }
 
-.actionButtonsContainer .actionButton:hover {
+ .actionButton:hover ,.modalBoxIcon:hover {
     /* might be checked later with the number of buttons that are going to be rendered */
     cursor: pointer;
     transform: scale(1.2);
