@@ -265,7 +265,7 @@ const getReportedPosts = (req, res) => {
 // this function will get friends posts with the logged user posts
 const getFriendsPosts = (req, res) => {
   const friendshipRequest = req.token.userId;
-  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.author_id =? AND post.isDeleted=0 OR post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0) OR post.author_id IN(SELECT friendshipRequest FROM friendship  WHERE friendshipAccept=?  AND isDeleted=0) ORDER BY post.createdAt DESC `;
+  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.isDeleted=0 AND post.author_id =? OR post.isDeleted=0 AND post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0) OR post.isDeleted=0 AND post.author_id IN(SELECT friendshipRequest FROM friendship  WHERE friendshipAccept=?  AND isDeleted=0) AND post.isDeleted=0  ORDER BY post.createdAt DESCGIT `;
   const data = [friendshipRequest, friendshipRequest,friendshipRequest];
   connection.query(query, data, (error, result) => {
     if (error) {
