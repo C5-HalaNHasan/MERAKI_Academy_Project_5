@@ -9,16 +9,16 @@ const AdminSideBar = () => {
 
   //! a way to prevent nesting routes!(not done yet)
   const allUsers = () => {
-    // navigate(`admin/allUsers`);
+    navigate(`/allUsers`);
   };
   const reportedUsers = () => {
-    // navigate(`admin/reportedUsers`);
+    navigate("/reportedUsers");
   };
   const reportedPosts = () => {
-    // navigate(`admin/reportedPosts`);
+    navigate(`/reportedPosts`);
   };
   const charts = () => {
-    // navigate(`admin/charts`);
+    navigate(`/charts`);
   };
   return (
     <div className="adminSideBarComponent">

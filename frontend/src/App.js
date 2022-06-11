@@ -25,7 +25,7 @@ function App() {
         <Route path="/message/:id" element={<MessageWithPage />} />
         <Route path="/users/:type/:name" element={<UsersPage />} />
         <Route path="/admin" element={<AdminMainPage />} />
-        <Route path="/admin/:type" element={<AdminSubPage />} />
+        <Route path="/:type" element={<AdminSubPage />} />
       </Routes>
     </div>
   );
