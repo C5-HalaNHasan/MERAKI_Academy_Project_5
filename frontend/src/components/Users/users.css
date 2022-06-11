@@ -1,0 +1,41 @@
+.usersComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 20px;
+}
+.users {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: lightgray;
+    border-radius: 20px;
+}
+.username {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 15px;
+}
+.username h3 {
+  font-family: cursive;
+  text-underline-position: under;
+}
+.username img {
+  width: 80px;
+  height: 80px;
+  border-radius: 40%;
+}
+.actionB {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+}
+.actionB button {
+  border-radius: 10px;
+  background: royalblue;
+}
