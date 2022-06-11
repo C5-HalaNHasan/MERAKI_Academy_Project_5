@@ -156,11 +156,11 @@ const updateUserProfile = async (req, res) => {
   } = req.body;
   const id = req.token.userId;
   const SALT = 10;
-  // let hashedPassword = await bcrypt.hash(password, SALT);
-  let hashedPassword;
-  bcrypt.hash(password, SALT, (err, hashed) => {
-    hashedPassword = hashed;
-  });
+  let hashedPassword = await bcrypt.hash(password, SALT);
+  // let hashedPassword;
+  // bcrypt.hash(password, SALT, (err, hashed) => {
+  //   hashedPassword = hashed;
+  // });
   const query = `UPDATE user SET firstName=COALESCE(?,firstName),lastName=COALESCE(?,lastName),password=COALESCE(?,password),birthday=COALESCE(?,birthday),country=COALESCE(?,country),profileImg=COALESCE(?,profileImg),coverImg=COALESCE(?,coverImg),isPrivate=COALESCE(?,isPrivate) WHERE id=?`;
   const data = [
     firstName,
