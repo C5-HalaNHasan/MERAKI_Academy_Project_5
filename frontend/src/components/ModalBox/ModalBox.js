@@ -12,7 +12,11 @@ import { setModalBox } from "../redux/reducers/modalBox/index";
 import { setCurrentUserInfo } from "../redux/reducers/user";
 import previewPostImg from "../assets/bgReg.jpg";
 //! to update posts:
-import { updatePosts, setAllPosts } from "../redux/reducers/post";
+import {
+  updatePosts,
+  setAllPosts,
+  removeFromPosts,
+} from "../redux/reducers/post";
 
 const ModalBox = () => {
   const navigate = useNavigate();
@@ -50,6 +54,7 @@ const ModalBox = () => {
     "coverImg",
     "profileImg",
     "updatePost",
+    "deletePost",
     "updateComment",
     "updateProfile",
   ];
@@ -231,6 +236,24 @@ const ModalBox = () => {
         console.log(error);
       });
   };
+  //deletePost
+  //! new deletePost function:
+  const deletePost = () => {
+    axios
+      .delete(` http://localhost:5000/post/${modalId}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(removeFromPosts(modalId));
+        clearModalBox();
+        getAllPosts();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="modalBox">
@@ -252,6 +275,8 @@ const ModalBox = () => {
           {modalType === "ok" && <img src={ok} alt="ok" />}
           {modalType === "notOk" && <img src={notOk} alt="notOk" />}
           {modalType === "alert" && <img src={alert} alt="alert" />}
+          {modalType === "deletePost" && <img src={alert} alt="alert" />}
+
           {modalType === "updatePost" && (
             <img src={previewImg ? previewImg : previewPostImg} alt="alert" />
           )}
@@ -310,7 +335,8 @@ const ModalBox = () => {
                   {/* end of  update profile & cover images & post images */}
                   {modalType !== "coverImg" &&
                     modalType !== "profileImg" &&
-                    modalType !== "updatePost" && (
+                    modalType !== "updatePost" &&
+                    modalType !== "deletePost" && (
                       <button
                         className="actionButton"
                         onClick={() => clearModalBox()}
@@ -332,6 +358,15 @@ const ModalBox = () => {
                       onClick={() => updateUserImgs()}
                     >
                       Update
+                    </button>
+                  )}
+
+                  {modalType == "deletePost" && (
+                    <button
+                      className="actionButton"
+                      onClick={() => deletePost()}
+                    >
+                      Delete
                     </button>
                   )}
                 </div>

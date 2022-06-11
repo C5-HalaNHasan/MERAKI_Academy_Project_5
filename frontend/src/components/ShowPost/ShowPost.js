@@ -171,20 +171,33 @@ const ShowPost = ({ type, id }) => {
     );
   };
 
+  //! new deletePost function:
   const deletePostById = (id) => {
-    axios
-      .delete(` http://localhost:5000/post/${id}`, {
-        headers: {
-          Authorization: token,
-        },
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "deletePost",
+        modalMessage: "Delete Post",
+        modalDetails: "Do you want to delete this post?",
+        modalShow: true,
       })
-      .then((result) => {
-        dispatch(removeFromPosts(id));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    );
   };
+
+  // const deletePostById = (id) => {
+  //   axios
+  //     .delete(` http://localhost:5000/post/${id}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     })
+  //     .then((result) => {
+  //       dispatch(removeFromPosts(id));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const reportPostById = (id) => {
     axios
