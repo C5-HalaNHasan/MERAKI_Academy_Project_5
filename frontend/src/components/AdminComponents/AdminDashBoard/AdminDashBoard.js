@@ -9,13 +9,6 @@ import { setAllPosts } from "../../redux/reducers/post/index";
 import axios from "axios";
 
 const AdminDashBoard = ({ type }) => {
-  //to set a limited number of pages each time;pagination is going to be used;
-  // users pagination
-  const [pageNumbers, setPageNumbers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage, setUsersPerPage] = useState(5);
-  const [currentUsers, setCurrentusers] = useState([]);
-
   const dispatch = useDispatch();
   //to use user token for axios calls
   const { token, userId, allUsers } = useSelector((state) => {
@@ -120,23 +113,33 @@ const AdminDashBoard = ({ type }) => {
     }
   };
 
-  //users pagination:
+  //!users pagination logic starts here (3 functions to handle the pagination process):
+  // users pagination states:
+  const [pageNumbers, setPageNumbers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage, setUsersPerPage] = useState(5);
+  const [currentUsers, setCurrentusers] = useState([]);
+  //function#1: this function to determine which users to be shown based on pageNumber
   const usersPagination = () => {
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     setCurrentusers(allUsers.slice(indexOfFirstUser, indexOfLastUser));
     pagination(allUsers.length, usersPerPage);
   };
+
+  //function#2: this function to determine the number of pages required:
   const pagination = (total, perPage) => {
     for (let i = 1; i < Math.ceil(total / perPage); i++) {
       setPageNumbers((old) => [...old, i]);
     }
   };
+
+  //function#3: this function allows the admin to move between pages:
   const changePage = (number) => {
     setCurrentPage(number);
   };
+  //!users pagination logic ends here
 
-  console.log({ currentUsers: pageNumbers });
   useEffect(() => {
     getAllUsers();
     getAllPosts();
@@ -161,7 +164,7 @@ const AdminDashBoard = ({ type }) => {
             );
           })}
       </div>
-      {/* pagination bar */}
+      {/* pagination bar starts here */}
       <div className="paginationBar">
         <ul className="pageNumbers">
           {pageNumbers.map((number) => {
@@ -177,9 +180,9 @@ const AdminDashBoard = ({ type }) => {
           })}
         </ul>
       </div>
-      {/* end of pagination bar */}
+      {/* pagination bar ends here  */}
 
-      {/* all usersDiv starts here above */}
+      {/* allUsers Div ends here */}
     </div>
   );
 };
