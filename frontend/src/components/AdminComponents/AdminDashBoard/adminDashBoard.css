@@ -15,6 +15,7 @@
     gap:1vw;
     /* to justify the text and the img on the same line */
     line-height: 4vh; 
+    justify-content: space-between;
 }
 .adminUserInfo img{
     width: 25px;
@@ -29,6 +30,7 @@
     /* margin-left: 8em; */
     font-size: 1.3em;
     cursor: pointer;
+    float: right;
 }
 
 .paginationBar ul {

@@ -242,7 +242,10 @@ const removePostByIdAdmin = (req, res) => {
 
 // this function will get all reported posts and not deleted yet
 const getReportedPosts = (req, res) => {
-  const query = `SELECT * FROM post WHERE isReported = 1 AND isDeleted=0`;
+  const limit = 4;
+  const page = req.query.page;
+  const offset = (page-1)*limit;
+  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id  WHERE post.isReported = 1 AND post.isDeleted=0 limit `+limit+ " OFFSET "+offset;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(404).json({
