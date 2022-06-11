@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="componentsContainer">
       <Routes>
-        <Route path="/login" element={<LandingPageLogin />} />
+        <Route path="/" element={<LandingPageLogin />} />
         <Route path="/register" element={<LandingPageRegister />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/user/:id" element={<UserProfilePage />} />
