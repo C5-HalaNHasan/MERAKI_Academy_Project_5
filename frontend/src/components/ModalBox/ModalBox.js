@@ -11,6 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 import { setCurrentUserInfo } from "../redux/reducers/user";
 import previewPostImg from "../assets/bgReg.jpg";
+//! to update posts:
+import { updatePosts, setAllPosts } from "../redux/reducers/post";
 
 const ModalBox = () => {
   const navigate = useNavigate();
@@ -31,16 +33,16 @@ const ModalBox = () => {
     };
   });
   //to use & set modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
-    return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
-    };
-  });
-  console.log("from modalbox", user, type, message, details, show);
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
   const actionTypes = [
     "ok",
     "notOk",
@@ -53,18 +55,18 @@ const ModalBox = () => {
   ];
   // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
 
-  if (show === false) {
+  if (modalShow === false) {
     return null;
   }
 
   const clearModalBox = () => {
     dispatch(
       setModalBox({
-        user: "",
-        type: "",
-        message: "",
-        details: "",
-        show: false,
+        modalId: "",
+        modalType: "",
+        modalMessage: "",
+        modalDetails: "",
+        modalShow: false,
       })
     );
     setPreviewImg("");
@@ -72,7 +74,7 @@ const ModalBox = () => {
   //! action buttons:
   //a function to send messages to users:
   const sendMessage = () => {
-    let sendMessageToUserUrl = `http://localhost:5000/message/${user}`;
+    let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
     if (enteredChar.length > 10) {
       axios
         .post(
@@ -97,7 +99,7 @@ const ModalBox = () => {
 
   //a function to report  users with only if reasons are provided:
   const reportUser = () => {
-    let reportUserUrl = `http://localhost:5000/user/remove/${user}`;
+    let reportUserUrl = `http://localhost:5000/user/remove/${modalId}`;
     if (enteredChar.length > 10) {
       axios
         .put(reportUserUrl, {}, { headers: { authorization: token } })
@@ -138,11 +140,11 @@ const ModalBox = () => {
   };
   const updateUserImgs = () => {
     let updateImgUrl = `http://localhost:5000/user`;
-    let update = type == "profileImg" ? "profileImg" : "coverImg";
+    let update = modalType == "profileImg" ? "profileImg" : "coverImg";
     axios
       .put(
         updateImgUrl,
-        { [type]: updatedImg },
+        { [modalType]: updatedImg },
         { headers: { authorization: token } }
       )
       .then((result) => {
@@ -159,7 +161,25 @@ const ModalBox = () => {
   //! till here
   //! updated image to be set wheneve the user uploads a photo
 
-  //! to handle posts edit:(as per show post component)
+  //! to handle posts edit:(as per show post component):
+  const getAllPosts = async () => {
+    try {
+      const res = await axios.get(
+        ` http://localhost:5000/post/user/${userId}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(setAllPosts(res.data.result));
+      }
+    } catch {}
+  };
+
+  //upload post photo to cloudinary
   const changePostImg = (e) => {
     setUpdatedImg(e.target.files[0]);
     const data = new FormData();
@@ -178,14 +198,36 @@ const ModalBox = () => {
         console.log(error);
       });
   };
+  //updatePost
+  const updatePost = () => {
+    axios
+      .put(
+        `http://localhost:5000/post/${modalId}`,
+        {
+          enteredChar,
+          updatedImg,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((result) => {
+        dispatch(updatePosts({ modalId, enteredChar, updatedImg }));
+        getAllPosts();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  const updatePost = () => {};
   return (
     <div className="modalBox">
       <div className="contentsContainer">
         {/* TOP TITLE STARTS HERE */}
         <div className="boxMessage">
-          <h3>{message}</h3>
+          <h3>{modalMessage}</h3>
           <AiOutlineCloseCircle
             className="closeModalBox"
             onClick={() => {
@@ -197,19 +239,19 @@ const ModalBox = () => {
 
         {/* PHOTOS DIV STARTS HERE */}
         <div className="modalPhoto">
-          {type === "ok" && <img src={ok} alt="ok" />}
-          {type === "notOk" && <img src={notOk} alt="notOk" />}
-          {type === "alert" && <img src={alert} alt="alert" />}
-          {type === "updatePost" && (
+          {modalType === "ok" && <img src={ok} alt="ok" />}
+          {modalType === "notOk" && <img src={notOk} alt="notOk" />}
+          {modalType === "alert" && <img src={alert} alt="alert" />}
+          {modalType === "updatePost" && (
             <img src={previewImg ? previewImg : previewPostImg} alt="alert" />
           )}
-          {type === "profileImg" && (
+          {modalType === "profileImg" && (
             <img
               src={previewImg ? previewImg : currentUserInfo.profileImg}
               alt="profileImg"
             />
           )}
-          {type === "coverImg" && (
+          {modalType === "coverImg" && (
             <img
               src={previewImg ? previewImg : currentUserInfo.coverImg}
               alt="profileImg"
@@ -222,12 +264,12 @@ const ModalBox = () => {
           {/* BOx CONTENT STARTS HERE */}
           <div className="boxContent">
             {/* add details whenevr a backend sends an error */}
-            {actionTypes.includes(type) && (
+            {actionTypes.includes(modalType) && (
               <>
-                <h2>{details}</h2>
+                <h2>{modalDetails}</h2>
                 <div className="actionButtonsContainer">
                   {/* start of  update profile & cover images */}
-                  {type === "profileImg" && (
+                  {modalType === "profileImg" && (
                     <>
                       <label for="upload1">
                         <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
@@ -241,7 +283,7 @@ const ModalBox = () => {
                     </>
                   )}
 
-                  {type === "coverImg" && (
+                  {modalType === "coverImg" && (
                     <>
                       <label for="upload2">
                         <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
@@ -256,9 +298,9 @@ const ModalBox = () => {
                   )}
 
                   {/* end of  update profile & cover images & post images */}
-                  {type !== "coverImg" &&
-                    type !== "profileImg" &&
-                    type !== "updatePost" && (
+                  {modalType !== "coverImg" &&
+                    modalType !== "profileImg" &&
+                    modalType !== "updatePost" && (
                       <button
                         className="actionButton"
                         onClick={() => clearModalBox()}
@@ -266,7 +308,7 @@ const ModalBox = () => {
                         Ok
                       </button>
                     )}
-                  {type == "coverImg" && (
+                  {modalType == "coverImg" && (
                     <button
                       className="actionButton"
                       onClick={() => updateUserImgs()}
@@ -274,7 +316,7 @@ const ModalBox = () => {
                       Update
                     </button>
                   )}
-                  {type == "profileImg" && (
+                  {modalType == "profileImg" && (
                     <button
                       className="actionButton"
                       onClick={() => updateUserImgs()}
@@ -289,7 +331,7 @@ const ModalBox = () => {
 
             {/* a state is going to be used to count the letters to ensure that it's filled */}
             {/* update post box and button start here */}
-            {type == "updatePost" && (
+            {modalType == "updatePost" && (
               <div className="boxContent">
                 <textarea
                   placeholder="Write your updated here..."
@@ -315,7 +357,7 @@ const ModalBox = () => {
             {/* update post box and button ends here */}
 
             {/* send message box and button start here */}
-            {type == "sendMessage" && (
+            {modalType == "sendMessage" && (
               <div className="boxContent">
                 <textarea
                   placeholder="Write your message here..."
@@ -334,7 +376,7 @@ const ModalBox = () => {
             {/* send message box and button end here */}
 
             {/* report user box and button starts here */}
-            {type == "report" && (
+            {modalType == "report" && (
               <div className="boxContent">
                 <textarea
                   placeholder="Write your reaseons here..."

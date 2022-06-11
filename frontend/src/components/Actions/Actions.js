@@ -26,40 +26,39 @@ const Actions = ({ id }) => {
     };
   });
   //modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
-    return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
-    };
-  });
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
 
   //a function that reports a user by id/ this function will be handeled inside ModalBox component:
   const reportUserById = () => {
     dispatch(
       setModalBox({
-        user: id,
+        modalId: id,
         // type: "report",
-        type: "updatePost",
-
-        message: "Report User",
-        details: "",
-        show: true,
+        modalType: "updatePost",
+        modalMessage: "Report User",
+        modalDetails: "",
+        modalShow: true,
       })
     );
   };
-
   //a function that sends a message to user by id:
   const sendMessageToUser = () => {
     dispatch(
       setModalBox({
-        user: id,
-        type: "sendMessage",
-        message: "Send Message",
-        details: "",
-        show: true,
+        modalId: id,
+        modalType: "sendMessage",
+        modalMessage: "Send Message",
+        modalDetails: "",
+        modalShow: true,
       })
     );
   };

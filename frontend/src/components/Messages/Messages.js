@@ -26,16 +26,16 @@ const Messages = () => {
   });
 
   //modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
-    return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
-    };
-  });
-
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
   // a function that sets allMessages in redux store:
   const getAllMessages = () => {
     let getMessagesUrl = `http://localhost:5000/message`;
@@ -46,11 +46,11 @@ const Messages = () => {
           //modalBox pops-up:
           dispatch(
             setModalBox({
-              user: "",
-              type: "alert",
-              message: "you don't have any conversation!",
-              details: "",
-              show: true,
+              modalId: "",
+              modalType: "alert",
+              modalMessage: "you don't have any conversation!",
+              modalDetails: "",
+              modalShow: true,
             })
           );
         } else {
@@ -58,11 +58,11 @@ const Messages = () => {
           dispatch(
             //modalBox pops-up:
             setModalBox({
-              user: "",
-              type: "ok",
-              message: `you have ${x.length} conversations!`, //!
-              details: "",
-              show: true,
+              modalId: "",
+              modalType: "ok",
+              modalMessage: `you have ${x.length} conversations!`, //!
+              modalDetails: "",
+              modalShow: true,
             })
           );
           dispatch(setAllMessages(result.data.result));
