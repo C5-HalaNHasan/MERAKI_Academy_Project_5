@@ -69,7 +69,7 @@ const Users = ({ type, name }) => {
         ? allUsers.map((user, index) => {
             if (user.firstName.includes(name)) {
               return (
-                <>
+                <div className="users">
                   <div className="username">
                     <img src={user.profileImg}></img>
                     <h3>
@@ -102,7 +102,7 @@ const Users = ({ type, name }) => {
                     <button>Send Message</button>
                     <button>Report</button>
                   </div>
-                </>
+                </div>
               );
             }
           })
