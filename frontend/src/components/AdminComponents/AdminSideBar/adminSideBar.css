@@ -1,10 +1,20 @@
 .adminSideBarComponent{
     background-color: #898F9C;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
+    
 }
 .adminSideBarComponent h3{
     text-decoration: none;
     cursor: pointer;
     margin:1vh 0;
+    color: white;
     
 
+}
+.adminSideBarComponent h3:hover{
+    transform: scale(1.1);
 }

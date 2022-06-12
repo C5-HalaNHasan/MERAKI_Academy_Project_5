@@ -232,7 +232,7 @@ const removeComment = (id)=>{
     action();
   }, []);
   return (<>
-    <p>Admin <span>DashBoard</span></p>
+    
 
     <div className="adminDashBoardComponent">
       {/* all usersDiv starts here */}

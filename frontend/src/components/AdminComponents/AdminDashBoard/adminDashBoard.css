@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: space-between;
     background-color: #898F9C;
-    width: 100%;
+   width: 95%;
 }
 .adminResultUsers {
     display:flex;

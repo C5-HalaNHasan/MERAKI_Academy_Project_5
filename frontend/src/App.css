@@ -57,6 +57,12 @@
   background-color: red;
   grid-area: nav;
 }
+.AdminNavBarComp{
+  /* border: 2px blue solid; */
+  background-color: red;
+  grid-area: nav;
+  
+}
 
 .profileImgsComponent
 {
@@ -140,14 +146,14 @@
 }
 
 .adminDashBoardComponent {
-  border: 2px blue solid;
+  
   background-color: red;
-  grid-area: m1/m2/m3/m3;
+  grid-area: m1/m2/m3/rs1;
 }
 
 .adminSideBarComponent{
-  border: 2px blue solid;
+  
   background-color: red;
-  grid-area: ls1/ls1/ls2/ls2;
+  grid-area:cvr/ls1/ls2;
 
 }
