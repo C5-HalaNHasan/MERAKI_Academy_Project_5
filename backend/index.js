@@ -35,7 +35,7 @@ const server = app.listen(PORT, () => {
 const io = socket(server, {
   cors: {
     origin: "http://localhost:3000",
-    method: ["GET", "POST", "DELETE"],
+    method: ["GET", "POST", "DELETE"], //! check if DELETE is required here!
   },
 });
 
@@ -54,7 +54,7 @@ io.on("CONNECTION", (socket) => {
     //data has received message,(its type is determind from frontend):
     //data={room:id,content:"hi"}
     //to which room the data is going to be sent:
-    socket.to(data.room).emit("RECEIVE_MESSAGE", data.content);
+    socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
   });
 
   //third event (automatic event):

@@ -3,7 +3,10 @@ import "./messagesWith.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessagesWith } from "../redux/reducers/message/index";
+import {
+  setMessagesWith,
+  addToMessagesWith,
+} from "../redux/reducers/message/index";
 //for real-time connection:
 import { io } from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
@@ -30,6 +33,8 @@ const MessagesWith = ({ id }) => {
 
   // a function that sets messagesWith in redux store:
   const getMessagesWith = () => {
+    //! meassagesWith is going to render the messages based on the unique room id(message schema and getAllMessagesFromUserById conroller to be updated backend)
+    //! this function (getMessagesWith) is going to be invoked whenever the user sends a message/receives a message/deletes a message
     let getMessagesWithUrl = `http://localhost:5000/message/${id}`;
     axios
       .get(getMessagesWithUrl, { headers: { authorization: token } })
@@ -44,6 +49,20 @@ const MessagesWith = ({ id }) => {
 
   // a function that sends message to a user:
   const sendMessageTo = () => {
+    //! sendMessageTo will emit SEND_MESSAGE event with the sentMessage and roomId(message schema and sendMessageToUserById conroller to be updated backend)
+    //! the commented code below to be implemented after modifying the message schema(roomId,message) and adding room schema(roomId)
+    /*
+    const messageContent={
+      roomId,
+      content:{
+        sentBy:userId,
+        receivedBy:id in the params(sent by props)
+        message:message,
+      }
+    }
+    socket.emit("SEND_MESSAGE",messageContent);
+    */
+    //! for the code below: the data that is going to be sent to the backend to be checked (after modifyng message schema/to match messageContent)
     let sendMessageToUrl = `http://localhost:5000/message/${id}`;
     if (sentMessage.length > 0) {
       axios
@@ -63,6 +82,14 @@ const MessagesWith = ({ id }) => {
     }
   };
 
+  // a function to receiveMessages from the server (by the other user):
+  const receiveMessageFrom = () => {
+    socket.on("RECEIVE_MESSAGE", (data) => {
+      dispatch(addToMessagesWith(data)); //! check if needed
+      getMessagesWith();
+    });
+  };
+
   // a function that removes sent message:
   const removeSentMessage = (messageId) => {
     let removeMessageFromUrl = `http://localhost:5000/message/${messageId}`;
@@ -78,7 +105,7 @@ const MessagesWith = ({ id }) => {
   };
 
   useEffect(() => {
-    getMessagesWith();
+    receiveMessageFrom();
   }, []);
 
   console.log(`all messages from user ${id} :`, messagesWith[4]);

@@ -133,6 +133,18 @@ CREATE TABLE friendship(
 --     PRIMARY KEY (id)
 -- );
 
+-- creating room table:
+-- CREATE TABLE room(
+--     id INT AUTO_INCREMENT NOT NULL,
+--     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     sentBy INT,
+--     FOREIGN KEY (sentBy) REFERENCES user(id),
+--     receivedBy INT,
+--     FOREIGN KEY (receivedBy) REFERENCES user(id),
+--     isDeleted TINYINT DEFAULT 0,
+--     PRIMARY KEY (id)
+-- );
+
 
 -- run the following command in the model directory:
 -- mysql -u root <"schema.sql" -p

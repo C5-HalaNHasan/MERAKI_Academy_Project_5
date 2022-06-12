@@ -26,16 +26,21 @@ const Messages = () => {
   });
 
   //modalBox states:
-  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
-    useSelector((state) => {
-      return {
-        modalId: state.modalBox.modalId,
-        modalType: state.modalBox.modalType,
-        modalMessage: state.modalBox.modalMessage,
-        modalDetails: state.modalBox.modalDetails,
-        modalShow: state.modalBox.modalShow,
-      };
-    });
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
   // a function that sets allMessages in redux store:
   const getAllMessages = () => {
     let getMessagesUrl = `http://localhost:5000/message`;
@@ -48,8 +53,8 @@ const Messages = () => {
             setModalBox({
               modalId: "",
               modalType: "alert",
-              modalMessage: "you don't have any conversation!",
-              modalDetails: "",
+              modalMessage: "Inbox",
+              modalDetails: "Your inbox is empty",
               modalShow: true,
             })
           );
@@ -60,8 +65,8 @@ const Messages = () => {
             setModalBox({
               modalId: "",
               modalType: "ok",
-              modalMessage: `you have ${x.length} conversations!`, //!
-              modalDetails: "",
+              modalMessage: "Inbox", //!
+              modalDetails: `you have ${x.length} conversations!`,
               modalShow: true,
             })
           );
@@ -101,8 +106,8 @@ const Messages = () => {
                   className="rightSide"
                   onClick={() => {
                     message.sentBy != userId
-                      ? navigate(`/message/${message.sentBy}`)
-                      : navigate(`/message/${message.receivedBy}`);
+                      ? navigate(`/message/${message.sentBy}`) //! to be replaced by room id
+                      : navigate(`/message/${message.receivedBy}`); //! to be replaced by room id
                   }}
                 >
                   Show
