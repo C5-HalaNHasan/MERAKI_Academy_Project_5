@@ -19,20 +19,30 @@ import axios from "axios";
 const AdminDashBoard = ({ type }) => {
   const dispatch = useDispatch();
   //to use user token for axios calls
-  const { token, userId, allUsers, allReportedUsers, posts, comments } =
-    useSelector((state) => {
-      return {
-        token: state.user.token,
-        userId: state.user.userId,
-        allUsers: state.user.allUsers,
-        posts: state.post.posts,
-        comments: state.post.comments,
+  const {
+    token,
+    userId,
+    allUsers,
+    allReportedUsers,
+    posts,
+    comments,
+  } = useSelector((state) => {
+    return {
+      token: state.user.token,
+      userId: state.user.userId,
+      allUsers: state.user.allUsers,
+      posts: state.post.posts,
+      comments: state.post.comments,
 
-        allReportedUsers: state.user.allReportedUsers,
-      };
-    });
+      allReportedUsers: state.user.allReportedUsers,
+    };
+  });
 
   //to get allUsers in the dataBase:
+  const [usersLength, setUsersLength] = useState(0);
+  const [reportedUsersLength, setReportedUsersLength] = useState(0);
+  const [postLength, setPostLength] = useState(0);
+  const [commentLength, setCommentLength] = useState(0);
 
   const getAllUsers = () => {
     let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=4`;
@@ -41,14 +51,13 @@ const AdminDashBoard = ({ type }) => {
       .then((result) => {
         dispatch(setAllUsers(result.data.result));
 
-        console.log(arrLength);
+        setUsersLength(result.data.users_count);
       })
       .catch((error) => {
         console.log({ fromAdminGetAllUsersError: error });
       });
   };
   const [page, setPage] = useState(1);
-  const [arrLength, setArrLength] = useState(0);
   const [show, setShow] = useState(false);
   const getAllUsersNext = (page) => {
     let allUsersUrl = `http://localhost:5000/user/pag?page=${page}&limit=4`;
@@ -56,7 +65,7 @@ const AdminDashBoard = ({ type }) => {
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllUsers(result.data.result));
-        setArrLength(result.data.result.length);
+        setUsersLength(result.data.result.length);
       })
       .catch((error) => {
         console.log({ fromAdminGetAllUsersError: error });
@@ -70,7 +79,8 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllReportedUsers(result.data.result));
-        setArrLength(result.data.result.length);
+        setUsersLength(result.data.users_count);
+        console.log(result.data);
       })
       .catch((error) => {
         console.log({ fromAdminGetReportedUsersError: error });
@@ -83,6 +93,7 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllReportedUsers(result.data.result));
+        setReportedUsersLength(result.data.result.length);
       })
       .catch((error) => {
         console.log({ fromAdminGetReportedUsersError: error });
@@ -121,6 +132,7 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllPosts(result.data.result));
+        // setArrLength(result.data.result.length);
       })
       .catch((error) => {
         console.log({ fromAdminGetReportedPostsError: error });
@@ -133,6 +145,7 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllPosts(result.data.result));
+        // setArrLength(result.data.result.length);
       })
       .catch((error) => {
         console.log({ fromAdminGetReportedPostsError: error });
@@ -173,12 +186,16 @@ const AdminDashBoard = ({ type }) => {
       })
       .catch((error) => {});
   };
-const removeComment = (id)=>{
-  axios.delete(`http://localhost:5000/comment/remove/${id}`,{ headers: { authorization: token },}) .then((result) => {
-    dispatch(removeFromComments(id));
-  })
-  .catch((error) => {});
-}
+  const removeComment = (id) => {
+    axios
+      .delete(`http://localhost:5000/comment/remove/${id}`, {
+        headers: { authorization: token },
+      })
+      .then((result) => {
+        dispatch(removeFromComments(id));
+      })
+      .catch((error) => {});
+  };
   //to vie charts and statistics:
   const showCharts = () => {};
   //! based on the props: the targeted action is going to be called:
@@ -231,145 +248,150 @@ const removeComment = (id)=>{
     usersPagination();
     action();
   }, []);
-  return (<>
-    
+  return (
+    <>
+      <div className="adminDashBoardComponent">
+        {/* all usersDiv starts here */}
 
-    <div className="adminDashBoardComponent">
-      {/* all usersDiv starts here */}
-
-      <div className="adminResultUsers">
-        {type == "allUsers" &&
-          allUsers.length &&
-          allUsers.map((user) => {
-            return (
-              <div className="adminUserInfo">
-                <img src={user.profileImg} />
-                <p>{user.firstName + " " + user.lastName}</p>
-                <p>{user.birthday.split("T")[0].split("")}</p>
-                <p>{user.country.toUpperCase()}</p>
-                <div>
-                  <TiUserDelete
-                    className="icon"
-                    id={user.id}
-                    onClick={(e) => removeUser(e.target.id)}
-                  />
+        <div className="adminResultUsers">
+          {
+          type == "allUsers" &&
+            allUsers.length &&
+            allUsers.map((user) => {
+              return (
+                <div className="adminUserInfo">
+                  <img src={user.profileImg} />
+                  <p>{user.firstName + " " + user.lastName}</p>
+                  <p>{user.birthday.split("T")[0].split("")}</p>
+                  <p>{user.country.toUpperCase()}</p>
+                  <div>
+                    <TiUserDelete
+                      className="icon"
+                      id={user.id}
+                      onClick={(e) => removeUser(e.target.id)}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        {type == "reportedUsers" &&
-          allReportedUsers.length &&
-          allReportedUsers.map((user) => {
-            return (
-              <div className="adminUserInfo">
-                <img src={user.profileImg} />
-                <p>{user.firstName + " " + user.lastName}</p>
-                <p>{user.birthday.split("T")[0].split("")}</p>
-                <p>{user.country.toUpperCase()}</p>
-                <div>
-                  <TiUserDelete
-                    className="icon"
-                    id={user.id}
-                    onClick={(e) => removeUser(e.target.id)}
-                  />
+              );
+            })
+           
+            }
+          {type == "reportedUsers" &&
+            allReportedUsers.length &&
+            allReportedUsers.map((user) => {
+              return (
+                <div className="adminUserInfo">
+                  <img src={user.profileImg} />
+                  <p>{user.firstName + " " + user.lastName}</p>
+                  <p>{user.birthday.split("T")[0].split("")}</p>
+                  <p>{user.country.toUpperCase()}</p>
+                  <div>
+                    <TiUserDelete
+                      className="icon"
+                      id={user.id}
+                      onClick={(e) => removeUser(e.target.id)}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        {type == "reportedPosts" &&
-          posts.length &&
-          posts.map((post) => {
-            return (
-              <div className="adminUserInfo">
-                <img src={post.profileImg} />
-                <p>{post.firstName + " " + post.lastName}</p>
-                <p>{post.createdAt.split("T")[0].split("")}</p>
-                <button
-                  onClick={() => {
-                    setShow(!show);
-                  }}
-                >
-                  Show Post
-                </button>
-                {/* modalbox */}
-                {show ? (
-                  <>
-                    {" "}
-                    <p>{post.postText}</p>
-                    <img src={post.postImg} />
-                  </>
-                ) : (
-                  ""
-                )}
-
-                <div>
-                  <AiFillDelete
-                    className="icon"
-                    id={post.id}
-                    onClick={(e) => {
-                      console.log(e.target);
-                      removeComment(e.target.id);
+              );
+            })}
+          {type == "reportedPosts" &&
+            posts.length &&
+            posts.map((post) => {
+              return (
+                <div className="adminUserInfo">
+                  <img src={post.profileImg} />
+                  <p>{post.firstName + " " + post.lastName}</p>
+                  <p>{post.createdAt.split("T")[0].split("")}</p>
+                  <button
+                    onClick={() => {
+                      setShow(!show);
                     }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        {type == "reportedComments" &&
-          comments.length &&
-          comments.map((comment) => {
-            return (
-              <div className="adminUserInfo">
-                <img src={comment.profileImg} />
-                <p>{comment.firstName + " " + comment.lastName}</p>
-                <p>{comment.createdAt.split("T")[0].split("")}</p>
-                <p>{comment.comment}</p>
+                  >
+                    Show Post
+                  </button>
+                  {/* modalbox */}
+                  {show ? (
+                    <>
+                      {" "}
+                      <p>{post.postText}</p>
+                      <img src={post.postImg} />
+                    </>
+                  ) : (
+                    ""
+                  )}
 
-                <div>
-                  <AiFillDelete
-                    className="icon"
-                    id={comment.id}
-                    onClick={(e) => {
-                      console.log(e.target);
-                      removeComment(e.target.id);
-                    }}
-                  />
+                  <div>
+                    <AiFillDelete
+                      className="icon"
+                      id={post.id}
+                      onClick={(e) => {
+                        console.log(e.target);
+                        removePost(e.target.id);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-      </div>
-      {/* pagination bar starts here */}
-      <div className="paginationBar">
-        {page == 1 ? (
-          ""
-        ) : (
-          <button
-          className="prevBtn"
+              );
+            })}
+          {type == "reportedComments" &&
+            comments.length &&
+            comments.map((comment) => {
+              return (
+                <div className="adminUserInfo">
+                  <img src={comment.profileImg} />
+                  <p>{comment.firstName + " " + comment.lastName}</p>
+                  <p>{comment.createdAt.split("T")[0].split("")}</p>
+                  <p>{comment.comment}</p>
+
+                  <div>
+                    <AiFillDelete
+                      className="icon"
+                      id={comment.id}
+                      onClick={(e) => {
+                        console.log(e.target);
+                        removeComment(e.target.id);
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+        {/* pagination bar starts here */}
+        <div className="paginationBar">
+          {page == 1 ? (
+            ""
+          ) : (
+            <button
+              className="nextBtn"
+              onClick={() => {
+                getAllUsersNext(page - 1);
+                getReportedUsersNext(page - 1);
+                getReportedPostsNext(page - 1);
+                getAllReportedCommentsNext(page - 1);
+                setPage(page - 1);
+              }}
+            >
+              Back
+            </button>
+          )}
+
+         {usersLength <4 ? "": <button
+            className="nextBtn"
             onClick={() => {
-              getAllUsersNext(page - 1);
-              getReportedUsersNext(page - 1);
-              getReportedPostsNext(page - 1);
-              getAllReportedCommentsNext(page - 1);
-              setPage(page - 1);
+              getAllUsersNext(page + 1);
+              getReportedUsersNext(page + 1);
+              getReportedPostsNext(page + 1);
+              getAllReportedCommentsNext(page + 1);
+              setPage(page + 1);
             }}
           >
-            Back
-          </button>
-        )}
-        <button
-        className="nextBtn"
-          onClick={() => {
-            getAllUsersNext(page + 1);
-            getReportedUsersNext(page + 1);
-            getReportedPostsNext(page + 1);
-            getAllReportedCommentsNext(page + 1);
-            setPage(page + 1);
-          }}
-        >
-          Next
-        </button>
-        {/* <ul className="pageNumbers">
+            Next
+          </button>}
+        
+      
+          {/* <ul className="pageNumbers">
           {pageNumbers.map((number) => {
             return (
               <li
@@ -382,11 +404,11 @@ const removeComment = (id)=>{
             );
           })}
         </ul> */}
-      </div>
-      {/* pagination bar ends here  */}
+        </div>
+        {/* pagination bar ends here  */}
 
-      {/* allUsers Div ends here */}
-      {/* <button onClick={()=>{
+        {/* allUsers Div ends here */}
+        {/* <button onClick={()=>{
         getAllUsersNext(page-1)
         setLimit(5)
         setPage(page-1)
@@ -398,7 +420,7 @@ const removeComment = (id)=>{
         setLimit(5)
 
       }} >Next</button> */}
-    </div>
+      </div>
     </>
   );
 };
