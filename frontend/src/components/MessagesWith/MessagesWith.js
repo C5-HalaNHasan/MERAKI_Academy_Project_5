@@ -12,7 +12,7 @@ import { io } from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
 const socket = io.connect(ENDPOINT);
 
-const MessagesWith = ({ id }) => {
+const MessagesWith = ({ roomId, id }) => {
   const dispatch = useDispatch();
   const [sentMessage, setSentMessage] = useState("");
   //user states:

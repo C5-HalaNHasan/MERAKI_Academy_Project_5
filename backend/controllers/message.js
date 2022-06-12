@@ -177,7 +177,7 @@ const openRoom = (req, res) => {
 // a function that returns all the rooms that the current user is engaged in:
 const getCurrentUserRooms = (req, res) => {
   const userId = req.token.userId;
-  query = `SELECT r.id, r.sentBy,r.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM room r  INNER JOIN user u1 ON r.sentBy=u1.id INNER JOIN user u2 ON r.receivedBy=u2.id WHERE (r.sentBy =? OR r.receivedBy =?)`;
+  query = `SELECT r.id AS roomId, r.sentBy,r.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM room r  INNER JOIN user u1 ON r.sentBy=u1.id INNER JOIN user u2 ON r.receivedBy=u2.id WHERE (r.sentBy =? OR r.receivedBy =?)`;
   const data = [userId, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
