@@ -458,16 +458,17 @@ const ShowPost = ({ type, id }) => {
                   </div>
                   <div className="postTopRight"></div>
                   <BsThreeDots
-                    className={element.id}
+                    className="settingBtn"
+                    id={element.id}
                     onClick={(e) => {
                       setUpdateClick(!updateClick);
-                      setCurrentPost(e.target.className);
+                      setCurrentPost(e.target.id);
                     }}
                   />
                   {/* {setAuthor(element.author_id)} */}
                   {currentUserInfo.id == element.author_id &&
                   updateClick &&
-                  currentPost.animVal == element.id ? (
+                  currentPost == element.id ? (
                     <>
                       {/* <input
                         type={"text"}
@@ -482,7 +483,8 @@ const ShowPost = ({ type, id }) => {
                         }}
                       /> */}
                       <button
-                        className={element.id}
+                        className="updateBtn"
+                        id={element.id}
                         onClick={(e) => {
                           {
                             updatePost(element.id, element.postImg);
@@ -497,20 +499,22 @@ const ShowPost = ({ type, id }) => {
                         Update
                       </button>
                       <button
+                        className="deleteBtn"
                         onClick={() => {
                           deletePostById(element.id);
                         }}
                       >
-                        delete
+                        Delete
                       </button>
                     </>
                   ) : (
                     ""
                   )}
                   {updateClick &&
-                  currentPost.animVal == element.id &&
+                  currentPost == element.id &&
                   author !== element.author_id ? (
                     <p
+                      className="report"
                       onClick={() => {
                         reportPostById(element.id);
                         setUpdateClick(false);
@@ -614,9 +618,7 @@ const ShowPost = ({ type, id }) => {
                                     <div className="dateAndLike">
                                       <div className="createdTime">
                                         {comment.createdAt
-                                          ? comment.createdAt
-                                              .toString()
-                                              .split("T")[0]
+                                          ? comment.createdAt.split("T")[0]
                                           : ""}
                                       </div>
                                       <div>
@@ -655,6 +657,8 @@ const ShowPost = ({ type, id }) => {
                                 </div>
                                 <div className="settingComments">
                                   <BsThreeDots
+                                  className="settingBtn"
+
                                     id={comment.id}
                                     onClick={(e) => {
                                       setUpdateClickComment(
@@ -669,6 +673,8 @@ const ShowPost = ({ type, id }) => {
                                     <>
                                       {" "}
                                       <input
+                                       className="inputUpdateComment"
+                                       placeholder="updated your comment.."
                                         value={clear}
                                         onClick={() => {
                                           setClear();
@@ -679,7 +685,8 @@ const ShowPost = ({ type, id }) => {
                                         }}
                                       />
                                       <button
-                                        className={element.id}
+                                        className="updateBtn"
+                                        id={element.id}
                                         onClick={(e) => {
                                           {
                                             updateCommentById(comment.id);
@@ -690,6 +697,7 @@ const ShowPost = ({ type, id }) => {
                                         Update
                                       </button>
                                       <button
+                                      className="deleteBtn"
                                         onClick={() => {
                                           deleteCommentById(comment.id);
                                         }}

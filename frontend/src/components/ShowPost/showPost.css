@@ -99,9 +99,10 @@ gap: 0.5em;
   }
   
 .deleteBtn{
-    background-color: red;
+    background-color: #898F9C;
     color: white;
     padding: 0.25em 0.25em;
+    font-weight: bold;
    
     border-radius: 0.5em;
     cursor: pointer;
@@ -119,10 +120,11 @@ gap: 0.5em;
     
 }
 .updateBtn{
-    background-color: yellow;
+    background-color: #898F9C;
     color: white;
     padding: 0.25em 0.25em;
-   color: black;
+   color: white;
+   font-weight: bold;
     border-radius: 0.5em;
     cursor: pointer;
     border: none;
