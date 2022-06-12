@@ -11,8 +11,9 @@ const {
   reportUserById,
   removeUserByIdAdmin,
   getReportedUsers,
-  getUserById,
+  getUserById,getSuggestedUser,
   getAllUsersPag,
+
 } = require("../controllers/user");
 const { authentication } = require("../middlewares/authentication");
 const { authorization } = require("../middlewares/authorization");
@@ -60,5 +61,7 @@ userRouter.get("/remove", authentication, getReportedUsers);
 
 //endpoint for GET request ==> http://localhost:5000/user/:id ==>getUserById
 userRouter.get("/:id", authentication, getUserById);
+//endpoint for GET request ==> http://localhost:5000/user/Friend/suggestedUser ==>getSuggestedUser
+userRouter.get("/Friend/suggestedUser", authentication, getSuggestedUser);
 
 module.exports = userRouter;

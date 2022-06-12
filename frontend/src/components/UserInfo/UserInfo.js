@@ -21,7 +21,7 @@ const UserInfo = ({ id }) => {
       };
     }
   );
-  useEffect(() => {
+  useEffect(async () => {
     // console.log(id)
     // console.log(userId);;
 
@@ -31,10 +31,11 @@ const UserInfo = ({ id }) => {
       })
       .then((respon) => {
         let result = respon.data.result[0];
+        console.log(result);
         result.birthday = result.birthday.split("T")[0];
         if (id == userId) {
-          console.log(result.birthday);
           dispatch(setCurrentUserInfo(result));
+          console.log(result.birthday);
         } else {
           console.log(result.birthday);
 
@@ -56,7 +57,7 @@ const UserInfo = ({ id }) => {
   return (
     <div className="userInfoComponent">
       userInfoComponent
-      {id===userId? (
+      {id === userId ? (
         <div className="currentUser">
           <h4>
             {currentUserInfo.firstName}.{currentUserInfo.lastName}
