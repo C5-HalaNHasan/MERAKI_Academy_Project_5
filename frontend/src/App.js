@@ -22,7 +22,7 @@ function App() {
         <Route path="/user/:id" element={<UserProfilePage />} />
         <Route path="/user/update/:id" element={<UpdateProfilePage />} />
         <Route path="/message" element={<MessagePage />} />
-        <Route path="/message/:id" element={<MessageWithPage />} />
+        <Route path="/message/:roomId/:id" element={<MessageWithPage />} />
         <Route path="/users/:type/:name" element={<UsersPage />} />
         <Route path="/admin" element={<AdminMainPage />} />
         <Route path="/:type" element={<AdminSubPage />} />
