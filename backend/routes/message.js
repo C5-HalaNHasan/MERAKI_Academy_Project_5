@@ -28,9 +28,9 @@ messageRouter.put("/:id", authentication, removeSentMessageById);
 
 //room endPoints:
 //endpoint for POST request ==> http://localhost:5000/message/room/:id==> openRoom
-messageRouter.post("room/:id", authentication, openRoom);
+messageRouter.post("/room/:id", authentication, openRoom);
 
-//endpoint for POST request ==> http://localhost:5000/message/room/:id==>  getCurrentUserRooms
-messageRouter.get("room/", authentication, getCurrentUserRooms);
+//endpoint for POST request ==> http://localhost:5000/message/room ==>  getCurrentUserRooms
+messageRouter.get("/user/room", authentication, getCurrentUserRooms);
 
 module.exports = messageRouter;

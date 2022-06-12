@@ -48,15 +48,15 @@ USE MERAKI_PROJECT5;
 -- );
 
 -- -- creating friendship table:
-CREATE TABLE friendship(
-    id INT AUTO_INCREMENT NOT NULL,
-    friendshipRequest INT,
-    FOREIGN KEY (friendshipRequest) REFERENCES user(id),
-    friendshipAccept INT,
-    FOREIGN KEY (friendshipAccept) REFERENCES user(id),
-    isDeleted TINYINT DEFAULT 0,
-    PRIMARY KEY (id)
-);
+-- CREATE TABLE friendship(
+--     id INT AUTO_INCREMENT NOT NULL,
+--     friendshipRequest INT,
+--     FOREIGN KEY (friendshipRequest) REFERENCES user(id),
+--     friendshipAccept INT,
+--     FOREIGN KEY (friendshipAccept) REFERENCES user(id),
+--     isDeleted TINYINT DEFAULT 0,
+--     PRIMARY KEY (id)
+-- );
 
 -- -- creating friendship_Notification table//extra feature:
 -- CREATE TABLE friendship_Notification (
@@ -120,6 +120,18 @@ CREATE TABLE friendship(
 --     PRIMARY KEY (id)
 -- );
 
+-- creating room table:
+-- CREATE TABLE room(
+--     id INT AUTO_INCREMENT NOT NULL,
+--     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     sentBy INT,
+--     FOREIGN KEY (sentBy) REFERENCES user(id),
+--     receivedBy INT,
+--     FOREIGN KEY (receivedBy) REFERENCES user(id),
+--     isDeleted TINYINT DEFAULT 0,
+--     PRIMARY KEY (id)
+-- );
+
 -- creating message table:
 CREATE TABLE message(
     id INT AUTO_INCREMENT NOT NULL,
@@ -130,23 +142,10 @@ CREATE TABLE message(
     receivedBy INT,
     FOREIGN KEY (receivedBy) REFERENCES user(id),
     room INT,
-    FOREIGN KEY (room) REFERENCES room(id)
+    FOREIGN KEY (room) REFERENCES room(id),
     isDeleted TINYINT DEFAULT 0,
     PRIMARY KEY (id)
 );
-
--- creating room table:
-CREATE TABLE room(
-    id INT AUTO_INCREMENT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    sentBy INT,
-    FOREIGN KEY (sentBy) REFERENCES user(id),
-    receivedBy INT,
-    FOREIGN KEY (receivedBy) REFERENCES user(id),
-    isDeleted TINYINT DEFAULT 0,
-    PRIMARY KEY (id)
-);
-
 
 -- run the following command in the model directory:
 -- mysql -u root <"schema.sql" -p

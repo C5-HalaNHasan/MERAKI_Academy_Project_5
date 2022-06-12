@@ -150,12 +150,12 @@ const openRoom = (req, res) => {
       //! this means that they have a room,their roomId is going to be returned:
       res.status(200).json({
         success: true,
-        message: "you already have a room!",
-        result: result1, //! to be checked to get roomId instead of the whole result
+        message: "you already have a room!,your roomId is:",
+        result: result1[0].id, //! to be checked to get roomId instead of the whole result
       });
     } else {
       //! they don't have a room: another query to create a new room:
-      const query2 = `SELECT * FROM ROOM WHERE sentBy=? AND receivedBy=?`;
+      const query2 = `INSERT INTO room (sentBy,receivedBy) VALUE (?,?)`;
       const data2 = [userId, otherUserId];
       connection.query(query2, data2, (error2, result2) => {
         if (error2) {
@@ -166,8 +166,8 @@ const openRoom = (req, res) => {
         }
         res.status(201).json({
           success: true,
-          message: "room created successfully!",
-          result: result2, //! to be checked to get roomId instead of the whole result
+          message: "room created successfully!,your roomId is:",
+          result: result2.insertId, //! to be checked to get roomId instead of the whole result
         });
       });
     }
@@ -175,10 +175,9 @@ const openRoom = (req, res) => {
 };
 
 // a function that returns all the rooms that the current user is engaged in:
-const getCurrentUserRooms = () => {
+const getCurrentUserRooms = (req, res) => {
   const userId = req.token.userId;
-  const otherUserId = req.params.id;
-  query = `SELECT * FROM room WHERE sentBy=? OR receivedBy=?`;
+  query = `SELECT r.id, r.sentBy,r.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM room r  INNER JOIN user u1 ON r.sentBy=u1.id INNER JOIN user u2 ON r.receivedBy=u2.id WHERE (r.sentBy =? OR r.receivedBy =?)`;
   const data = [userId, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
