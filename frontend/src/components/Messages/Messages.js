@@ -42,32 +42,32 @@ const Messages = () => {
   });
   // a function that sets allMessages in redux store:
   const getAllMessages = () => {
-    let getMessagesUrl = `http://localhost:5000/message/user/room`;
+    let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
     axios
       .get(getMessagesUrl, { headers: { authorization: token } })
       .then((result) => {
         if (!result.data.result.length) {
-          dispatch(
-            setModalBox({
-              modalId: "",
-              modalType: "alert",
-              modalMessage: "Inbox",
-              modalDetails: "Your inbox is empty",
-              modalShow: true,
-            })
-          );
+          // dispatch(
+          //   setModalBox({
+          //     modalId: "",
+          //     modalType: "alert",
+          //     modalMessage: "Inbox",
+          //     modalDetails: "Your inbox is empty",
+          //     modalShow: true,
+          //   })
+          // );
         } else {
           dispatch(setAllMessages(result.data.result));
           console.log({ all_conversations: result.data.result });
-          dispatch(
-            setModalBox({
-              modalId: "",
-              modalType: "ok",
-              modalMessage: "Inbox",
-              modalDetails: `you have ${allMessages.length} conversations!`,
-              modalShow: true,
-            })
-          );
+          // dispatch(
+          //   setModalBox({
+          //     modalId: "",
+          //     modalType: "ok",
+          //     modalMessage: "Inbox",
+          //     modalDetails: `you have ${allMessages.length} conversations!`,
+          //     modalShow: true,
+          //   })
+          // );
         }
       })
       .catch((error) => {});

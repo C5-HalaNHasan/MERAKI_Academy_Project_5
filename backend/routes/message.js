@@ -31,6 +31,6 @@ messageRouter.put("/:id", authentication, removeSentMessageById);
 messageRouter.post("/room/:id", authentication, openRoom);
 
 //endpoint for POST request ==> http://localhost:5000/message/room ==>  getCurrentUserRooms
-messageRouter.get("/user/room", authentication, getCurrentUserRooms);
+messageRouter.get("/get/user/room", authentication, getCurrentUserRooms);
 
 module.exports = messageRouter;
