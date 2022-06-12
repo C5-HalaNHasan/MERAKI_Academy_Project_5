@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAllUsers,
@@ -12,6 +12,22 @@ import "./users.css";
 
 //Users component will take two props:type(search or friendlist) & name (name of the searched user)
 const Users = ({ type, name }) => {
+  //modalBox states:
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow
+    };
+  });
   const dispatch = useDispatch();
   const { allUsers, token, userId, currentUserFriends } = useSelector(
     (state) => {
@@ -23,7 +39,7 @@ const Users = ({ type, name }) => {
       };
     }
   );
-  // const addFriend = () => {
+    // const addFriend = () => {
   //   let addFriendUrl = `http://localhost:5000/user/${id}`;
   //   axios
   //     .post(addFriendUrl, {}, { headers: { authorization: token } })
@@ -73,7 +89,7 @@ const Users = ({ type, name }) => {
                   <div className="username">
                     <img src={user.profileImg}></img>
                     <h3>
-                      {user.firstName}.{user.lastName}{" "}
+                      {user.firstName} {user.lastName}{" "}
                     </h3>
                   </div>
                   <div className="actionB">
@@ -98,8 +114,36 @@ const Users = ({ type, name }) => {
                     >
                       Add
                     </button>
-                    <button>Send Message</button>
-                    <button>Report</button>
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          setModalBox({
+                            // modalId: id,
+                            modalType: "sendMessage",
+                            modalMessage: "Send Message",
+                            modalDetails: "",
+                            modalShow: true
+                          })
+                        );
+                      }}
+                    >
+                      Send Message
+                    </button>
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          setModalBox({
+                            modalId: user.id,
+                            modalType: "report",
+                            modalMessage: "Report User",
+                            modalDetails: "",
+                            modalShow: true
+                          })
+                        );
+                      }}
+                    >
+                      Report
+                    </button>
                   </div>
                 </div>
               );
@@ -113,7 +157,7 @@ const Users = ({ type, name }) => {
                     <div className="friendInfo">
                       <img src={friend.profileImg}></img>
                       <h3>
-                        {friend.firstName}.{friend.lastName}{" "}
+                        {friend.firstName} {friend.lastName}{" "}
                       </h3>
                     </div>
                     <div className="actionButton">
