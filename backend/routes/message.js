@@ -8,6 +8,7 @@ const {
   removeSentMessageById,
   //room functions:
   createNewRoom,
+  getCurrentUserRooms,
 } = require("../controllers/message");
 
 const { authentication } = require("../middlewares/authentication");
@@ -28,5 +29,8 @@ messageRouter.put("/:id", authentication, removeSentMessageById);
 //room endPoints:
 //endpoint for POST request ==> http://localhost:5000/message/room/:id==> createNewRoom
 messageRouter.post("room/:id", authentication, createNewRoom);
+
+//endpoint for POST request ==> http://localhost:5000/message/room/:id==>  getCurrentUserRooms
+messageRouter.get("room/", authentication, getCurrentUserRooms);
 
 module.exports = messageRouter;
