@@ -231,9 +231,12 @@ const removeComment = (id)=>{
     usersPagination();
     action();
   }, []);
-  return (
+  return (<>
+    <p>Admin <span>DashBoard</span></p>
+
     <div className="adminDashBoardComponent">
       {/* all usersDiv starts here */}
+
       <div className="adminResultUsers">
         {type == "allUsers" &&
           allUsers.length &&
@@ -342,6 +345,7 @@ const removeComment = (id)=>{
           ""
         ) : (
           <button
+          className="prevBtn"
             onClick={() => {
               getAllUsersNext(page - 1);
               getReportedUsersNext(page - 1);
@@ -354,6 +358,7 @@ const removeComment = (id)=>{
           </button>
         )}
         <button
+        className="nextBtn"
           onClick={() => {
             getAllUsersNext(page + 1);
             getReportedUsersNext(page + 1);
@@ -394,6 +399,7 @@ const removeComment = (id)=>{
 
       }} >Next</button> */}
     </div>
+    </>
   );
 };
 

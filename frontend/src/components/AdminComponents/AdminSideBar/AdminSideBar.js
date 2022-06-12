@@ -25,7 +25,7 @@ const AdminSideBar = () => {
   };
   return (
     <div className="adminSideBarComponent">
-      adminSideBarComponent
+      
       <h3
         onClick={() => {
           allUsers();

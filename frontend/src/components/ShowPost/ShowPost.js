@@ -424,6 +424,7 @@ const ShowPost = ({ type, id }) => {
       }
     });
   };
+
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
@@ -537,6 +538,8 @@ const ShowPost = ({ type, id }) => {
                 </div>
                 <div className="postBottom">
                   <div>
+                  
+
                     <AiOutlineLike
                       // style={{color:`${ currentUserInfo.id?"blue":"red"}`}}
 
