@@ -98,7 +98,6 @@ const Users = ({ type, name }) => {
                     >
                       Add
                     </button>
-                    <button>Remove</button>
                     <button>Send Message</button>
                     <button>Report</button>
                   </div>
