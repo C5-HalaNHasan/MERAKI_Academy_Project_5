@@ -128,8 +128,8 @@ const removeSentMessageById = (req, res) => {
 };
 
 //room functions:
-//a function that creates a new room for the two users after checking that they don't have any
-const createNewRoom = (req, res) => {
+//this function: creates a new room for the two users if they don't have a room OR returns their current roomId
+const openRoom = (req, res) => {
   //to create new unique room between the current user and the other user by id sent by params
   //first room table is going to be checked if the two connected users have a room or not:
   //if they have: the function will return their current roomId
@@ -174,9 +174,10 @@ const createNewRoom = (req, res) => {
   });
 };
 
-// a function that returns all the rooms that the current user is engaged in:4
+// a function that returns all the rooms that the current user is engaged in:
 const getCurrentUserRooms = () => {
   const userId = req.token.userId;
+  const otherUserId = req.params.id;
   query = `SELECT * FROM room WHERE sentBy=? OR receivedBy=?`;
   const data = [userId, userId];
   connection.query(query, data, (error, result) => {
@@ -193,12 +194,13 @@ const getCurrentUserRooms = () => {
     });
   });
 };
+
 module.exports = {
   getAllUserMessages,
   sendMessageToUserById,
   getAllMessagesFromUserById,
   removeSentMessageById,
   //room functions:
-  createNewRoom,
+  openRoom,
   getCurrentUserRooms,
 };

@@ -7,7 +7,7 @@ const {
   getAllMessagesFromUserById,
   removeSentMessageById,
   //room functions:
-  createNewRoom,
+  openRoom,
   getCurrentUserRooms,
 } = require("../controllers/message");
 
@@ -27,8 +27,8 @@ messageRouter.get("/:id", authentication, getAllMessagesFromUserById);
 messageRouter.put("/:id", authentication, removeSentMessageById);
 
 //room endPoints:
-//endpoint for POST request ==> http://localhost:5000/message/room/:id==> createNewRoom
-messageRouter.post("room/:id", authentication, createNewRoom);
+//endpoint for POST request ==> http://localhost:5000/message/room/:id==> openRoom
+messageRouter.post("room/:id", authentication, openRoom);
 
 //endpoint for POST request ==> http://localhost:5000/message/room/:id==>  getCurrentUserRooms
 messageRouter.get("room/", authentication, getCurrentUserRooms);
