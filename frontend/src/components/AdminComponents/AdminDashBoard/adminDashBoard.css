@@ -1,10 +1,29 @@
+.adminDashBoardComponent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #898F9C;
+    width: 100%;
+}
 .adminResultUsers {
     display:flex;
     flex-direction: column;
     gap:1vh;
     margin:0.5vh 0.5vw;
 }
-
+button{
+    background-color:  rgb(54, 54, 237);;
+    color: var(--spanColor);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5vh 1vw;
+    border-radius: 2vh;
+    transition:0.5s ease;
+    border: none;
+    margin-left: 0.75rem;
+    margin-bottom: 0.25rem;
+    
+}
 .adminUserInfo{
     background-color: aliceblue;
     height: 8vh;
