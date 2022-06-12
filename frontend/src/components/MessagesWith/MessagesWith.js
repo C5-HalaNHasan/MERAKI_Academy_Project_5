@@ -12,7 +12,7 @@ import { io } from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
 const socket = io.connect(ENDPOINT);
 
-const MessagesWith = ({ id }) => {
+const MessagesWith = ({ roomId, id }) => {
   const dispatch = useDispatch();
   const [sentMessage, setSentMessage] = useState("");
   //user states:
@@ -33,14 +33,15 @@ const MessagesWith = ({ id }) => {
 
   // a function that sets messagesWith in redux store:
   const getMessagesWith = () => {
-    //! meassagesWith is going to render the messages based on the unique room id(message schema and getAllMessagesFromUserById conroller to be updated backend)
-    //! this function (getMessagesWith) is going to be invoked whenever the user sends a message/receives a message/deletes a message
+    //! meassagesWith is going to render the messages based on the unique room id
     let getMessagesWithUrl = `http://localhost:5000/message/${id}`;
     axios
       .get(getMessagesWithUrl, { headers: { authorization: token } })
       .then((result) => {
-        dispatch(setMessagesWith(result.data.result));
-        console.log({ all_conversationsWith_result: result.data.result });
+        if (result.data.success) {
+          dispatch(setMessagesWith(result.data.result));
+          console.log({ all_conversationsWith_result: result.data.result });
+        }
       })
       .catch((error) => {
         console.log({ all_conversationsWith_error: error.message });
@@ -49,26 +50,28 @@ const MessagesWith = ({ id }) => {
 
   // a function that sends message to a user:
   const sendMessageTo = () => {
+    console.log(roomId);
     //! sendMessageTo will emit SEND_MESSAGE event with the sentMessage and roomId(message schema and sendMessageToUserById conroller to be updated backend)
     //! the commented code below to be implemented after modifying the message schema(roomId,message) and adding room schema(roomId)
-    /*
-    const messageContent={
+    const messageContent = {
       roomId,
-      content:{
-        sentBy:userId,
-        receivedBy:id in the params(sent by props)
-        message:message,
-      }
-    }
-    socket.emit("SEND_MESSAGE",messageContent);
-    */
-    //! for the code below: the data that is going to be sent to the backend to be checked (after modifyng message schema/to match messageContent)
+      content: {
+        sentBy: userId,
+        receivedBy: id,
+        message: sentMessage,
+      },
+    };
+    socket.emit("SEND_MESSAGE", messageContent);
+
     let sendMessageToUrl = `http://localhost:5000/message/${id}`;
     if (sentMessage.length > 0) {
       axios
         .post(
           sendMessageToUrl,
-          { message: sentMessage },
+          {
+            room: roomId,
+            message: sentMessage,
+          },
           { headers: { authorization: token } }
         )
         .then((result) => {
@@ -77,7 +80,7 @@ const MessagesWith = ({ id }) => {
           setSentMessage("");
         })
         .catch((error) => {
-          console.log({ sendMessageTo_error: error.message });
+          console.log({ sendMessageTo_error: error });
         });
     }
   };
@@ -106,9 +109,10 @@ const MessagesWith = ({ id }) => {
 
   useEffect(() => {
     receiveMessageFrom();
+    getMessagesWith();
   }, []);
 
-  console.log(`all messages from user ${id} :`, messagesWith[4]);
+  console.log(`all messages from user ${id} :`, messagesWith);
 
   return (
     <div className="messagesWithComponent">

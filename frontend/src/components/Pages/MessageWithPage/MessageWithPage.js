@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import ModalBox from "../../ModalBox/ModalBox";
 
 const MessagePageWith = () => {
-  const { id } = useParams();
+  const { roomId, id } = useParams();
   const { userId } = useSelector((state) => {
     return {
       userId: state.user.userId,
@@ -24,7 +24,7 @@ const MessagePageWith = () => {
       MessageWithPage
       <FriendList id={userId} />
       <Suggested />
-      <MessageWith id={id} />
+      <MessageWith id={id} roomId={roomId} />
       <Adv />
       {/* <Footer /> */}
     </>
