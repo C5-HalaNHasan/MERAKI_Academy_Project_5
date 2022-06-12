@@ -126,9 +126,81 @@ const removeSentMessageById = (req, res) => {
     }
   });
 };
+
+//room functions:
+//this function: creates a new room for the two users if they don't have a room OR returns their current roomId
+const openRoom = (req, res) => {
+  //to create new unique room between the current user and the other user by id sent by params
+  //first room table is going to be checked if the two connected users have a room or not:
+  //if they have: the function will return their current roomId
+  //if they don't have: the function will return the created roomId
+  const userId = req.token.userId;
+  const otherUserId = req.params.id;
+  const query1 = `SELECT * FROM ROOM WHERE (sentBy=? AND receivedBy=?) OR (sentBy=? AND receivedBy=?)`;
+  const data1 = [userId, otherUserId, otherUserId, userId];
+  //! to be continued after creating the room schema in the database
+  connection.query(query1, data1, (error1, result1) => {
+    if (error1) {
+      return res.status(500).json({
+        success: false,
+        message: error1.message,
+      });
+    }
+    if (result1.length) {
+      //! this means that they have a room,their roomId is going to be returned:
+      res.status(200).json({
+        success: true,
+        message: "you already have a room!",
+        result: result1, //! to be checked to get roomId instead of the whole result
+      });
+    } else {
+      //! they don't have a room: another query to create a new room:
+      const query2 = `SELECT * FROM ROOM WHERE sentBy=? AND receivedBy=?`;
+      const data2 = [userId, otherUserId];
+      connection.query(query2, data2, (error2, result2) => {
+        if (error2) {
+          return res.status(500).json({
+            success: false,
+            message: error2.message,
+          });
+        }
+        res.status(201).json({
+          success: true,
+          message: "room created successfully!",
+          result: result2, //! to be checked to get roomId instead of the whole result
+        });
+      });
+    }
+  });
+};
+
+// a function that returns all the rooms that the current user is engaged in:
+const getCurrentUserRooms = () => {
+  const userId = req.token.userId;
+  const otherUserId = req.params.id;
+  query = `SELECT * FROM room WHERE sentBy=? OR receivedBy=?`;
+  const data = [userId, userId];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "your rooms:",
+      result: result, //! to be checked to get roomId instead of the whole result
+    });
+  });
+};
+
 module.exports = {
   getAllUserMessages,
   sendMessageToUserById,
   getAllMessagesFromUserById,
   removeSentMessageById,
+  //room functions:
+  openRoom,
+  getCurrentUserRooms,
 };
