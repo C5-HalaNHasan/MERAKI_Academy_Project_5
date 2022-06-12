@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import ModalBox from "../../ModalBox/ModalBox";
 import AdminSideBar from "../../AdminComponents/AdminSideBar/AdminSideBar";
 import AdminDashBoard from "../../AdminComponents/AdminDashBoard/AdminDashBoard";
+import AdminNavBar from "../../AdminBavBar/AdminNavBar";
 
 const AdminSubPage = () => {
   const { type } = useParams();
@@ -12,7 +13,7 @@ const AdminSubPage = () => {
   return (
     <>
       <ModalBox />
-      <NavBar />
+      <AdminNavBar />
       <AdminSideBar />
       <AdminDashBoard type={type} />
     </>
