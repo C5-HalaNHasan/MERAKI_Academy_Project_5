@@ -189,7 +189,7 @@ const getCurrentUserRooms = () => {
     }
     res.status(200).json({
       success: true,
-      message: "you  rooms:",
+      message: "your rooms:",
       result: result, //! to be checked to get roomId instead of the whole result
     });
   });
