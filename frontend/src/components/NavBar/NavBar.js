@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout, setCurrentUserInfo } from "../redux/reducers/user";
 import { setModalBox } from "../redux/reducers/modalBox/index";
+import {RiAdminFill} from "react-icons/ri"
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -120,6 +121,16 @@ const NavBar = () => {
               }}
             />
           </div>
+         {currentUserInfo.role_id ==1 ?
+         <div className="navBarMessages">
+            <RiAdminFill
+            className="adminIcon"
+              onClick={() => {
+                
+                navigate("/admin");
+              }}
+            />
+          </div>:""}
         </div>
         <img
           className="userImg"

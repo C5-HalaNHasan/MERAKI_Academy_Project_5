@@ -70,7 +70,7 @@
 }
 
 .advComponent {
-  border: 2px blue solid;
+  /* border: 2px blue solid; */
   background-color: red;
   grid-area: rs1/rs1/rs2/rs2;
   /* align-self: end; */
