@@ -32,17 +32,24 @@ const UserInfo = ({ id }) => {
       .then((respon) => {
         let result = respon.data.result[0];
         console.log(result);
+        // console.log(result.gender);
         result.birthday = result.birthday.split("T")[0];
-        if (id == userId) {
+        if (result.gender === 0) {
+          result.gender = "male";
+        }
+        if (id === userId) {
           dispatch(setCurrentUserInfo(result));
           console.log(result.birthday);
+          console.log(result.gender);
         } else {
-          console.log(result.birthday);
+          // console.log(result.birthday);
 
           dispatch(setVisitedUserInfo(result));
           console.log(id);
           console.log(userId);
         }
+        console.log(result.birthday);
+        console.log(result.gender);
       })
       .catch((err) => {
         //   console.log(id)
@@ -50,6 +57,8 @@ const UserInfo = ({ id }) => {
         console.log(err);
       });
   }, []);
+  console.log(currentUserInfo);
+  console.log(visitedUserInfo);
   //! UserInfo component to be modified based on the following:
   //since this component will be shown in profile pages only: id is taken from userProfile Params
   //if id=userId: dispatch(setCurrentUserInfo({getUserById from backend}))
@@ -60,10 +69,16 @@ const UserInfo = ({ id }) => {
       {id === userId ? (
         <div className="currentUser">
           <h4>
-            {currentUserInfo.firstName}.{currentUserInfo.lastName}
+            {currentUserInfo.firstName} {currentUserInfo.lastName}
           </h4>
-          <h4>{currentUserInfo.birthday}</h4>
+          {currentUserInfo.birthday ? (
+            <h4>{currentUserInfo.birthday.split("T")[0]}</h4>
+          ) : (
+            ""
+          )}
+
           <h4>{currentUserInfo.country}</h4>
+          {currentUserInfo.gender === 0 ? <h4>Male</h4> : <h4>Female</h4>}
           <button
             onClick={(e) => {
               navigate(`/user/update/${id}`);
@@ -75,10 +90,15 @@ const UserInfo = ({ id }) => {
       ) : (
         <div className="visitUser">
           <h4>
-            {visitedUserInfo.firstName}.{visitedUserInfo.lastName}
+            {visitedUserInfo.firstName} {visitedUserInfo.lastName}
           </h4>
-          <h4>{visitedUserInfo.birthday}</h4>
+          {visitedUserInfo.birthday ? (
+            <h4>{visitedUserInfo.birthday.split("T")[0]}</h4>
+          ) : (
+            ""
+          )}
           <h4>{visitedUserInfo.country}</h4>
+          {visitedUserInfo.gender === 0 ? <h4>Male</h4> : <h4>Female</h4>}
         </div>
       )}
     </div>
