@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;500;600&display=swap');
-
 /* darkMode & lightMode*/
 :root {
   --mainText: #003049;
@@ -8,34 +6,50 @@
   --spanColor: rgba(255, 255, 255, 0.9);
   --lightBgColor: rgba(255, 255, 255, 0.7);
   --onHover: rgba(255, 226, 76, 0.6);
-  --mainBgImg: url("");
+  /* --mainBgImg: url("../src/components/assets/bgReg.jpg"); */
+  --regBgImg: url("../src/components/assets/bgReg.jpg");
 }
 
 
 * {
-  margin: 0;
+  margin: 0vh 0vw;
   padding: 0;
   box-sizing: border-box;
   /* color: var(--mainText); */
   text-decoration: none;
   list-style: none;
-  /* font-family: 'Hind Siliguri', sans-serif; */
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 #root {
-  width: 100vw;
+  /* background setting */
+  /* background: var(--mainBgImg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; */
   height: 100vh;
+  width: 100vw;
 }
 
 .componentsContainer {
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: repeat(7, 1fr);
-  grid-template-areas: "nav nav nav""ls1 m1 rs1""ls1 m2 rs1""ls2 m3 rs2""ls2 m3 rs2""ftr ftr ftr";
+  grid-gap: 1em;
+  /* grid-template-areas: "nav nav nav""ls1 m1 rs1""ls1 m2 rs1""ls2 m3 rs2""ls2 m3 rs2""ftr ftr ftr"; */
+  grid-template-areas: 
+  "nav nav nav"
+  "cvr cvr cvr"
+  "ls1 m1 rs1"
+  "ls1 m2 rs1"
+  "ls2 m3 rs2"
+  "ls2 m4 rs2"
+  "ftr ftr ftr";
   width: 100%;
   height: 100%;
   /* overflow-y: scroll;
   overflow-x: hidden; */
+  overflow-y:scroll;
 }
 
 .navBarComponent {
@@ -44,22 +58,24 @@
   grid-area: nav;
 }
 
+.profileImgsComponent
+{
+  grid-area: cvr;
+}
+
 .advComponent {
   border: 2px blue solid;
   background-color: red;
   grid-area: rs1/rs1/rs2/rs2;
+  /* align-self: end; */
 }
 
 .createPostComponent {
-  border: 2px blue solid;
-  background-color: red;
   grid-area: m1;
 }
 
 .showsPostComponent {
-  border: 2px blue solid;
-  background-color: red;
-  grid-area: m2/m3/m3;
+  grid-area:m2/m3/m3 ;
 }
 
 .friendListComponent {
@@ -79,6 +95,7 @@
   border: 2px blue solid;
   background-color: red;
   grid-area: m1/m2/m3/m3;
+
 }
 
 .messagesWithComponent {
@@ -87,16 +104,11 @@
   grid-area: m1/m2/m3/m3;
 }
 
-.profileImgsComponent {
-  border: 2px blue solid;
-  background-color: red;
-  grid-area: m1;
-}
-
+/* this component to be removed and replaced with modal box */
 .updateProfileComponent {
   border: 2px blue solid;
   background-color: red;
-  grid-area: m2/m3/m3;
+  grid-area: m1/m2/m3/m3;
 }
 
 .userInfoComponent {
@@ -105,6 +117,7 @@
   grid-area: ls2;
 }
 
+/* still not given by mutaz! */
 .usersComponent {
   border: 2px blue solid;
   background-color: red;
@@ -112,19 +125,29 @@
 }
 
 .footerComponent {
-  border: 2px blue solid;
-  background-color: red;
   grid-area: ftr;
 }
 
 .registerComponent {
-  border: 2px blue solid;
-  /* background-color: red; */
-  grid-area: m2/m3/m3;
+  background-color: var(--spanColor);
+  box-shadow: 0px 0px 18px 0px var(--mainBgColor);
+  border-radius: 1.5vw;
+  grid-area: m2/m3;
 }
 
 .actionsComponent {
+  grid-area: rs2;
+}
+
+.adminDashBoardComponent {
   border: 2px blue solid;
   background-color: red;
-  grid-area: rs1/rs1;
+  grid-area: m1/m2/m3/m3;
+}
+
+.adminSideBarComponent{
+  border: 2px blue solid;
+  background-color: red;
+  grid-area: ls1/ls1/ls2/ls2;
+
 }

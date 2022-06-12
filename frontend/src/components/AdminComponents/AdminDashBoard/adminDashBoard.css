@@ -1,0 +1,63 @@
+.adminDashBoardComponent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #898F9C;
+    width: 100%;
+}
+.adminResultUsers {
+    display:flex;
+    flex-direction: column;
+    gap:1vh;
+    margin:0.5vh 0.5vw;
+}
+button{
+    background-color:  rgb(54, 54, 237);;
+    color: var(--spanColor);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5vh 1vw;
+    border-radius: 2vh;
+    transition:0.5s ease;
+    border: none;
+    margin-left: 0.75rem;
+    margin-bottom: 0.25rem;
+    
+}
+.adminUserInfo{
+    background-color: aliceblue;
+    height: 8vh;
+    width:100%;
+    border-radius: 1vw;
+    display:flex;
+    padding: 1vw;
+    gap:1vw;
+    /* to justify the text and the img on the same line */
+    line-height: 4vh; 
+    justify-content: space-between;
+}
+.adminUserInfo img{
+    width: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 0.3vw;
+    cursor: pointer;
+}
+
+.icon{
+    /* gap: 4.5em; */
+    /* margin-left: 8em; */
+    font-size: 1.3em;
+    cursor: pointer;
+    float: right;
+}
+
+.paginationBar ul {
+display: flex;
+gap:.3vw;
+}
+.paginationBar ul li{
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline;
+}

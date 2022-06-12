@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import "./userProfilePage.css";
 import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
+import Footer from "../../Footer/Footer"; //! to be deleted
 import FriendList from "../../FriendList/FriendList";
 import UserInfo from "../../UserInfo/UserInfo";
 import ProfileImgs from "../../ProfileImgs/ProfileImgs";
@@ -26,13 +26,11 @@ const UserProfilePage = () => {
     <>
       <ModalBox />
       <NavBar />
-      UserProfile
       <FriendList id={usedId} />
       <UserInfo id={usedId} />
       <ProfileImgs id={usedId} />
-      {/* later:user can add posts on other walls! (extra) */}
-      {/* {id == userId && <CreatePost />} */}
-      <ShowPost />
+      {id == userId && <CreatePost />}
+      <ShowPost id={usedId} />
       {id == userId ? <Adv /> : <Actions id={id} />}
       {/* <Footer /> */}
     </>

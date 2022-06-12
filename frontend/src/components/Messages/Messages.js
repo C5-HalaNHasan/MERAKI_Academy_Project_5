@@ -26,16 +26,21 @@ const Messages = () => {
   });
 
   //modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
     return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
     };
   });
-
   // a function that sets allMessages in redux store:
   const getAllMessages = () => {
     let getMessagesUrl = `http://localhost:5000/message`;
@@ -46,11 +51,11 @@ const Messages = () => {
           //modalBox pops-up:
           dispatch(
             setModalBox({
-              user: "",
-              type: "alert",
-              message: "you don't have any conversation!",
-              details: "",
-              show: true,
+              modalId: "",
+              modalType: "alert",
+              modalMessage: "Inbox",
+              modalDetails: "Your inbox is empty",
+              modalShow: true,
             })
           );
         } else {
@@ -58,11 +63,11 @@ const Messages = () => {
           dispatch(
             //modalBox pops-up:
             setModalBox({
-              user: "",
-              type: "ok",
-              message: `you have ${x.length} conversations!`, //!
-              details: "",
-              show: true,
+              modalId: "",
+              modalType: "ok",
+              modalMessage: "Inbox", //!
+              modalDetails: `you have ${x.length} conversations!`,
+              modalShow: true,
             })
           );
           dispatch(setAllMessages(result.data.result));
@@ -76,14 +81,6 @@ const Messages = () => {
     let filtered = allMessages.filter((conv, ind) => {
       return conv.sentBy != userId || conv.receivedBy != userId;
     });
-    // const filtered2 = allMessages.filter(
-    //   (conv, ind, self) =>
-    //     ind ==
-    //     self.findIndex(
-    //       (t) => t.sentBy !== conv.receivedBy && t.receivedBy !== conv.sentBy
-    //     )
-    // );
-
     setList(filtered);
     return filtered;
   };
@@ -109,8 +106,8 @@ const Messages = () => {
                   className="rightSide"
                   onClick={() => {
                     message.sentBy != userId
-                      ? navigate(`/message/${message.sentBy}`)
-                      : navigate(`/message/${message.receivedBy}`);
+                      ? navigate(`/message/${message.sentBy}`) //! to be replaced by room id
+                      : navigate(`/message/${message.receivedBy}`); //! to be replaced by room id
                   }}
                 >
                   Show

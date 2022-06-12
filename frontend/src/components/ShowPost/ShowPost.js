@@ -25,7 +25,21 @@ import {
   setCommentReactionCounter,
 } from "../redux/reducers/post";
 
-const ShowPost = () => {
+import { setModalBox } from "../redux/reducers/modalBox/index";
+
+const ShowPost = ({ type, id }) => {
+  //! modalBox states:
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
+
   const {
     currentUserInfo,
     token,
@@ -64,86 +78,126 @@ const ShowPost = () => {
   const [clear, setClear] = useState();
   const [showComments, setShowComments] = useState(false);
   const [postId, setPostId] = useState("");
-  const [likeColor, setLikeColor] = useState("notLiked");
+  const [likeColor, setLikeColor] = useState(false);
   const author = currentUserInfo.id;
-
-  const getAllPosts = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/post/friends", {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (res.data.success) {
-        dispatch(setAllPosts(res.data.result));
-
-        setShow(true);
-      }
-    } catch {}
-  };
-
-  const updatePost = (id, postImg, postText) => {
-    axios
-      .put(
-        `http://localhost:5000/post/${id}`,
-        {
-          postText,
-          postImg,
-          postVideo,
-        },
-        {
+  let getAllPosts;
+  if (type == "home") {
+    getAllPosts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/post/friends", {
           headers: {
             Authorization: token,
           },
+        });
+
+        if (res.data.success) {
+          dispatch(setAllPosts(res.data.result));
+
+          setShow(true);
         }
-      )
-      .then((result) => {
-        dispatch(updatePosts({ id, postText, postImg, postVideo }));
-        getAllPosts();
+      } catch {}
+    };
+  } else if (id != undefined) {
+    getAllPosts = async () => {
+      try {
+        const res = await axios.get(` http://localhost:5000/post/user/${id}`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (res.data.success) {
+          dispatch(setAllPosts(res.data.result));
+
+          setShow(true);
+        }
+      } catch {}
+    };
+  }
+
+  //! old updatePost & uploadImage functions:
+  // const updatePost = (id, postImg, postText) => {
+  //   axios
+  //     .put(
+  //       `http://localhost:5000/post/${id}`,
+  //       {
+  //         postText,
+  //         postImg,
+  //         postVideo,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     )
+  //     .then((result) => {
+  //       dispatch(updatePosts({ id, postText, postImg, postVideo }));
+  //       getAllPosts();
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  // const uploadImage = (id) => {
+  //   const data = new FormData();
+  //   data.append("file", postImg);
+  //   // clickedVideo? data.append("file", postVideo): ""
+  //   data.append("upload_preset", "rapulojk");
+  //   data.append("cloud_name", "difjgm3tp");
+  //   let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+  //   axios
+  //     .post(uploadPicUrl, data)
+  //     .then((result) => {
+  //       setPostImg(result.data.url);
+  //       updatePost(id, result.data.url);
+  //       setPostImg("");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  //! new updatePost function:
+  const updatePost = (id, postImg) => {
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "updatePost",
+        modalMessage: "Update Post",
+        modalDetails: postImg,
+        modalShow: true,
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    );
   };
 
+  //! new deletePost function:
   const deletePostById = (id) => {
-    axios
-      .delete(` http://localhost:5000/post/${id}`, {
-        headers: {
-          Authorization: token,
-        },
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "deletePost",
+        modalMessage: "Delete Post",
+        modalDetails: "Do you want to delete this post?",
+        modalShow: true,
       })
-      .then((result) => {
-        dispatch(removeFromPosts(id));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    );
   };
-  const uploadImage = (id) => {
-    const data = new FormData();
 
-    data.append("file", postImg);
-    // clickedVideo? data.append("file", postVideo): ""
-
-    data.append("upload_preset", "rapulojk");
-    data.append("cloud_name", "difjgm3tp");
-
-    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
-    axios
-      .post(uploadPicUrl, data)
-      .then((result) => {
-        setPostImg(result.data.url);
-
-        updatePost(id, result.data.url);
-        setUpdateClick(false);
-        setPostImg("");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const deletePostById = (id) => {
+  //   axios
+  //     .delete(` http://localhost:5000/post/${id}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     })
+  //     .then((result) => {
+  //       dispatch(removeFromPosts(id));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const reportPostById = (id) => {
     axios
@@ -238,7 +292,7 @@ const ShowPost = () => {
       .catch((error) => {});
   };
   const addReactionToPost = async (id) => {
-   await axios
+    await axios
       .post(
         `http://localhost:5000/reaction/post/${id}`,
         {},
@@ -250,13 +304,14 @@ const ShowPost = () => {
       )
       .then((result) => {
         getCounterNumber();
+        getAllPostsReactions();
       })
       .catch((error) => {
         console.log(error);
       });
   };
   const removeReactionFromPost = async (id) => {
-  await  axios
+    await axios
       .delete(`http://localhost:5000/reaction/post/${id} `, {
         headers: {
           Authorization: token,
@@ -279,7 +334,9 @@ const ShowPost = () => {
       })
       .catch((error) => {});
   };
+
   const checkIfLiked = (post, author) => {
+    console.log(post, author, postsReaction);
     if (postsReaction.length == 0) {
       return addReactionToPost(post);
     }
@@ -294,6 +351,19 @@ const ShowPost = () => {
     });
     return addReactionToPost(post);
   };
+
+  const getAllCommentsReactions = () => {
+    axios
+      .get("http://localhost:5000/reaction/comment", {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(setAllCommentsReactions(result.data.result));
+      })
+      .catch((error) => {});
+  };
   const addReactionToComment = (id) => {
     axios
       .post(
@@ -307,6 +377,7 @@ const ShowPost = () => {
       )
       .then((result) => {
         getCommentReactionsCount();
+        getAllCommentsReactions();
       })
       .catch((error) => {});
   };
@@ -319,15 +390,15 @@ const ShowPost = () => {
       })
       .then((result) => {
         getCommentReactionsCount();
+        getAllCommentsReactions();
       })
       .catch((error) => {});
   };
   const checkCommentsLiked = (comment, author) => {
-    console.log(commentReactionsCounter, "commentReactionsCounter");
-    if (commentReactionsCounter.length == 0) {
+    if (commentsReactions.length == 0) {
       return addReactionToComment(comment);
     }
-    commentReactionsCounter.map((element, index) => {
+    commentsReactions.map((element, index) => {
       if (
         element.author_id == author &&
         element.comment_id == comment &&
@@ -336,83 +407,115 @@ const ShowPost = () => {
         return removeReactionFromComment(comment);
       }
     });
+
     return addReactionToComment(comment);
   };
+  const colorFunc = (author, post) => {
+    if (postsReaction.length == 0) {
+      return setLikeColor(false);
+    }
+    postsReaction.map((element, index) => {
+      if (
+        element.author_id == author &&
+        element.post_id == post &&
+        element.isDeleted == 0
+      ) {
+        setLikeColor(true);
+      }
+    });
+  };
+
   useEffect(() => {
     getAllPosts();
     getCounterNumber();
     getAllPostsReactions();
     getCommentReactionsCount();
+    getAllCommentsReactions();
   }, []);
   return (
     <>
       <div className="showsPostComponent">
         {show &&
+          posts &&
           posts.map((element, index) => {
             return (
               <div key={index} className="showPosts">
                 <div className="postTop">
-                  <div className="postTopLeft"><div>
-                    <img className="postUserImg" src={element.profileImg} /></div>
+                  <div className="postTopLeft">
+                    <div>
+                      <img className="postUserImg" src={element.profileImg} />
+                    </div>
                     <div className="nameAndDate">
-                    <div className="name">{element.firstName} {element.lastName}</div>{" "}
-                    <span className="date"> {element.createdAt.toString().split("T")[0]}</span>
-                  </div></div>
+                      <div className="name">
+                        {element.firstName} {element.lastName}
+                      </div>{" "}
+                      <span className="date">
+                        {" "}
+                        {element.createdAt
+                          ? element.createdAt.split("T")[0]
+                          : ""}
+                      </span>
+                    </div>
+                  </div>
                   <div className="postTopRight"></div>
                   <BsThreeDots
-                    className={element.id}
+                    className="settingBtn"
+                    id={element.id}
                     onClick={(e) => {
                       setUpdateClick(!updateClick);
-                      setCurrentPost(e.target.className);
+                      setCurrentPost(e.target.id);
                     }}
                   />
                   {/* {setAuthor(element.author_id)} */}
                   {currentUserInfo.id == element.author_id &&
                   updateClick &&
-                  currentPost.animVal == element.id ? (
+                  currentPost == element.id ? (
                     <>
-                      {" "}
-                      <input
+                      {/* <input
                         type={"text"}
                         onChange={(e) => {
                           setPostText(e.target.value);
                         }}
-                      />
-                      <input
+                      /> */}
+                      {/* <input
                         type={"file"}
                         onChange={(e) => {
                           setPostImg(e.target.files[0]);
                         }}
-                      />
+                      /> */}
                       <button
-                        className={element.id}
+                        className="updateBtn"
+                        id={element.id}
                         onClick={(e) => {
                           {
-                            postImg
-                              ? uploadImage(e.target.className)
-                              : updatePost(element.id, postImg, postText);
+                            updatePost(element.id, element.postImg);
+                            //   postImg
+                            //     ? uploadImage(e.target.className)
+                            //  : updatePost(element.id, postImg, postText);
                             setUpdateClick(false);
                           }
-                          // setUpdateClick(false)
+                          // setUpdateClick(false);
                         }}
                       >
                         Update
                       </button>
                       <button
+                        className="deleteBtn"
                         onClick={() => {
                           deletePostById(element.id);
                         }}
                       >
-                        delete
+                        Delete
                       </button>
                     </>
                   ) : (
                     ""
                   )}
                   {updateClick &&
-                  currentPost.animVal == element.id &&
+                  currentPost == element.id &&
                   author !== element.author_id ? (
                     <p
+                      className="report"
                       onClick={() => {
                         reportPostById(element.id);
                         setUpdateClick(false);
@@ -434,15 +537,23 @@ const ShowPost = () => {
                   )}
                 </div>
                 <div className="postBottom">
-
                   <div>
-                    <AiOutlineLike
-                      className={likeColor}
+                  
 
+                    <AiOutlineLike
+                      // style={{color:`${ currentUserInfo.id?"blue":"red"}`}}
+
+                      // if current user id liked the post -- blue else false
+                      // we need function to check if user liked the post
+                      // call function and send current user and post id
+                      // check reactionspost array if included
+                      // if return blue then class name = liked else not liked
+                      className="likeColor"
                       onClick={() => {
                         checkIfLiked(element.id, currentUserInfo.id);
                       }}
                     />
+
                     {reactionCounter &&
                       reactionCounter.map((count, ind) => {
                         return (
@@ -455,15 +566,15 @@ const ShowPost = () => {
                           </>
                         );
                       })}
-                        <span className="tags">  Like</span>
-
-                      </div>
-                      <div>
+                    <span className="tags"> Like</span>
+                  </div>
+                  <div>
                     <BiComment
-                      className={element.id}
+                      className="commentIcon"
+                      id={element.id}
                       onClick={(e) => {
                         setShowComments(!showComments);
-                        setPostId(e.target.className);
+                        setPostId(e.target.id);
                       }}
                     />
                     {commentCounter &&
@@ -478,10 +589,10 @@ const ShowPost = () => {
                           </>
                         );
                       })}
-                      <span className="tags">  Comment</span>
-                 </div>
+                    <span className="tags"> Comment</span>
+                  </div>
                 </div>
-                {showComments && postId.baseVal == element.id ? (
+                {showComments && postId == element.id ? (
                   <>
                     <div className="comments">
                       {element.comments ? (
@@ -496,15 +607,61 @@ const ShowPost = () => {
                                       src={comment.profileImg}
                                     />
                                   </div>
-                                  <div className="commenterName">
-                                    <>{comment.firstName}</>
-                                  </div>
-                                  <div className="createdTime">
-                                    {comment.createdAt.toString().split("T")[0]}
+                                  <div className="mainComment">
+                                    <div className="commenterNameAndPost">
+                                      <div className="commenterName">
+                                        {comment.firstName} {comment.lastName}
+                                      </div>{" "}
+                                      <div className="userComment">
+                                        <p className="comment" key={i}>
+                                          {comment.comment}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="dateAndLike">
+                                      <div className="createdTime">
+                                        {comment.createdAt
+                                          ? comment.createdAt.split("T")[0]
+                                          : ""}
+                                      </div>
+                                      <div>
+                                        <AiOutlineLike
+                                          className="commentLike"
+                                          onClick={() => {
+                                            checkCommentsLiked(
+                                              comment.id,
+                                              currentUserInfo.id
+                                            );
+                                          }}
+                                        />
+                                        {commentReactionsCounter &&
+                                          commentReactionsCounter.map(
+                                            (count, ind) => {
+                                              return (
+                                                <>
+                                                  {count.id == comment.id ? (
+                                                    <>
+                                                      {
+                                                        count[
+                                                          "COUNT(distinct comment_reaction.id)"
+                                                        ]
+                                                      }
+                                                    </>
+                                                  ) : (
+                                                    ""
+                                                  )}
+                                                </>
+                                              );
+                                            }
+                                          )}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="settingComments">
                                   <BsThreeDots
+                                  className="settingBtn"
+
                                     id={comment.id}
                                     onClick={(e) => {
                                       setUpdateClickComment(
@@ -519,6 +676,8 @@ const ShowPost = () => {
                                     <>
                                       {" "}
                                       <input
+                                       className="inputUpdateComment"
+                                       placeholder="updated your comment.."
                                         value={clear}
                                         onClick={() => {
                                           setClear();
@@ -529,7 +688,8 @@ const ShowPost = () => {
                                         }}
                                       />
                                       <button
-                                        className={element.id}
+                                        className="updateBtn"
+                                        id={element.id}
                                         onClick={(e) => {
                                           {
                                             updateCommentById(comment.id);
@@ -540,6 +700,7 @@ const ShowPost = () => {
                                         Update
                                       </button>
                                       <button
+                                      className="deleteBtn"
                                         onClick={() => {
                                           deleteCommentById(comment.id);
                                         }}
@@ -565,39 +726,8 @@ const ShowPost = () => {
                                   )}
                                 </div>
                               </div>
-                              <div className="userComment">
-                                <p className="comment" key={i}>
-                                  {comment.comment}
-                                </p>
-                              </div>
-                              <div>
-                                <AiOutlineLike
-                                  onClick={() => {
-                                    checkCommentsLiked(
-                                      comment.id,
-                                      currentUserInfo.id
-                                    );
-                                  }}
-                                />
-                                {commentReactionsCounter &&
-                                  commentReactionsCounter.map((count, ind) => {
-                                    return (
-                                      <>
-                                        {count.id == comment.id ? (
-                                          <>
-                                            {
-                                              count[
-                                                "COUNT(distinct comment_reaction.id)"
-                                              ]
-                                            }
-                                          </>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </>
-                                    );
-                                  })}
-                              </div>
+
+                              <div></div>
                             </div>
                           );
                         })

@@ -11,8 +11,6 @@ const LandingPage = () => {
     <>
       <ModalBox />
       <NavBar />
-      LandingPage
-      {/* <Register/> */}
       <Login />
       <Footer />
     </>

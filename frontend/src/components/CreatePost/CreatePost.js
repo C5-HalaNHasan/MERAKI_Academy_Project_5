@@ -36,6 +36,7 @@ const CreatePost = () => {
       }
     } catch {}
   };
+
   const submit = (url) => {
     axios
       .post(

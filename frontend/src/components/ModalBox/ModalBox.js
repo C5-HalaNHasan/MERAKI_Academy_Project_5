@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { HiOutlinePhotograph } from "react-icons/hi";
 import "./modalBox.css";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -9,8 +10,14 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 import { setCurrentUserInfo } from "../redux/reducers/user";
+import previewPostImg from "../assets/bgReg.jpg";
+//! to update posts:
+import {
+  updatePosts,
+  setAllPosts,
+  removeFromPosts,
+} from "../redux/reducers/post";
 
-//! box is not closing on click
 const ModalBox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,6 +27,16 @@ const ModalBox = () => {
   //state to update profile images:
   const [updatedImg, setUpdatedImg] = useState("");
   const [previewImg, setPreviewImg] = useState("");
+
+  //to update profile Info:
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [country, setCountry] = useState();
+  const [isPrivate, setIsPrivate] = useState();
+  const [birthday, setBirthday] = useState();
+
   //to use user token for axios calls
   const { token, userId, currentUserInfo } = useSelector((state) => {
     return {
@@ -29,36 +46,47 @@ const ModalBox = () => {
     };
   });
   //to use & set modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
-    return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
-    };
-  });
-  console.log("from modalbox", user, type, message, details, show);
-  const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
-  if (show === false) {
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
+  const actionTypes = [
+    "ok",
+    "notOk",
+    "alert",
+    "coverImg",
+    "profileImg",
+    // "updatePost",
+    "deletePost",
+    "updateProfile",
+  ];
+  // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
+
+  if (modalShow === false) {
     return null;
   }
-
   const clearModalBox = () => {
     dispatch(
       setModalBox({
-        user: "",
-        type: "",
-        message: "",
-        details: "",
-        show: false,
+        modalId: "",
+        modalType: "",
+        modalMessage: "",
+        modalDetails: "",
+        modalShow: false,
       })
     );
+    setPreviewImg("");
   };
-
+  //! action buttons in ACTION COMPONENT:
   //a function to send messages to users:
   const sendMessage = () => {
-    let sendMessageToUserUrl = `http://localhost:5000/message/${user}`;
+    let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
     if (enteredChar.length > 10) {
       axios
         .post(
@@ -77,13 +105,13 @@ const ModalBox = () => {
           console.log({ fromSendMessage_error: error }); //! to be deleted and replaced by toast notification
         });
     } else {
-      setNotification("at least 30 characters must be provided!");
+      setNotification("at least 30 characters must be entered!"); //! by toast
     }
   };
 
   //a function to report  users with only if reasons are provided:
   const reportUser = () => {
-    let reportUserUrl = `http://localhost:5000/user/remove/${user}`;
+    let reportUserUrl = `http://localhost:5000/user/remove/${modalId}`;
     if (enteredChar.length > 10) {
       axios
         .put(reportUserUrl, {}, { headers: { authorization: token } })
@@ -101,7 +129,48 @@ const ModalBox = () => {
       setNotification("at least 30 characters must be provided!");
     }
   };
+  // a function that gets currentUserInfo sothat the cover & profile photos will be directly shown when modal box is closed:
+  const getCurrentUserInfo = () => {
+    let getCurrentUserInfoUrl = `http://localhost:5000/user/${userId}`;
+    axios
+      .get(getCurrentUserInfoUrl, { headers: { Authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(setCurrentUserInfo(result.data.result[0]));
+        }
+      })
+      .catch((error) => {
+        console.log({ error_from_getUserInfo: error });
+      });
+  };
 
+  //! a function to update current user profile:
+  const updateProfile = async () => {
+    let userData = {
+      firstName,
+      lastName,
+      password,
+      country,
+      birthday,
+      isPrivate,
+    };
+    let updateProfileUrl = `http://localhost:5000/user`;
+    await axios
+      .put(updateProfileUrl, userData, { headers: { authorization: token } })
+      .then(async (result) => {
+        console.log({ result_from_updateuserProfile: result });
+
+        if (result.data.success) {
+          dispatch(setCurrentUserInfo(result.data.result[0]));
+          getCurrentUserInfo();
+          clearModalBox();
+        }
+      })
+      .catch((error) => {
+        console.log({ error_from_updateuserProfile: error });
+      });
+  };
+  //!
   //! update profile & cover photos from here
   //a function that updates currentUser profileImg OR cover Img:
   const changeUserImgs = (e) => {
@@ -124,17 +193,17 @@ const ModalBox = () => {
   };
   const updateUserImgs = () => {
     let updateImgUrl = `http://localhost:5000/user`;
-    let update = type == "profileImg" ? "profileImg" : "coverImg";
+    let update = modalType == "profileImg" ? "profileImg" : "coverImg";
     axios
       .put(
         updateImgUrl,
-        { [type]: updatedImg },
+        { [modalType]: updatedImg },
         { headers: { authorization: token } }
       )
       .then((result) => {
         if (result.data.success) {
           console.log("updated successfully");
-          setCurrentUserInfo(result.data.result);
+          getCurrentUserInfo();
           clearModalBox();
         }
       })
@@ -144,62 +213,196 @@ const ModalBox = () => {
   };
   //! till here
   //! updated image to be set wheneve the user uploads a photo
+
+  //! to handle posts edit:(as per show post component):
+  const getAllPosts = async () => {
+    try {
+      const res = await axios.get(
+        ` http://localhost:5000/post/user/${userId}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(setAllPosts(res.data.result));
+      }
+    } catch {}
+  };
+
+  //upload post photo to cloudinary
+  const changePostImg = (e) => {
+    setUpdatedImg(e.target.files[0]);
+    const data = new FormData();
+    data.append("file", e.target.files[0]);
+    data.append("upload_preset", "rapulojk");
+    data.append("cloud_name", "difjgm3tp");
+    let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
+    axios
+      .post(uploadPicUrl, data)
+      .then((result) => {
+        setUpdatedImg(result.data.url);
+        setPreviewImg(result.data.url);
+        console.log(result.data.url);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  //updatePost
+  //! new updatePost function:
+  const updatePost = () => {
+    axios
+      .put(
+        `http://localhost:5000/post/${modalId}`,
+        {
+          postText: enteredChar,
+          postImg: updatedImg,
+          // postVideo, //! to be checked
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((result) => {
+        dispatch(
+          updatePosts({
+            id: modalId,
+            postText: enteredChar,
+            postImg: updatedImg,
+            // postVideo, //! to be checked
+          })
+        );
+        getAllPosts();
+        clearModalBox();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  //deletePost
+  //! new deletePost function:
+  const deletePost = () => {
+    axios
+      .delete(` http://localhost:5000/post/${modalId}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(removeFromPosts(modalId));
+        clearModalBox();
+        getAllPosts();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="modalBox">
       <div className="contentsContainer">
-        {/* types to be modified later */}
-        {type === "ok" && <img src={ok} alt="ok" />}
-        {type === "notOk" && <img src={notOk} alt="notOk" />}
-        {type === "alert" && <img src={alert} alt="alert" />}
-        {type === "profileImg" && (
-          <img
-            src={currentUserInfo.profileImg}
-            alt="profileImg"
-            style={{ borderRadius: "50%", height: "100px" }}
+        {/* TOP TITLE STARTS HERE */}
+        <div className="boxMessage">
+          <h3>{modalMessage}</h3>
+          <AiOutlineCloseCircle
+            className="closeModalBox"
+            onClick={() => {
+              clearModalBox();
+            }}
           />
-        )}
-        {type === "coverImg" && (
-          <img
-            src={currentUserInfo.coverImg}
-            alt="profileImg"
-            style={{ borderRadius: "50%", height: "100px" }}
-          />
-        )}
+        </div>
+        {/* TOP TITLE ENDS HERE */}
 
-        <div className="modalRight">
-          <span class="closeModalBox">
-            <AiOutlineCloseCircle
-              onClick={() => {
-                clearModalBox();
-              }}
+        {/* PHOTOS DIV STARTS HERE */}
+        <div className="modalPhoto">
+          {modalType === "ok" && <img src={ok} alt="ok" />}
+          {modalType === "notOk" && <img src={notOk} alt="notOk" />}
+          {modalType === "alert" && <img src={alert} alt="alert" />}
+          {modalType === "deletePost" && <img src={alert} alt="alert" />}
+
+          {/* IMAGE TO BE CHECKED SINCE MODAL IS NOT CLEARED WHEN TRYING TO MODIFY ANOTHER POST WITHOUT IMAGE*/}
+          {modalType === "updatePost" && (
+            <img
+              src={modalDetails ? modalDetails : previewPostImg}
+              alt="alert"
             />
-          </span>
+          )}
+          {modalType === "profileImg" && (
+            <img
+              src={previewImg ? previewImg : currentUserInfo.profileImg}
+              alt="profileImg"
+            />
+          )}
+          {modalType === "coverImg" && (
+            <img
+              src={previewImg ? previewImg : currentUserInfo.coverImg}
+              alt="profileImg"
+            />
+          )}
+        </div>
+        {/* PHOTOS DIV ENDS HERE */}
 
+        <div className="modalBottom">
+          {/* BOx CONTENT STARTS HERE */}
           <div className="boxContent">
-            {actionTypes.includes(type) && (
+            {/* add details whenevr a backend sends an error */}
+            {modalType == "ok" ||
+            modalType == "notOk" ||
+            modalType == "alert" ||
+            modalType == "deletPost" ? (
+              <h2>{modalDetails}</h2>
+            ) : null}
+            {actionTypes.includes(modalType) && (
               <>
-                <h1>{message}</h1>
-                <h2>{details}</h2>
                 <div className="actionButtonsContainer">
                   {/* start of  update profile & cover images */}
-                  {type === "profileImg" && (
-                    <input type="file" onChange={changeUserImgs}></input>
+                  {modalType === "profileImg" && (
+                    <>
+                      <label for="upload1">
+                        <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
+                      </label>
+                      <input
+                        type="file"
+                        onChange={changeUserImgs}
+                        id="upload1"
+                        style={{ display: "none" }}
+                      ></input>
+                    </>
                   )}
 
-                  {type === "coverImg" && (
-                    <input type="file" onChange={changeUserImgs}></input>
+                  {modalType === "coverImg" && (
+                    <>
+                      <label for="upload2">
+                        <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
+                      </label>
+                      <input
+                        type="file"
+                        onChange={changeUserImgs}
+                        id="upload2"
+                        style={{ display: "none" }}
+                      ></input>
+                    </>
                   )}
 
-                  {/* end of  update profile & cover images */}
-
-                  {type !== "coverImg" && type !== "profileImg" ? (
-                    <button
-                      className="actionButton"
-                      onClick={() => clearModalBox()}
-                    >
-                      Ok
-                    </button>
-                  ) : (
+                  {/* end of  update profile & cover images & post images */}
+                  {modalType !== "coverImg" &&
+                    modalType !== "profileImg" &&
+                    modalType !== "updatePost" &&
+                    modalType !== "deletePost" &&
+                    modalType !== "updateProfile" && (
+                      <button
+                        className="actionButton"
+                        onClick={() => clearModalBox()}
+                      >
+                        Ok
+                      </button>
+                    )}
+                  {modalType == "coverImg" && (
                     <button
                       className="actionButton"
                       onClick={() => updateUserImgs()}
@@ -207,12 +410,57 @@ const ModalBox = () => {
                       Update
                     </button>
                   )}
+                  {modalType == "profileImg" && (
+                    <button
+                      className="actionButton"
+                      onClick={() => updateUserImgs()}
+                    >
+                      Update
+                    </button>
+                  )}
+
+                  {modalType == "deletePost" && (
+                    <button
+                      className="actionButton"
+                      onClick={() => deletePost()}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </>
             )}
+            {/* end of the big condition actionTypes */}
 
             {/* a state is going to be used to count the letters to ensure that it's filled */}
-            {type == "sendMessage" && (
+            {/* update post box and button start here */}
+            {modalType == "updatePost" && (
+              <div className="boxContent">
+                <textarea
+                  placeholder="Write your updated here..."
+                  onChange={(e) => setEnteredChar(e.target.value)}
+                />
+                <div className="actionButtonsContainer">
+                  <label for="upload3">
+                    <HiOutlinePhotograph className="modalBoxIcon"></HiOutlinePhotograph>
+                  </label>
+                  <input
+                    type="file"
+                    onChange={changePostImg}
+                    id="upload3"
+                    style={{ display: "none" }}
+                  ></input>
+
+                  <button className="actionButton" onClick={() => updatePost()}>
+                    Update
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* update post box and button ends here */}
+
+            {/* send message box and button start here */}
+            {modalType == "sendMessage" && (
               <div className="boxContent">
                 <textarea
                   placeholder="Write your message here..."
@@ -228,8 +476,10 @@ const ModalBox = () => {
                 </div>
               </div>
             )}
+            {/* send message box and button end here */}
 
-            {type == "report" && (
+            {/* report user box and button starts here */}
+            {modalType == "report" && (
               <div className="boxContent">
                 <textarea
                   placeholder="Write your reaseons here..."
@@ -242,7 +492,95 @@ const ModalBox = () => {
                 </div>
               </div>
             )}
+            {/* report user box and button ends here */}
           </div>
+          {/* BOx CONTENT ENDS HERE (DIV ABOVE)*/}
+          {/* UPDATE PROFILE STARTS HERE (DIV BELOW)*/}
+          {modalType == "updateProfile" && (
+            <>
+              <div className="modalUpdateProfile">
+                <div className="loginBox">
+                  <div className="inputField">
+                    <label>First Name:</label>
+                    <input
+                      type="text"
+                      placeholder="First Name..."
+                      name="firstName"
+                      onChange={(e) => setFirstName(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+                  <div className="inputField">
+                    <label>Last Name:</label>
+                    <input
+                      type="text"
+                      placeholder="Last Name..."
+                      name="lastName"
+                      onChange={(e) => setLastName(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <div className="inputField">
+                    <div className="dropDown">
+                      <label>Acc. Privacy:</label>
+                      <select
+                        name="isPrivate"
+                        onChange={(e) => setIsPrivate(e.target.value)}
+                      >
+                        <option value="0">Public Account</option>
+                        <option value="1">Private Account</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="inputField">
+                    <label>Birthday:</label>
+                    <input
+                      type="date"
+                      placeholder="Birthday..."
+                      name="birthday"
+                      onChange={(e) => setBirthday(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <div className="inputField">
+                    <label>Country:</label>
+                    <input
+                      type="text"
+                      placeholder="Country..."
+                      name="country"
+                      onChange={(e) => setCountry(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+
+                  <div className="inputField">
+                    <label>Password:</label>
+                    <input
+                      type="password"
+                      placeholder="Password..."
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="off"
+                    ></input>
+                  </div>
+                  <div className="actionButtonsContainer">
+                    <button
+                      className="actionButton"
+                      onClick={() => {
+                        updateProfile();
+                      }}
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          {/* UPDATE PROFILE ENDS HERE (first DIV ABOVE)*/}
         </div>
       </div>
     </div>

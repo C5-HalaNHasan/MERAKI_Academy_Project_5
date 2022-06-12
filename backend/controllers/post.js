@@ -66,7 +66,7 @@ const getAllPosts = (req, res) => {
 
 const getPostByUserId = (req, res) => {
   const author_id = req.params.id;
-  const query = `SELECT * FROM post WHERE author_id=? AND isDeleted=0 `;
+  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.author_id =? AND post.isDeleted=0 ORDER BY post.createdAt DESC `;
   const data = [author_id];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -75,11 +75,27 @@ const getPostByUserId = (req, res) => {
         message: error.message,
       });
     }
-    res.status(201).json({
+    const query2 = `SELECT comment.author_id, comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0 ORDER BY comment.createdAt DESC`;
+    connection.query(query2, (error, result2) => {
+      
+      result2.forEach((comment) => {
+        result.forEach((post) => {
+          if (post.id == comment.post_id) {
+            if (post.comments) {
+              post.comments.push(comment);
+            } else {
+              post.comments = [comment];
+            }
+          }
+        });
+      });
+    
+    res.status(200).json({
       success: true,
-      message: `All posts for userId => ${author_id}`,
+      massage: "All the posts",
       result: result,
     });
+  });
   });
 };
 
@@ -226,7 +242,10 @@ const removePostByIdAdmin = (req, res) => {
 
 // this function will get all reported posts and not deleted yet
 const getReportedPosts = (req, res) => {
-  const query = `SELECT * FROM post WHERE isReported = 1 AND isDeleted=0`;
+  const limit = 4;
+  const page = req.query.page;
+  const offset = (page-1)*limit;
+  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id  WHERE post.isReported = 1 AND post.isDeleted=0 limit `+limit+ " OFFSET "+offset;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(404).json({
@@ -246,7 +265,7 @@ const getReportedPosts = (req, res) => {
 // this function will get friends posts with the logged user posts
 const getFriendsPosts = (req, res) => {
   const friendshipRequest = req.token.userId;
-  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.author_id =? AND post.isDeleted=0 OR post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0) OR post.author_id IN(SELECT friendshipRequest FROM friendship  WHERE friendshipAccept=?  AND isDeleted=0)  `;
+  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.isDeleted=0 AND post.author_id =? OR post.isDeleted=0 AND post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0) OR post.isDeleted=0 AND post.author_id IN(SELECT friendshipRequest FROM friendship  WHERE friendshipAccept=?  AND isDeleted=0) AND post.isDeleted=0  ORDER BY post.createdAt DESC `;
   const data = [friendshipRequest, friendshipRequest,friendshipRequest];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -256,7 +275,7 @@ const getFriendsPosts = (req, res) => {
         error: error,
       });
     }
-    const query2 = `SELECT comment.author_id, comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0`;
+    const query2 = `SELECT comment.author_id, comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0 ORDER BY comment.createdAt DESC`;
     connection.query(query2, (error, result2) => {
       
       result2.forEach((comment) => {

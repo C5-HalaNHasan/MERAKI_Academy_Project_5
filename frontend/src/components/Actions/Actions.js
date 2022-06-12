@@ -26,38 +26,39 @@ const Actions = ({ id }) => {
     };
   });
   //modalBox states:
-  const { user, type, message, details, show } = useSelector((state) => {
-    return {
-      user: state.modalBox.user,
-      type: state.modalBox.type,
-      message: state.modalBox.message,
-      details: state.modalBox.details,
-      show: state.modalBox.show,
-    };
-  });
+  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
+    useSelector((state) => {
+      return {
+        modalId: state.modalBox.modalId,
+        modalType: state.modalBox.modalType,
+        modalMessage: state.modalBox.modalMessage,
+        modalDetails: state.modalBox.modalDetails,
+        modalShow: state.modalBox.modalShow,
+      };
+    });
 
   //a function that reports a user by id/ this function will be handeled inside ModalBox component:
   const reportUserById = () => {
     dispatch(
       setModalBox({
-        user: id,
-        type: "report",
-        message: "Report User",
-        details: "",
-        show: true,
+        modalId: id,
+        modalType: "report",
+        // modalType: "updatePost",
+        modalMessage: "Report User",
+        modalDetails: "",
+        modalShow: true,
       })
     );
   };
-
   //a function that sends a message to user by id:
   const sendMessageToUser = () => {
     dispatch(
       setModalBox({
-        user: id,
-        type: "sendMessage",
-        message: "",
-        details: "",
-        show: true,
+        modalId: id,
+        modalType: "sendMessage",
+        modalMessage: "Send Message",
+        modalDetails: "",
+        modalShow: true,
       })
     );
   };
@@ -145,7 +146,6 @@ const Actions = ({ id }) => {
   console.log(currentUserFriends);
   return (
     <div className="actionsComponent">
-      actionsComponent
       <div className="actionButtons">
         {isFriend ? (
           <button onClick={() => removeFriend()}>Remove</button>

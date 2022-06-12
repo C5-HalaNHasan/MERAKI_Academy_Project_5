@@ -11,7 +11,9 @@ const {
   reportUserById,
   removeUserByIdAdmin,
   getReportedUsers,
-  getUserById,getSuggestedUser
+  getUserById,getSuggestedUser,
+  getAllUsersPag,
+
 } = require("../controllers/user");
 const { authentication } = require("../middlewares/authentication");
 const { authorization } = require("../middlewares/authorization");
@@ -26,6 +28,10 @@ userRouter.post("/login", loginUser);
 
 //endpoint for GET request ==> http://localhost:5000/user ==>getAllUsers
 userRouter.get("/", getAllUsers);
+
+//endpoint for GET request ==> http://localhost:5000/user ==>getAllUsersPag
+userRouter.get("/pag", getAllUsersPag);
+
 
 //endpoint for PUT request ==> http://localhost:5000/user ==>updateUserProfile
 userRouter.put("/", authentication, updateUserProfile);
