@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setMessagesWith } from "../redux/reducers/message/index";
+//for real-time connection:
+import { io } from "socket.io-client";
+const ENDPOINT = "http://localhost:5000";
+const socket = io.connect(ENDPOINT);
 
 const MessagesWith = ({ id }) => {
   const dispatch = useDispatch();
@@ -51,6 +55,7 @@ const MessagesWith = ({ id }) => {
         .then((result) => {
           getMessagesWith();
           console.log({ sendMessageTo_result: result.data.result });
+          setSentMessage("");
         })
         .catch((error) => {
           console.log({ sendMessageTo_error: error.message });
