@@ -1,7 +1,6 @@
 import React from "react";
 import "./messageWithPage.css";
 import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
 import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import MessageWith from "../../MessagesWith/MessagesWith";
@@ -21,12 +20,10 @@ const MessagePageWith = () => {
     <>
       <ModalBox />
       <NavBar />
-      MessageWithPage
       <FriendList id={userId} />
       <Suggested />
       <MessageWith id={id} roomId={roomId} />
       <Adv />
-      {/* <Footer /> */}
     </>
   );
 };

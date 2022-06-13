@@ -1,23 +1,25 @@
+.profileImgsComponent{
+}
+
 .imgContainer{
     display: flex;
     flex-direction: column;
     align-items: center;
     width:100%;
-    min-height: 100px;
+    min-height: 15em;
     text-align: center;
     cursor: pointer;
 }
 
 .coverImg{
-    width: 90%;
+    width: 100vw;
 }
 
 .coverImg img{
-    border-radius: 1vw;
+    border-radius: 1em;
     width: 100%;
-    height: 300px;
-    object-fit:fill;
-
+    height: 20em;
+    object-fit:cover;
 }
 
 .profileImg{
@@ -25,14 +27,16 @@
 }
 
 .profileImg img{
-    width: 150px;
+    width:10em;
+    height: 10em;
     border-radius: 50%;
     margin-top: -50%;
-    border: solid 5px white;
+    border: solid 0.3em white;
     object-fit:fill;
 }
 
 .profileName h3{
     text-decoration: none;
+    font-size:1.5em !important;
 }
 

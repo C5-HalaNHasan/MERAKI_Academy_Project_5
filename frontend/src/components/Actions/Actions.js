@@ -74,7 +74,6 @@ const Actions = ({ id }) => {
       .post(addFriendUrl, {}, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          //!toast notification to be added "added successfully"
           dispatch(addToFriendsList(result.data.result[0])); //! to be deleted if not used
           setIsFriend(true);
           getAllFriendsOfCurrentUser();
@@ -93,7 +92,6 @@ const Actions = ({ id }) => {
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          //!toast notification to be added "added successfully"
           dispatch(removeFromFriendsList(result.data.result[0].id)); //! to be deleted if not used
           setIsFriend(false);
           getAllFriendsOfCurrentUser();
@@ -101,7 +99,7 @@ const Actions = ({ id }) => {
         }
       })
       .catch((error) => {
-        console.log({ fromRemoveFriend_error: error }); //! to be deleted and replaced by toast notification
+        console.log({ fromRemoveFriend_error: error });
       });
   };
 
@@ -124,7 +122,7 @@ const Actions = ({ id }) => {
         }
       })
       .catch((error) => {
-        console.log({ fromGetAllFriends_error: error }); //! to be deleted and replaced by toast notification
+        console.log({ fromGetAllFriends_error: error });
       });
   };
 
@@ -139,14 +137,14 @@ const Actions = ({ id }) => {
         }
       })
       .catch((error) => {
-        console.log({ fromGetAllFriends_error: error }); //! to be deleted and replaced by toast notification
+        console.log({ fromGetAllFriends_error: error });
       });
   };
   useEffect(() => {
     getAllFriendsOfVisitedUser();
     getAllFriendsOfCurrentUser();
     checkIfFriend();
-  }, [isFriend, id]);
+  }, []);
 
   console.log(currentUserFriends);
   return (

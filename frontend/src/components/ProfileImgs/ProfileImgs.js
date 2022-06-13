@@ -44,16 +44,21 @@ const ProfileImgs = ({ id }) => {
   console.log({ visitedUserInfo: visitedUserInfo }); //!
 
   //to use & set modalBox states:
-  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
-    useSelector((state) => {
-      return {
-        modalId: state.modalBox.modalId,
-        modalType: state.modalBox.modalType,
-        modalMessage: state.modalBox.modalMessage,
-        modalDetails: state.modalBox.modalDetails,
-        modalShow: state.modalBox.modalShow,
-      };
-    });
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
   const updateProfileImg = () => {
     dispatch(
       setModalBox({

@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import "./usersPage.css";
 import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
 import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import Users from "../../Users/Users";
@@ -22,12 +21,10 @@ const UsersPage = () => {
     <>
       <ModalBox />
       <NavBar />
-      UsersPage
       <FriendList id={userId} />
       <Suggested />
       <Users type={type} name={name} />
       <Adv />
-      {/* <Footer /> */}
     </>
   );
 };

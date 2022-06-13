@@ -2,14 +2,15 @@
     /* overflow-y:scroll; */
 }
 
+.messagesCardContainer{
 
+}
 .messageContent{
     display: flex;
     flex-direction: column;
-    justify-content:flex-start;
+    justify-content: space-between;
     gap: 1.2em;
     margin-left: 0;
-
 }
 
 .messageContent h6{
@@ -36,3 +37,8 @@
     background-color: var(--mainBgColor);
 }
 
+ .rightSide{
+    display: flex;
+    flex-direction: row-reverse;
+
+}

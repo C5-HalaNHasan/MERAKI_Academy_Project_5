@@ -5,7 +5,6 @@ import LandingPageLogin from "./components/Pages/LandingPage/LandingPageLogin";
 import LandingPageRegister from "./components/Pages/LandingPage/LandingPageRegister";
 import HomePage from "./components/Pages/HomePage/HomePage";
 import UserProfilePage from "./components/Pages/UserProfilePage/UserProfilePage";
-import UpdateProfilePage from "./components/Pages/UpdateProfilePage/UpdateProfilePage";
 import MessagePage from "./components/Pages/MessagePage/MessagePage";
 import MessageWithPage from "./components/Pages/MessageWithPage/MessageWithPage";
 import UsersPage from "./components/Pages/UsersPage/UsersPage";
@@ -20,7 +19,6 @@ function App() {
         <Route path="/register" element={<LandingPageRegister />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/user/:id" element={<UserProfilePage />} />
-        <Route path="/user/update/:id" element={<UpdateProfilePage />} />
         <Route path="/message" element={<MessagePage />} />
         <Route path="/message/:roomId/:id" element={<MessageWithPage />} />
         <Route path="/users/:type/:name" element={<UsersPage />} />

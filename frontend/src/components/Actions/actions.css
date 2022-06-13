@@ -1,31 +1,32 @@
 .actionsComponent {
     width: 80%;
     height: 100%;
+
 }
 
 .actionButtons {
     display: flex;
     flex-direction: column;
-    gap: 1vh;
-    margin: 1vh 1vw;
-    padding:5% ;
+    gap: 0.8em;
+    margin: 0.9em;
+    padding:1em ;
     align-items: center;
     width: 90%;
-    /* background-color: var(--spanColor);
+    background-color: var(--spanColor);
     box-shadow: 0px 0px 18px 0px var(--mainBgColor);
-    border-radius: 2vh; */
+    border-radius: 1em;
 }
 
 .actionButtons button {
-    border-radius: 1vw;
+    border-radius: 1em;
     width: 70%;
-    font-size: 1.1rem;
-    font-weight: 400;
+    font-size: 1.1em;
+    font-weight: 500;
     background-color:  rgb(54, 54, 237);
     color: var(--spanColor);
     transition: 0.5s ease;
     border: none;
-    padding: 1vh;
+    padding: 0.4em;
 }
 
 .actionButtons button:hover {
