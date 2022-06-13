@@ -506,6 +506,7 @@ const deleteCommentById = (id) => {
                           setPostImg(e.target.files[0]);
                         }}
                       /> */}
+                      <div>
                       <button
                         className="updateBtn"
                         id={element.id}
@@ -530,6 +531,7 @@ const deleteCommentById = (id) => {
                       >
                         Delete
                       </button>
+                      </div>
                     </>
                   ) : (
                     ""

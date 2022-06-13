@@ -17,7 +17,8 @@ import {
   setAllPosts,
   removeFromPosts,
   updateComments,
-  removeFromComments
+  removeFromComments,
+  setCommentCounter,
 } from "../redux/reducers/post";
 
 const ModalBox = () => {
@@ -347,9 +348,22 @@ const ModalBox = () => {
         dispatch(removeFromComments(modalId));
         clearModalBox();
         getAllPosts();
+        getCounterNumber()
       })
       .catch((error) => {});
   };
+  const getCounterNumber = () => {
+    axios
+      .get("http://localhost:5000/comment/")
+      .then((result) => {
+        dispatch(setCommentCounter(result.data.commentCounter));
+        getAllPosts()
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="modalBox">
       <div className="contentsContainer">

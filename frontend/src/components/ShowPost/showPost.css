@@ -131,7 +131,7 @@ gap: 0.5em;
     border: none;
     opacity: 0.9;
 }
-.deleteBtn,.commentBtn,.updateBtn:hover{
+.deleteBtn:hover,.commentBtn:hover,.updateBtn:hover{
     opacity: 1;
 
 }
