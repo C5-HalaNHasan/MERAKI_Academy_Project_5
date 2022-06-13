@@ -21,7 +21,7 @@ const UserInfo = ({ id }) => {
       };
     }
   );
-  useEffect(async () => {
+  useEffect(() => {
     // console.log(id)
     // console.log(userId);;
 

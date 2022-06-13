@@ -12,37 +12,40 @@
   justify-content: space-around;
   background-color: lightgray;
   border-radius: 20px;
+  height: 10vh;
 }
 .username {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 15px;
+  grid-gap: 15px;
+  gap: 1vw;
 }
 .username h3 {
   font-family: cursive;
   text-underline-position: under;
 }
 .username img {
-  width: 80px;
-  height: 80px;
-  border-radius: 40%;
+  width: 4vw;
+  height: 6vh;
+  border-radius: 50%;
 }
 .actionB {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  grid-gap: 1vh;
   gap: 1vh;
   margin: 1vh 1vw;
-  padding: 5%;
+  padding: 1vh;
   align-items: center;
-  width: 90%;
+  width: 15vw;
 }
 .actionB button {
   border-radius: 1vw;
-  width: 70%;
-  font-size: 1.1rem;
-  font-weight: 400;
+  width: 100vw;
+  font-size: 0.8rem;
+  font-weight: 200;
   background-color: rgb(54, 54, 237);
   color: var(--spanColor);
   transition: 0.5s ease;
