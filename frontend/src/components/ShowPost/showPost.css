@@ -12,6 +12,11 @@
 .notliked{
     color: brown;
 }
+.btnStyling{
+    display: flex;
+    justify-content: space-between;
+    gap:1em;
+}
 .notLiked{
     color:black
 }

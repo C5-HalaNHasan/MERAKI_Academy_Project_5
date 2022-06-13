@@ -8,6 +8,8 @@
   --onHover: rgba(255, 226, 76, 0.6);
   /* --mainBgImg: url("../src/components/assets/bgReg.jpg"); */
   --regBgImg: url("../src/components/assets/bgReg.jpg");
+  --mainColor:#4267B2;
+  --mainBackColor:#898F9C;
 }
 
 
