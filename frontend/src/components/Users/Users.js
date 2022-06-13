@@ -39,7 +39,7 @@ const Users = ({ type, name }) => {
       };
     }
   );
-    // const addFriend = () => {
+  // const addFriend = () => {
   //   let addFriendUrl = `http://localhost:5000/user/${id}`;
   //   axios
   //     .post(addFriendUrl, {}, { headers: { authorization: token } })
@@ -127,7 +127,7 @@ const Users = ({ type, name }) => {
                         );
                       }}
                     >
-                      Send Message
+                      Message
                     </button>
                     <button
                       onClick={() => {
@@ -162,7 +162,7 @@ const Users = ({ type, name }) => {
                     </div>
                     <div className="actionButton">
                       <button>Remove</button>
-                      <button>sendMessage</button>
+                      <button>Message</button>
                       <button>Report</button>
                     </div>
                   </div>

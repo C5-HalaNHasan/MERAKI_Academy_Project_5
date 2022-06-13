@@ -153,39 +153,37 @@ const getAllUsersPag = (req, res) => {
     limit +
     " OFFSET " +
     offset;
-    const query2 = `SELECT COUNT(*) FROM user WHERE role_id=1 AND isDeleted =0`
+  const query2 = `SELECT COUNT(*) FROM user WHERE role_id=1 AND isDeleted =0`;
   connection.query(query, (error, result) => {
-
     if (error) {
       return res.status(500).json({
         success: false,
         message: error.message
       });
     }
-    connection.query(query2,(error2,result2)=>{
+    connection.query(query2, (error2, result2) => {
       if (error2) {
         return res.status(500).json({
           success: false,
-          message: error2.message,
+          message: error2.message
         });
       }
-    
-    if (!result.length) {
-      return res.status(404).json({
-        success: false,
-        message: `No Users Found`
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: `all users:${result.length} users`,
-        users_count: result2[0]["COUNT(*)"],
-        page_number: page,
-        result: result,
-      });
-      
-    }
-  })
+
+      if (!result.length) {
+        return res.status(404).json({
+          success: false,
+          message: `No Users Found`
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: `all users:${result.length} users`,
+          users_count: result2[0]["COUNT(*)"],
+          page_number: page,
+          result: result
+        });
+      }
+    });
   });
 };
 // a function that updates User Profile
@@ -414,7 +412,7 @@ const getReportedUsers = (req, res) => {
     limit +
     " OFFSET " +
     offset;
-    const query2 = `SELECT COUNT(*) FROM user WHERE isReported =1 AND isDeleted =0`
+  const query2 = `SELECT COUNT(*) FROM user WHERE isReported =1 AND isDeleted =0`;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(404).json({
@@ -423,23 +421,23 @@ const getReportedUsers = (req, res) => {
         error: error
       });
     }
-    connection.query(query2,(error2,result2)=>{
+    connection.query(query2, (error2, result2) => {
       if (error2) {
         return res.status(500).json({
           success: false,
-          message: error2.message,
+          message: error2.message
         });
       }
-    res.status(201).json({
-      success: true,
-      message: `All Reported users`,
-      users_count: result2[0]["COUNT(*)"],
+      res.status(201).json({
+        success: true,
+        message: `All Reported users`,
+        users_count: result2[0]["COUNT(*)"],
 
-      page_number: page,
-      result: result
+        page_number: page,
+        result: result
+      });
     });
   });
-})
 };
 
 // a function that returns user by id
@@ -471,12 +469,15 @@ const getUserById = (req, res) => {
 const getSuggestedUser = (req, res) => {
   const userId = req.token.userId;
   console.log(userId);
-  const query = `SELECT *,friendship.id as friendshipId FROM friendship  JOIN user on user.id=friendship.friendshipAccept OR user.id = friendship.friendshipRequest WHERE  (friendship.friendshipRequest!=? AND friendship.friendshipAccept !=?) AND (USER.id!=?) ;`;
-  const data = [userId, userId,userId];
+  const query = ` SELECT * FROM user WHERE id NOT IN(SELECT friendshipAccept FROM friendship) AND id NOT IN(SELECT friendshipRequest FROM friendship)`;
+
+//   SELECT id FROM user WHERE id NOT IN(SELECT friendshipAccept FROM friendship) -> 100%
+
+  const data = [userId, userId, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
       console.log(error);
-      res.status(500).json({});
+      res.status(500).json({error});
     }
     res
       .status(200)
