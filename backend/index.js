@@ -39,13 +39,14 @@ const io = socket(server, {
   },
 });
 
-io.on("CONNECTION", (socket) => {
+io.on("connection", (socket) => {
   console.log({ roomConnectedId: socket.id });
 
   //first event:
   socket.on("JOIN_ROOM", (data) => {
     //data has the id of the room
     socket.join(data);
+    console.log({ joinedRoom: data }); //!
   });
 
   //second event:
@@ -57,8 +58,14 @@ io.on("CONNECTION", (socket) => {
     socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
   });
 
-  //third event (automatic event):
-  socket.on("DISCONNET", () => {
+  //thirs event://! to be checked
+  // socket.on("DELETE_MESSAGE", (data) => {
+  //   console.log({ data });
+  //   socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
+  // });
+
+  //fourth event (automatic event):
+  socket.on("disconnect", () => {
     console.log(`user left...`);
   });
 });

@@ -26,16 +26,21 @@ const Actions = ({ id }) => {
     };
   });
   //modalBox states:
-  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
-    useSelector((state) => {
-      return {
-        modalId: state.modalBox.modalId,
-        modalType: state.modalBox.modalType,
-        modalMessage: state.modalBox.modalMessage,
-        modalDetails: state.modalBox.modalDetails,
-        modalShow: state.modalBox.modalShow,
-      };
-    });
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
 
   //a function that reports a user by id/ this function will be handeled inside ModalBox component:
   const reportUserById = () => {

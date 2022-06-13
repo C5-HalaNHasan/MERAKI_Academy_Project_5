@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setMessagesWith,
   addToMessagesWith,
+  removeFromMessagesWith,
 } from "../redux/reducers/message/index";
 //for real-time connection:
 import { io } from "socket.io-client";
@@ -15,8 +16,6 @@ const socket = io.connect(ENDPOINT);
 const MessagesWith = ({ roomId, id }) => {
   const dispatch = useDispatch();
   const [sentMessage, setSentMessage] = useState("");
-  //user states:
-  //to use user token for axios calls
   const { token, userId, currentUserInfo } = useSelector((state) => {
     return {
       token: state.user.token,
@@ -24,7 +23,6 @@ const MessagesWith = ({ roomId, id }) => {
       currentUserInfo: state.user.currentUserInfo,
     };
   });
-  //message states to be used:
   const { messagesWith } = useSelector((state) => {
     return {
       messagesWith: state.message.messagesWith,
@@ -33,8 +31,7 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function that sets messagesWith in redux store:
   const getMessagesWith = () => {
-    //! meassagesWith is going to render the messages based on the unique room id
-    let getMessagesWithUrl = `http://localhost:5000/message/${id}`;
+    let getMessagesWithUrl = `http://localhost:5000/message/${id}/${roomId}`;
     axios
       .get(getMessagesWithUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -50,15 +47,16 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function that sends message to a user:
   const sendMessageTo = () => {
+    socket.emit("JOIN_ROOM", roomId); //!
     console.log(roomId);
-    //! sendMessageTo will emit SEND_MESSAGE event with the sentMessage and roomId(message schema and sendMessageToUserById conroller to be updated backend)
-    //! the commented code below to be implemented after modifying the message schema(roomId,message) and adding room schema(roomId)
     const messageContent = {
       roomId,
       content: {
-        sentBy: userId,
-        receivedBy: id,
+        room: roomId,
         message: sentMessage,
+        sentBy: userId, //!
+        receivedBy: id, //!
+        createdAt: Date.now(),
       },
     };
     socket.emit("SEND_MESSAGE", messageContent);
@@ -87,8 +85,17 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function to receiveMessages from the server (by the other user):
   const receiveMessageFrom = () => {
+    console.log("message recieved");
     socket.on("RECEIVE_MESSAGE", (data) => {
-      dispatch(addToMessagesWith(data)); //! check if needed
+      dispatch(addToMessagesWith(data));
+      getMessagesWith();
+    });
+  };
+
+  //! to be checked/backend
+  const removeMessageFrom = () => {
+    socket.on("DELETE_MESSAGE", (data) => {
+      dispatch(removeFromMessagesWith(data)); //! data is the messageId
       getMessagesWith();
     });
   };
@@ -109,10 +116,9 @@ const MessagesWith = ({ roomId, id }) => {
 
   useEffect(() => {
     receiveMessageFrom();
+    // removeMessageFrom();
     getMessagesWith();
   }, []);
-
-  console.log(`all messages from user ${id} :`, messagesWith);
 
   return (
     <div className="messagesWithComponent">
@@ -120,52 +126,76 @@ const MessagesWith = ({ roomId, id }) => {
         messagesWith.map((message, ind) => {
           return (
             <>
-              <div className="messageCard">
+              <div className="messagesCardContainer">
                 {message.sentBy != userId && (
                   <div className="messageCard leftSide">
-                    <img src={message.profileImg} />
-                    <div className="messageContent">
+                    <div className="senderInfo">
+                      <img src={message.profileImg} />
                       <h3>{message.firstName}</h3>
+                    </div>
+                    <div className="messageContent">
                       <p>{message.message}</p>
+                      <h6>{message.createdAt}</h6>
+
+                      {/* <h6>{message.createdAt.split("T")[0]}</h6>
                       <h6>
-                        {message.createdAt.split(".000Z")[0].replace("T", "@")}
-                      </h6>
+                        {message.createdAt.split("T")[1].replace(".000Z", "")}
+                      </h6> */}
+                    </div>
+                    <div className="inboxButtons">
+                      <button id={message.id} style={{ display: "none" }}>
+                        remove
+                      </button>
                     </div>
                   </div>
                 )}
                 {/* from user */}
                 {message.sentBy == userId && (
                   <div className=" messageCard rightSide">
-                    <img src={currentUserInfo.profileImg} />
-                    <h3>you</h3>
+                    <div className="senderInfo">
+                      <img src={currentUserInfo.profileImg} />
+                      <h3>you</h3>
+                    </div>
                     <div className="messageContent">
                       <p>{message.message}</p>
+                      <h6>{message.createdAt}</h6>
+                      {/* <h6>{message.createdAt.split("T")[0]}</h6>
                       <h6>
-                        {message.createdAt.split(".000Z")[0].replace("T", "@")}
-                      </h6>
+                        {message.createdAt.split("T")[1].replace(".000Z", "")}
+                      </h6> */}
                     </div>
                     {/* query in the backend to be updated to get message id */}
-                    <button
-                      id={message.id}
-                      onClick={(e) => removeSentMessage(e.target.id)}
-                    >
-                      remove
-                    </button>
+                    <div className="inboxButtons">
+                      <button
+                        id={message.id}
+                        onClick={(e) => removeSentMessage(e.target.id)}
+                      >
+                        remove
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             </>
           );
         })}
-      <div className="messageActions">
+      <div className="messageInput">
         <input
           placeholder="write your message here..."
           onChange={(e) => setSentMessage(e.target.value)}
         />
-        <button onClick={() => sendMessageTo()}>send</button>
+        <div className="inboxButtons">
+          <button onClick={() => sendMessageTo()}>send</button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default MessagesWith;
+
+/*
+to be resolved:
+1-message.createdAt is not taking split or replace each time
+2-DELETE_MESSAGE
+*/
