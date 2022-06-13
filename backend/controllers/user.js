@@ -137,7 +137,7 @@ const getAllUsers = (req, res) => {
       res.status(200).json({
         success: true,
         message: `all users:${result.length} users`,
-        result,
+        result
       });
     }
   });
@@ -159,7 +159,7 @@ const getAllUsersPag = (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
     connection.query(query2,(error2,result2)=>{
@@ -173,7 +173,7 @@ const getAllUsersPag = (req, res) => {
     if (!result.length) {
       return res.status(404).json({
         success: false,
-        message: `No Users Found`,
+        message: `No Users Found`
       });
     } else {
       res.status(200).json({
@@ -182,7 +182,6 @@ const getAllUsersPag = (req, res) => {
         users_count: result2[0]["COUNT(*)"],
         page_number: page,
         result: result,
-
       });
       
     }
@@ -437,8 +436,7 @@ const getReportedUsers = (req, res) => {
       users_count: result2[0]["COUNT(*)"],
 
       page_number: page,
-      result: result,
-
+      result: result
     });
   });
 })
@@ -471,15 +469,18 @@ const getUserById = (req, res) => {
   });
 };
 const getSuggestedUser = (req, res) => {
-  const query = `SELECT *,user.id FROM user INNER JOIN friendship WHERE user.id!=friendship.friendshipAccept;`;
-  connection.query(query, (error, result) => {
+  const userId = req.token.userId;
+  console.log(userId);
+  const query = `SELECT *,friendship.id as friendshipId FROM friendship  JOIN user on user.id=friendship.friendshipAccept OR user.id = friendship.friendshipRequest WHERE  (friendship.friendshipRequest!=? AND friendship.friendshipAccept !=?) AND (USER.id!=?) ;`;
+  const data = [userId, userId,userId];
+  connection.query(query, data, (error, result) => {
     if (error) {
       console.log(error);
       res.status(500).json({});
     }
-    res.status(200).json({ success: true,
-      message: `suggested friends `,
-      result});
+    res
+      .status(200)
+      .json({ success: true, message: `suggested friends `, result });
   });
 };
 
@@ -496,5 +497,5 @@ module.exports = {
   getReportedUsers,
   getUserById,
   getSuggestedUser,
-  getAllUsersPag,
+  getAllUsersPag
 };
