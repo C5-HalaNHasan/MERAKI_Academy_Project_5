@@ -22,7 +22,7 @@ messageRouter.get("/", authentication, getAllUserMessages);
 messageRouter.post("/:id", authentication, sendMessageToUserById);
 
 //endpoint for GET request ==> http://localhost:5000/message/:id==> getAllMessagesFromUserById
-messageRouter.get("/:id", authentication, getAllMessagesFromUserById);
+messageRouter.get("/:id/:roomId", authentication, getAllMessagesFromUserById);
 
 //endpoint for PUT request ==> http://localhost:5000/message/:id==> removeSentMessageById
 messageRouter.put("/:id", authentication, removeSentMessageById);

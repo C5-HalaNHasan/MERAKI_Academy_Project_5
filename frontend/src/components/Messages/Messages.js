@@ -86,7 +86,7 @@ const Messages = () => {
     navigate(`/message/${room}/${withUser}`);
     socket.emit("JOIN_ROOM", room);
   };
-  //a function to remove the room between two users
+  //a function to remove the room between two users:
   const deleteRoom = (roomId) => {
     let removeRoomUrl = `http://localhost:5000/message/room/${roomId}`;
     axios

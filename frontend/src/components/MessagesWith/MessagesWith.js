@@ -31,7 +31,7 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function that sets messagesWith in redux store:
   const getMessagesWith = () => {
-    let getMessagesWithUrl = `http://localhost:5000/message/${id}`;
+    let getMessagesWithUrl = `http://localhost:5000/message/${id}/${roomId}`;
     axios
       .get(getMessagesWithUrl, { headers: { authorization: token } })
       .then((result) => {
