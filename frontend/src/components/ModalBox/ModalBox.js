@@ -10,7 +10,9 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 import { setCurrentUserInfo } from "../redux/reducers/user";
-import previewPostImg from "../assets/bgReg.jpg";
+// import previewPostImg from "../assets/bgReg.jpg";
+import previewPostImg from "../assets/fbLogo.png";
+
 //! to update posts:
 import {
   updatePosts,
@@ -437,8 +439,8 @@ const ModalBox = () => {
           {modalType === "notOk" && <img src={notOk} alt="notOk" />}
           {modalType === "alert" && <img src={alert} alt="alert" />}
           {modalType === "deletePost" && <img src={alert} alt="alert" />}
-          {modalType === "deleteComment" ||
-            (modalType == "deleteRoom" && <img src={alert} alt="alert" />)}
+          {modalType === "deleteComment" && <img src={alert} alt="alert" />}
+          {modalType == "deleteRoom" && <img src={alert} alt="alert" />}
 
           {/* IMAGE TO BE CHECKED SINCE MODAL IS NOT CLEARED WHEN TRYING TO MODIFY ANOTHER POST WITHOUT IMAGE*/}
           {modalType === "updatePost" && (
@@ -448,10 +450,7 @@ const ModalBox = () => {
             />
           )}
           {modalType === "updateComment" && (
-            <img
-              src={modalDetails ? modalDetails : previewPostImg}
-              alt="alert"
-            />
+            <img src={previewPostImg} alt="alert" />
           )}
           {modalType === "profileImg" && (
             <img
@@ -594,7 +593,7 @@ const ModalBox = () => {
             {modalType == "updatePost" && (
               <div className="boxContent">
                 <textarea
-                  placeholder="Write your updated here..."
+                  placeholder="Write your updated post here..."
                   onChange={(e) => setEnteredChar(e.target.value)}
                 />
                 <div className="actionButtonsContainer">

@@ -144,7 +144,7 @@ const MessagesWith = ({ roomId, id }) => {
                     </div>
                     <div className="inboxButtons">
                       <button id={message.id} style={{ display: "none" }}>
-                        remove
+                        dummy
                       </button>
                     </div>
                   </div>
@@ -153,8 +153,8 @@ const MessagesWith = ({ roomId, id }) => {
                 {message.sentBy == userId && (
                   <div className=" messageCard rightSide">
                     <div className="senderInfo">
-                      <img src={currentUserInfo.profileImg} />
                       <h3>you</h3>
+                      <img src={currentUserInfo.profileImg} />
                     </div>
                     <div className="messageContent">
                       <p>{message.message}</p>
