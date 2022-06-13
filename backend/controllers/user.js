@@ -13,9 +13,10 @@ const createUser = async (req, res) => {
     birthday,
     country,
     gender,
+    profileImg,
     role_id
   } = req.body;
-  const query = `INSERT INTO user(firstName,lastName,email,password,birthday,country,gender,role_id) VALUES(?,?,?,?,?,?,?,?)`;
+  const query = `INSERT INTO user(firstName,lastName,email,password,birthday,country,gender,profileImg,role_id) VALUES(?,?,?,?,?,?,?,?,?)`;
   const SALT = 10;
   const hashedPassword = await bcrypt.hash(password, SALT);
   const data = [
@@ -26,6 +27,7 @@ const createUser = async (req, res) => {
     birthday,
     country,
     gender,
+    profileImg,
     role_id
   ];
   //before registration: the entered email is going to be checked if it exists in the dataBase or not:
