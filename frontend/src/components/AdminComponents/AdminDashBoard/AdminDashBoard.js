@@ -50,6 +50,7 @@ const AdminDashBoard = ({ type }) => {
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllUsers(result.data.result));
+        setPage(1)
 
         setUsersLength(result.data.users_count);
       })
@@ -79,7 +80,9 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllReportedUsers(result.data.result));
-        setUsersLength(result.data.users_count);
+        setPage(1)
+
+        setReportedUsersLength(result.data.users_count);
         console.log(result.data);
       })
       .catch((error) => {
@@ -132,6 +135,9 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllPosts(result.data.result));
+        setPage(1)
+
+        setPostLength(result.data.users_count)
         // setArrLength(result.data.result.length);
       })
       .catch((error) => {
@@ -145,6 +151,7 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllPosts(result.data.result));
+        setPostLength(result.data.result.length)
         // setArrLength(result.data.result.length);
       })
       .catch((error) => {
@@ -173,6 +180,9 @@ const AdminDashBoard = ({ type }) => {
       })
       .then((result) => {
         dispatch(setAllComments(result.data.result));
+        setPage(1)
+
+        setCommentLength(result.data.users_count)
       })
       .catch((error) => {});
   };
@@ -183,6 +193,7 @@ const AdminDashBoard = ({ type }) => {
       })
       .then((result) => {
         dispatch(setAllComments(result.data.result));
+        setCommentLength(result.data.result.length)
       })
       .catch((error) => {});
   };
@@ -376,13 +387,40 @@ const AdminDashBoard = ({ type }) => {
               Back
             </button>
           )}
-
-         {usersLength <4 ? "": <button
+    {type=="allUsers" && usersLength >= 4  && <button
             className="nextBtn"
             onClick={() => {
               getAllUsersNext(page + 1);
+              setPage(page + 1);
+            }}
+          >
+            Next
+          </button>}
+         {type=="reportedUsers" && reportedUsersLength >4  && <button
+            className="nextBtn"
+            onClick={() => {
+      
               getReportedUsersNext(page + 1);
+              setPage(page + 1);
+            }}
+          >
+            Next
+          </button>}
+          {type=="reportedPosts" && postLength >4  && <button
+            className="nextBtn"
+            onClick={() => {
+          
               getReportedPostsNext(page + 1);
+           
+              setPage(page + 1);
+            }}
+          >
+            Next
+          </button>}
+          {type=="reportedComments" && commentLength >4  && <button
+            className="nextBtn"
+            onClick={() => {
+    
               getAllReportedCommentsNext(page + 1);
               setPage(page + 1);
             }}
