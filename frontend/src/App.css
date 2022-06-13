@@ -98,15 +98,15 @@
 
 
 .messagesComponent {
-  border: 2px blue solid;
-  background-color: red;
+  /* border: 2px blue solid;
+  background-color: red; */
   grid-area: m1/m2/m3/m3;
 
 }
 
 .messagesWithComponent {
-  border: 2px blue solid;
-  background-color: red;
+  /* border: 2px blue solid;
+  background-color: red; */
   grid-area: m1/m2/m3/m3;
 }
 
@@ -156,4 +156,8 @@
   background-color: red;
   grid-area:cvr/ls1/ls2;
 
+}
+
+h3{
+  text-decoration: none !important;
 }

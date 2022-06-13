@@ -120,20 +120,20 @@ const MessagesWith = ({ roomId, id }) => {
     getMessagesWith();
   }, []);
 
-  console.log(`all messages from user ${id} :`, messagesWith);
-
   return (
     <div className="messagesWithComponent">
       {messagesWith.length &&
         messagesWith.map((message, ind) => {
           return (
             <>
-              <div className="messageCard">
+              <div className="messagesCardContainer">
                 {message.sentBy != userId && (
                   <div className="messageCard leftSide">
-                    <img src={message.profileImg} />
-                    <div className="messageContent">
+                    <div className="senderInfo">
+                      <img src={message.profileImg} />
                       <h3>{message.firstName}</h3>
+                    </div>
+                    <div className="messageContent">
                       <p>{message.message}</p>
                       <h6>{message.createdAt}</h6>
 
@@ -142,13 +142,20 @@ const MessagesWith = ({ roomId, id }) => {
                         {message.createdAt.split("T")[1].replace(".000Z", "")}
                       </h6> */}
                     </div>
+                    <div className="inboxButtons">
+                      <button id={message.id} style={{ display: "none" }}>
+                        remove
+                      </button>
+                    </div>
                   </div>
                 )}
                 {/* from user */}
                 {message.sentBy == userId && (
                   <div className=" messageCard rightSide">
-                    <img src={currentUserInfo.profileImg} />
-                    <h3>you</h3>
+                    <div className="senderInfo">
+                      <img src={currentUserInfo.profileImg} />
+                      <h3>you</h3>
+                    </div>
                     <div className="messageContent">
                       <p>{message.message}</p>
                       <h6>{message.createdAt}</h6>
@@ -158,24 +165,28 @@ const MessagesWith = ({ roomId, id }) => {
                       </h6> */}
                     </div>
                     {/* query in the backend to be updated to get message id */}
-                    <button
-                      id={message.id}
-                      onClick={(e) => removeSentMessage(e.target.id)}
-                    >
-                      remove
-                    </button>
+                    <div className="inboxButtons">
+                      <button
+                        id={message.id}
+                        onClick={(e) => removeSentMessage(e.target.id)}
+                      >
+                        remove
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             </>
           );
         })}
-      <div className="messageActions">
+      <div className="messageInput">
         <input
           placeholder="write your message here..."
           onChange={(e) => setSentMessage(e.target.value)}
         />
-        <button onClick={() => sendMessageTo()}>send</button>
+        <div className="inboxButtons">
+          <button onClick={() => sendMessageTo()}>send</button>
+        </div>
       </div>
     </div>
   );
@@ -186,5 +197,5 @@ export default MessagesWith;
 /*
 to be resolved:
 1-message.createdAt is not taking split or replace each time
-2-DELETE_ME
+2-DELETE_MESSAGE
 */

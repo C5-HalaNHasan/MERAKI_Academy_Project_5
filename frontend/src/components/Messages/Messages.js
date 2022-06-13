@@ -55,38 +55,41 @@ const Messages = () => {
       .get(getMessagesUrl, { headers: { authorization: token } })
       .then((result) => {
         if (!result.data.result.length) {
-          dispatch(
-            setModalBox({
-              modalId: "",
-              modalType: "alert",
-              modalMessage: "Inbox",
-              modalDetails: "Your inbox is empty",
-              modalShow: true,
-            })
-          );
+          // dispatch(
+          //   setModalBox({
+          //     modalId: "",
+          //     modalType: "alert",
+          //     modalMessage: "Inbox",
+          //     modalDetails: "Your inbox is empty",
+          //     modalShow: true,
+          //   })
+          // );
         } else {
           dispatch(setAllMessages(result.data.result));
           console.log({ all_conversations: result.data.result });
-          dispatch(
-            setModalBox({
-              modalId: "",
-              modalType: "ok",
-              modalMessage: "Inbox",
-              modalDetails: `you have ${allMessages.length} conversations!`,
-              modalShow: true,
-            })
-          );
+          // dispatch(
+          //   setModalBox({
+          //     modalId: "",
+          //     modalType: "ok",
+          //     modalMessage: "Inbox",
+          //     modalDetails: `you have ${allMessages.length} conversations!`,
+          //     modalShow: true,
+          //   })
+          // );
         }
       })
       .catch((error) => {});
   };
 
-  console.log({ all_rooms: allMessages });
+  //a function to join a room between two users
   const joinRoom = (room, withUser) => {
     navigate(`/message/${room}/${withUser}`);
     socket.emit("JOIN_ROOM", room);
   };
-
+  //a function to remove the room between two users
+  const deleteRoom = (roomId) => {
+    //! a function to be added in the backend
+  };
   useEffect(() => {
     getAllMessages();
   }, []);
@@ -96,41 +99,69 @@ const Messages = () => {
         allMessages.map((room, ind) => {
           return (
             <>
-              <div className="messageCard">
+              <div className="messageCardsContainer">
                 {room.receivedBy == userId ? (
-                  <>
-                    <img className="leftSide" src={room.profileImg} />
-                    <h3 className="leftSide">
-                      {room.firstName + " " + room.lastName}
-                    </h3>
-                    <button
-                      className="rightSide"
-                      onClick={() => {
-                        room.sentBy != userId
-                          ? navigate(`/message/${room.roomId}/${room.sentBy}`)
-                          : navigate(
-                              `/message/${room.roomId}/${room.receivedBy}`
-                            );
-                      }}
-                    >
-                      Show
-                    </button>
-                  </>
+                  <div className="messageCard">
+                    <div className="senderInfo">
+                      <img
+                        src={room.profileImg}
+                        onClick={() => navigate(`/user/${room.sentBy}`)}
+                      />
+                      <h3>{room.firstName + " " + room.lastName}</h3>
+                    </div>
+                    <div className="inboxButtons">
+                      <button
+                        className=""
+                        onClick={() => {
+                          room.sentBy != userId
+                            ? navigate(`/message/${room.roomId}/${room.sentBy}`)
+                            : navigate(
+                                `/message/${room.roomId}/${room.receivedBy}`
+                              );
+                        }}
+                      >
+                        Show
+                      </button>
+                      <button
+                        className=""
+                        onClick={() => {
+                          deleteRoom(room.roomId);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    <img className="leftSide" src={room.u2Img} />
-                    <h3 className="leftSide">{room.u2f + " " + room.u2l}</h3>
-                    <button
-                      className="rightSide"
-                      onClick={() => {
-                        room.sentBy != userId
-                          ? joinRoom(room.roomId, room.sentBy)
-                          : joinRoom(room.roomId, room.receivedBy);
-                      }}
-                    >
-                      Show
-                    </button>
-                  </>
+                  <div className="messageCard">
+                    <div className="senderInfo">
+                      <img
+                        src={room.u2Img}
+                        onClick={() => navigate(`/user/${room.receivedBy}`)}
+                      />
+                      <h3>{room.u2f + " " + room.u2l}</h3>
+                    </div>
+                    <div className="inboxButtons">
+                      <button
+                        className=""
+                        onClick={() => {
+                          room.sentBy != userId
+                            ? joinRoom(room.roomId, room.sentBy)
+                            : joinRoom(room.roomId, room.receivedBy);
+                        }}
+                      >
+                        Show
+                      </button>
+                      <button
+                        className=""
+                        onClick={() => {
+                          deleteRoom(room.roomId);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
               {/* to render sent messages */}

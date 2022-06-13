@@ -1,18 +1,38 @@
-.messageCard .rightSide button{
-    /* this styling not to be adopted! only for testing */
-    width:5vw;
+.messagesWithComponent{
+    /* overflow-y:scroll; */
 }
 
-.rightSide {
-background-color:  rgba(0, 255, 255,1);
-width:75vw;
+
+.messageContent{
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    gap: 1.2em;
+    margin-left: 0;
+
 }
 
-.leftSide {
-    background-color: rgba(0, 255, 255,0.3);
-    width:75vw;
-    }
-    
+.messageContent h6{
+    font-size:0.7em !important;  
+    color:  rgb(54, 54, 237);
+}
 
+.messageInput{
+    border-radius: 1vh;;
+    display: flex;
+    justify-content: space-between;
+    margin:0.7em;
+    gap: 0.8em;
+    padding: 0.8em;
+}
 
+.messageInput input{
+    border-radius: 2vh;
+    height: 3em;
+    width:40em;
+    border: 1px solid var(--spanColor);
+    padding: 1em;
+    display: block;
+    background-color: var(--mainBgColor);
+}
 
