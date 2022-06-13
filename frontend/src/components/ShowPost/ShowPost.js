@@ -507,6 +507,7 @@ const deleteCommentById = (id) => {
                         }}
                       /> */}
                       <div>
+                        <div className="btnStyling">
                       <button
                         className="updateBtn"
                         id={element.id}
@@ -523,6 +524,7 @@ const deleteCommentById = (id) => {
                       >
                         Update
                       </button>
+                      
                       <button
                         className="deleteBtn"
                         onClick={() => {
@@ -531,6 +533,7 @@ const deleteCommentById = (id) => {
                       >
                         Delete
                       </button>
+                      </div>
                       </div>
                     </>
                   ) : (
@@ -712,6 +715,7 @@ const deleteCommentById = (id) => {
                                           setNewComment(e.target.value);
                                         }}
                                       /> */}
+                                      <div className="btnStyling">
                                       <button
                                         className="updateBtn"
                                         id={element.id}
@@ -732,6 +736,7 @@ const deleteCommentById = (id) => {
                                       >
                                         delete
                                       </button>
+                                      </div>
                                     </>
                                   ) : (
                                     ""

@@ -26,7 +26,7 @@ const AdminSideBar = () => {
   return (
     <div className="adminSideBarComponent">
       
-      <h3
+      <h3 className="SideBar"
         onClick={() => {
           allUsers();
         }}
@@ -34,6 +34,7 @@ const AdminSideBar = () => {
         Get All Users
       </h3>
       <h3
+      className="SideBar"
         onClick={() => {
           reportedUsers();
         }}
@@ -41,6 +42,7 @@ const AdminSideBar = () => {
         Get Reported Users
       </h3>
       <h3
+      className="SideBar"
         onClick={() => {
           getReportedPosts();
         }}
@@ -48,6 +50,7 @@ const AdminSideBar = () => {
         Get Reported Posts
       </h3>
       <h3
+      className="SideBar"
         onClick={() => {
           reportedComments();
         }}
@@ -55,6 +58,7 @@ const AdminSideBar = () => {
         Get Reported Comments
       </h3>
       <h3
+      className="SideBar"
         onClick={() => {
           charts();
         }}

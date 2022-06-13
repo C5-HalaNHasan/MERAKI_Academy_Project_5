@@ -89,7 +89,7 @@ const CreatePost = () => {
             autoComplete="off"
             type={"text"}
             className="userPostInput"
-            placeholder={"What is in your mind " + currentUserInfo.firstName}
+            placeholder={"What is in your mind " + currentUserInfo.firstName +"?"}
             onChange={(e) => {
               setPostText(e.target.value);
             }}
@@ -99,16 +99,20 @@ const CreatePost = () => {
         <div className="bottomPostCreate">
           <div className="leftBottomPost">
             <div className="ImgUpload">
+              <label for= "uploadImg">
               <HiOutlinePhotograph
                 className="iconImg1"
                 onClick={() => {
                   setClickedImg(!clickedImg);
                 }}
               />
+              </label>
               {clickedImg ? (
                 <>
                   <input
+                  id = "uploadImg"
                     type={"file"}
+                    style={{ display: "none" }}
                     onChange={(e) => {
                       setPostImg(e.target.files[0]);
                     }}
@@ -119,15 +123,21 @@ const CreatePost = () => {
               )}
             </div>
             <div className="ImgUpload">
+              <label for="uploadVid" >
               <BsFillCameraVideoFill
                 className="iconImg2"
+
                 onClick={() => {
                   setClickedVideo(!clickedVideo);
                 }}
               />
+              </label>
               {clickedVideo ? (
                 <>
                   <input
+                  id ="uploadVid"
+                style={{ display: "none" }}
+
                     type={"file"}
                     onChange={(e) => {
                       setPostVideo(e.target.files[0]);
