@@ -16,6 +16,8 @@ import {
   updatePosts,
   setAllPosts,
   removeFromPosts,
+  updateComments,
+  removeFromComments
 } from "../redux/reducers/post";
 
 const ModalBox = () => {
@@ -63,6 +65,7 @@ const ModalBox = () => {
     "coverImg",
     "profileImg",
     // "updatePost",
+    "deleteComment",
     "deletePost",
     "updateProfile",
   ];
@@ -284,6 +287,35 @@ const ModalBox = () => {
         console.log(error);
       });
   };
+  const updateComment = () => {
+    axios
+      .put(
+        `http://localhost:5000/comment/${modalId}`,
+        {
+          comment: enteredChar,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((result) => {
+        dispatch(
+          updateComments({
+            id: modalId,
+            comment: enteredChar,
+     
+          })
+        );
+        getAllPosts();
+        clearModalBox();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   //deletePost
   //! new deletePost function:
   const deletePost = () => {
@@ -302,7 +334,22 @@ const ModalBox = () => {
         console.log(error);
       });
   };
-
+// new delete comment function
+  
+ const deleteComment = () => {
+    axios
+      .delete(`http://localhost:5000/comment/${modalId}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((result) => {
+        dispatch(removeFromComments(modalId));
+        clearModalBox();
+        getAllPosts();
+      })
+      .catch((error) => {});
+  };
   return (
     <div className="modalBox">
       <div className="contentsContainer">
@@ -324,9 +371,17 @@ const ModalBox = () => {
           {modalType === "notOk" && <img src={notOk} alt="notOk" />}
           {modalType === "alert" && <img src={alert} alt="alert" />}
           {modalType === "deletePost" && <img src={alert} alt="alert" />}
+          {modalType === "deleteComment" && <img src={alert} alt="alert" />}
+
 
           {/* IMAGE TO BE CHECKED SINCE MODAL IS NOT CLEARED WHEN TRYING TO MODIFY ANOTHER POST WITHOUT IMAGE*/}
           {modalType === "updatePost" && (
+            <img
+              src={modalDetails ? modalDetails : previewPostImg}
+              alt="alert"
+            />
+          )}
+            {modalType === "updateComment" && (
             <img
               src={modalDetails ? modalDetails : previewPostImg}
               alt="alert"
@@ -354,7 +409,8 @@ const ModalBox = () => {
             {modalType == "ok" ||
             modalType == "notOk" ||
             modalType == "alert" ||
-            modalType == "deletPost" ? (
+            modalType == "deletePost" ||
+            modalType == "deleteComment"? (
               <h2>{modalDetails}</h2>
             ) : null}
             {actionTypes.includes(modalType) && (
@@ -394,6 +450,7 @@ const ModalBox = () => {
                     modalType !== "profileImg" &&
                     modalType !== "updatePost" &&
                     modalType !== "deletePost" &&
+                    modalType !== "deleteComment" &&
                     modalType !== "updateProfile" && (
                       <button
                         className="actionButton"
@@ -427,6 +484,14 @@ const ModalBox = () => {
                       Delete
                     </button>
                   )}
+                   {modalType == "deleteComment" && (
+                    <button
+                      className="actionButton"
+                      onClick={() => deleteComment()}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </>
             )}
@@ -434,6 +499,18 @@ const ModalBox = () => {
 
             {/* a state is going to be used to count the letters to ensure that it's filled */}
             {/* update post box and button start here */}
+            {modalType=="updateComment" && (
+              <div className="boxContent">
+                <textarea
+                  placeholder="Write your updated here..."
+                  onChange={(e) => setEnteredChar(e.target.value)}
+                />  <div className="actionButtonsContainer">
+                 <button className="actionButton" onClick={() => updateComment()}>
+                Update
+              </button>
+            </div>
+            </div>
+                )}
             {modalType == "updatePost" && (
               <div className="boxContent">
                 <textarea

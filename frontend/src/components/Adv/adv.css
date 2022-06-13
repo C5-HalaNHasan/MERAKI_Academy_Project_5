@@ -1,10 +1,15 @@
 .advComponent{
     background-color: white;
     width: 100%;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  padding: 1em;
+  border-radius: 1em;
+
 }
 .advImg{
-    height: 47vh;
+    height: 50vh;
     background-color: white;
-    width: 24.8vw;
+    width: 23vw;
     padding: 1em;
+
 }
