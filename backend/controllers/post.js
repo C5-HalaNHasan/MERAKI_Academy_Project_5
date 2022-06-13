@@ -246,6 +246,8 @@ const getReportedPosts = (req, res) => {
   const page = req.query.page;
   const offset = (page-1)*limit;
   const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id  WHERE post.isReported = 1 AND post.isDeleted=0 limit `+limit+ " OFFSET "+offset;
+  const query2 = `SELECT COUNT(*) FROM post WHERE isReported =1 AND isDeleted =0`
+
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(404).json({
@@ -254,12 +256,20 @@ const getReportedPosts = (req, res) => {
         error: error,
       });
     }
+    connection.query(query2,(error2,result2)=>{
+      if (error2) {
+        return res.status(500).json({
+          success: false,
+          message: error2.message,
+        });
+      }
     res.status(201).json({
       success: true,
       message: `All Reported posts`,
+      users_count: result2[0]["COUNT(*)"],
       result: result,
     });
-  });
+  });})
 };
 
 // this function will get friends posts with the logged user posts

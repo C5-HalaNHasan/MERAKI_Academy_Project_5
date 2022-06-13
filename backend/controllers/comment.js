@@ -233,6 +233,8 @@ const getReportedComments = (req, res) => {
   const page = req.query.page;
   const offset = (page-1)*limit;
   const query = `SELECT comment.id,createdAt,comment.isDeleted ,comment,author_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id  WHERE comment.isDeleted =0 AND comment.isReported =1 limit `+limit+" OFFSET " + offset;
+  const query2 = `SELECT COUNT(*) FROM post WHERE isReported =1 AND isDeleted =0`
+
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(404).json({
@@ -241,12 +243,20 @@ const getReportedComments = (req, res) => {
         error: error,
       });
     }
+    connection.query(query2,(error2,result2)=>{
+      if (error2) {
+        return res.status(500).json({
+          success: false,
+          message: error2.message,
+        });
+      }
     res.status(201).json({
       success: true,
       message: `All Reported comments`,
+      users_count: result2[0]["COUNT(*)"],
       result: result,
     });
-  });
+  });})
 };
 
 module.exports = {

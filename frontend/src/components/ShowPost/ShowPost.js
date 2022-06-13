@@ -183,7 +183,30 @@ const ShowPost = ({ type, id }) => {
       })
     );
   };
+  // new update comment function
+const updateComment =(id)=>{
+  dispatch(
+    setModalBox({
+      modalId: id,
+      modalType: "updateComment",
+      modalMessage: "Update Comment",
+      modalShow: true,
+    })
+  );
+}
 
+// new delete comment func
+const deleteCommentById = (id) => {
+  dispatch(
+    setModalBox({
+      modalId: id,
+      modalType: "deleteComment",
+      modalMessage: "Delete Comment",
+      modalDetails: "Do you want to delete this comment?",
+      modalShow: true,
+    })
+  );
+};
   // const deletePostById = (id) => {
   //   axios
   //     .delete(` http://localhost:5000/post/${id}`, {
@@ -228,19 +251,19 @@ const ShowPost = ({ type, id }) => {
       })
       .catch((error) => {});
   };
-  const deleteCommentById = (id) => {
-    axios
-      .delete(`http://localhost:5000/comment/${id}`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((result) => {
-        dispatch(removeFromComments(id));
-        getAllPosts();
-      })
-      .catch((error) => {});
-  };
+  // const deleteCommentById = (id) => {
+  //   axios
+  //     .delete(`http://localhost:5000/comment/${id}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     })
+  //     .then((result) => {
+  //       dispatch(removeFromComments(id));
+  //       getAllPosts();
+  //     })
+  //     .catch((error) => {});
+  // };
   const reportCommentById = (id) => {
     axios
       .put(`http://localhost:5000/comment/remove/${id}`)
@@ -249,25 +272,25 @@ const ShowPost = ({ type, id }) => {
         dispatch(updateComments({ id, isReported }));
       });
   };
-  const updateCommentById = (id) => {
-    axios
-      .put(
-        `http://localhost:5000/comment/${id}`,
-        {
-          comment: newComment,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      )
-      .then((result) => {
-        dispatch(updateComments({ id, newComment }));
-        getAllPosts();
-      })
-      .catch((error) => {});
-  };
+  // const updateCommentById = (id) => {
+  //   axios
+  //     .put(
+  //       `http://localhost:5000/comment/${id}`,
+  //       {
+  //         comment: newComment,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     )
+  //     .then((result) => {
+  //       dispatch(updateComments({ id, newComment }));
+  //       getAllPosts();
+  //     })
+  //     .catch((error) => {});
+  // };
   const getCounterNumber = () => {
     axios
       .get("http://localhost:5000/comment/")
@@ -675,7 +698,7 @@ const ShowPost = ({ type, id }) => {
                                   currentComment == comment.id ? (
                                     <>
                                       {" "}
-                                      <input
+                                      {/* <input
                                        className="inputUpdateComment"
                                        placeholder="updated your comment.."
                                         value={clear}
@@ -686,13 +709,13 @@ const ShowPost = ({ type, id }) => {
                                         onChange={(e) => {
                                           setNewComment(e.target.value);
                                         }}
-                                      />
+                                      /> */}
                                       <button
                                         className="updateBtn"
                                         id={element.id}
                                         onClick={(e) => {
                                           {
-                                            updateCommentById(comment.id);
+                                            updateComment(comment.id);
                                             setClear("");
                                           }
                                         }}
