@@ -88,7 +88,15 @@ const Messages = () => {
   };
   //a function to remove the room between two users
   const deleteRoom = (roomId) => {
-    //! a function to be added in the backend
+    let removeRoomUrl = `http://localhost:5000/message/room/${roomId}`;
+    axios
+      .put(removeRoomUrl, {}, { headers: { authorization: token } })
+      .then((result) => {
+        getAllMessages();
+      })
+      .catch((error) => {
+        console.log({ removeRoome_error: error });
+      });
   };
   useEffect(() => {
     getAllMessages();

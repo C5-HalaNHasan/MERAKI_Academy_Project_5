@@ -207,7 +207,7 @@ const openRoom = (req, res) => {
 // a function that returns all the rooms that the current user is engaged in:
 const getCurrentUserRooms = (req, res) => {
   const userId = req.token.userId;
-  query = `SELECT r.id AS roomId, r.sentBy,r.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM room r  INNER JOIN user u1 ON r.sentBy=u1.id INNER JOIN user u2 ON r.receivedBy=u2.id WHERE (r.sentBy =? OR r.receivedBy =? AND r.isDeleted=0)`;
+  query = `SELECT r.id AS roomId, r.sentBy,r.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM room r INNER JOIN user u1 ON r.sentBy=u1.id INNER JOIN user u2 ON r.receivedBy=u2.id WHERE (r.sentBy =? AND r.isDeleted=0) OR (r.receivedBy =? AND r.isDeleted=0)`;
   const data = [userId, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
@@ -224,6 +224,33 @@ const getCurrentUserRooms = (req, res) => {
   });
 };
 
+// a function deletes a room by roomId
+const deleteRoom = (req, res) => {
+  const roomId = req.params.roomId;
+  query = `UPDATE room SET isDeleted=1 WHERE id=?`;
+  const data = [roomId];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    console.log(result);
+    if (result.affectedRows) {
+      res.status(200).json({
+        success: true,
+        message: `room ${roomId} is deleted successfully!`,
+        result: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: `room ${roomId} is not found!`,
+      });
+    }
+  });
+};
 module.exports = {
   getAllUserMessages,
   sendMessageToUserById,
@@ -232,4 +259,5 @@ module.exports = {
   //room functions:
   openRoom,
   getCurrentUserRooms,
+  deleteRoom,
 };
