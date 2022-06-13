@@ -3,8 +3,15 @@ import { useNavigate } from "react-router-dom";
 import "./messages.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { setAllMessages } from "../redux/reducers/message/index";
+import {
+  setAllMessages,
+  setMessagesWith,
+} from "../redux/reducers/message/index";
 import { setModalBox } from "../redux/reducers/modalBox/index";
+//for real-time connection:
+import { io } from "socket.io-client";
+const ENDPOINT = "http://localhost:5000";
+const socket = io.connect(ENDPOINT);
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -42,38 +49,43 @@ const Messages = () => {
   });
   // a function that sets allMessages in redux store:
   const getAllMessages = () => {
+    dispatch(setMessagesWith([]));
     let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
     axios
       .get(getMessagesUrl, { headers: { authorization: token } })
       .then((result) => {
         if (!result.data.result.length) {
-          // dispatch(
-          //   setModalBox({
-          //     modalId: "",
-          //     modalType: "alert",
-          //     modalMessage: "Inbox",
-          //     modalDetails: "Your inbox is empty",
-          //     modalShow: true,
-          //   })
-          // );
+          dispatch(
+            setModalBox({
+              modalId: "",
+              modalType: "alert",
+              modalMessage: "Inbox",
+              modalDetails: "Your inbox is empty",
+              modalShow: true,
+            })
+          );
         } else {
           dispatch(setAllMessages(result.data.result));
           console.log({ all_conversations: result.data.result });
-          // dispatch(
-          //   setModalBox({
-          //     modalId: "",
-          //     modalType: "ok",
-          //     modalMessage: "Inbox",
-          //     modalDetails: `you have ${allMessages.length} conversations!`,
-          //     modalShow: true,
-          //   })
-          // );
+          dispatch(
+            setModalBox({
+              modalId: "",
+              modalType: "ok",
+              modalMessage: "Inbox",
+              modalDetails: `you have ${allMessages.length} conversations!`,
+              modalShow: true,
+            })
+          );
         }
       })
       .catch((error) => {});
   };
 
   console.log({ all_rooms: allMessages });
+  const joinRoom = (room, withUser) => {
+    navigate(`/message/${room}/${withUser}`);
+    socket.emit("JOIN_ROOM", room);
+  };
 
   useEffect(() => {
     getAllMessages();
@@ -112,10 +124,8 @@ const Messages = () => {
                       className="rightSide"
                       onClick={() => {
                         room.sentBy != userId
-                          ? navigate(`/message/${room.roomId}/${room.sentBy}`)
-                          : navigate(
-                              `/message/${room.roomId}/${room.receivedBy}`
-                            );
+                          ? joinRoom(room.roomId, room.sentBy)
+                          : joinRoom(room.roomId, room.receivedBy);
                       }}
                     >
                       Show
