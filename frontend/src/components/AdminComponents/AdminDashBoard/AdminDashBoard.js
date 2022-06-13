@@ -315,6 +315,7 @@ const AdminDashBoard = ({ type }) => {
                   <p>{post.firstName + " " + post.lastName}</p>
                   <p>{post.createdAt.split("T")[0].split("")}</p>
                   <button
+                  className="nextBtn"
                     onClick={() => {
                       setShow(!show);
                     }}
