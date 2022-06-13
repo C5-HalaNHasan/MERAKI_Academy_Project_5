@@ -54,31 +54,35 @@ const Messages = () => {
     axios
       .get(getMessagesUrl, { headers: { authorization: token } })
       .then((result) => {
-        if (!result.data.result.length) {
-          // dispatch(
-          //   setModalBox({
-          //     modalId: "",
-          //     modalType: "alert",
-          //     modalMessage: "Inbox",
-          //     modalDetails: "Your inbox is empty",
-          //     modalShow: true,
-          //   })
-          // );
-        } else {
+        if (result.data.result.length) {
           dispatch(setAllMessages(result.data.result));
-          console.log({ all_conversations: result.data.result });
-          // dispatch(
-          //   setModalBox({
-          //     modalId: "",
-          //     modalType: "ok",
-          //     modalMessage: "Inbox",
-          //     modalDetails: `you have ${allMessages.length} conversations!`,
-          //     modalShow: true,
-          //   })
-          // );
         }
       })
       .catch((error) => {});
+  };
+  const modalAlerts = () => {
+    //! might be removed!
+    if (allMessages.length) {
+      dispatch(
+        setModalBox({
+          modalId: "",
+          modalType: "ok",
+          modalMessage: "Inbox",
+          modalDetails: `you have ${allMessages.length} conversations!`,
+          modalShow: true,
+        })
+      );
+    } else {
+      dispatch(
+        setModalBox({
+          modalId: "",
+          modalType: "alert",
+          modalMessage: "Inbox",
+          modalDetails: "Your inbox is empty",
+          modalShow: true,
+        })
+      );
+    }
   };
 
   //a function to join a room between two users
@@ -88,15 +92,15 @@ const Messages = () => {
   };
   //a function to remove the room between two users:
   const deleteRoom = (roomId) => {
-    let removeRoomUrl = `http://localhost:5000/message/room/${roomId}`;
-    axios
-      .put(removeRoomUrl, {}, { headers: { authorization: token } })
-      .then((result) => {
-        getAllMessages();
+    dispatch(
+      setModalBox({
+        modalId: roomId,
+        modalType: "deleteRoom",
+        modalMessage: "Delete Conversation",
+        modalDetails: `Do you want to delete this conversation?`,
+        modalShow: true,
       })
-      .catch((error) => {
-        console.log({ removeRoome_error: error });
-      });
+    );
   };
   useEffect(() => {
     getAllMessages();

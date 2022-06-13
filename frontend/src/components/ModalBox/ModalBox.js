@@ -21,6 +21,9 @@ import {
   setCommentCounter,
 } from "../redux/reducers/post";
 
+//! to rerender the inbox:
+import { setAllMessages } from "../redux/reducers/message/index";
+
 const ModalBox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,6 +33,12 @@ const ModalBox = () => {
   //state to update profile images:
   const [updatedImg, setUpdatedImg] = useState("");
   const [previewImg, setPreviewImg] = useState("");
+  //message states to be used to rerender the inbox:
+  const { allMessages } = useSelector((state) => {
+    return {
+      allMessages: state.message.allMessages,
+    };
+  });
 
   //to update profile Info:
   const [firstName, setFirstName] = useState();
@@ -49,16 +58,21 @@ const ModalBox = () => {
     };
   });
   //to use & set modalBox states:
-  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
-    useSelector((state) => {
-      return {
-        modalId: state.modalBox.modalId,
-        modalType: state.modalBox.modalType,
-        modalMessage: state.modalBox.modalMessage,
-        modalDetails: state.modalBox.modalDetails,
-        modalShow: state.modalBox.modalShow,
-      };
-    });
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
   const actionTypes = [
     "ok",
     "notOk",
@@ -69,6 +83,7 @@ const ModalBox = () => {
     "deleteComment",
     "deletePost",
     "updateProfile",
+    "deleteRoom",
   ];
   // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
 
@@ -89,28 +104,39 @@ const ModalBox = () => {
   };
   //! action buttons in ACTION COMPONENT:
   //a function to send messages to users:
+  //!first open room==> from result get roomId then add the sent message with the room id to the database
   const sendMessage = () => {
-    let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
-    if (enteredChar.length > 10) {
-      axios
-        .post(
-          sendMessageToUserUrl,
-          { message: enteredChar },
-          { headers: { authorization: token } }
-        )
-        .then((result) => {
-          if (result.data.success) {
-            console.log({ fromSendMessage_result: result });
-            clearModalBox();
-            //!toast notification to be added "message sent successfully"
+    //! before sending message to the user: get room id or create on if not exists:
+    let openRoomUrl = `http://localhost:5000/message/room/${modalId}`;
+    axios
+      .post(openRoomUrl, {}, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          let roomId = result.data.result;
+          let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
+          if (enteredChar.length > 10) {
+            axios
+              .post(
+                sendMessageToUserUrl,
+                { message: enteredChar, room: roomId },
+                { headers: { authorization: token } }
+              )
+              .then((result1) => {
+                if (result1.data.success) {
+                  console.log({ fromSendMessage_result1: result1 });
+                  clearModalBox();
+                }
+              })
+              .catch((error1) => {
+                console.log({ fromSendMessage_error: error1 });
+              });
+          } else {
+            setNotification("at least 30 characters must be entered!"); //! by toast
           }
-        })
-        .catch((error) => {
-          console.log({ fromSendMessage_error: error }); //! to be deleted and replaced by toast notification
-        });
-    } else {
-      setNotification("at least 30 characters must be entered!"); //! by toast
-    }
+        }
+      })
+      .catch((error) => {});
+    clearModalBox();
   };
 
   //a function to report  users with only if reasons are provided:
@@ -306,7 +332,6 @@ const ModalBox = () => {
           updateComments({
             id: modalId,
             comment: enteredChar,
-     
           })
         );
         getAllPosts();
@@ -335,9 +360,9 @@ const ModalBox = () => {
         console.log(error);
       });
   };
-// new delete comment function
-  
- const deleteComment = () => {
+  // new delete comment function
+
+  const deleteComment = () => {
     axios
       .delete(`http://localhost:5000/comment/${modalId}`, {
         headers: {
@@ -348,7 +373,7 @@ const ModalBox = () => {
         dispatch(removeFromComments(modalId));
         clearModalBox();
         getAllPosts();
-        getCounterNumber()
+        getCounterNumber();
       })
       .catch((error) => {});
   };
@@ -357,10 +382,37 @@ const ModalBox = () => {
       .get("http://localhost:5000/comment/")
       .then((result) => {
         dispatch(setCommentCounter(result.data.commentCounter));
-        getAllPosts()
+        getAllPosts();
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  //a function to remove the room between two users: //!
+  //a function that rerenders the inbox after the room is deleted:
+  const getAllMessages = () => {
+    let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
+    axios
+      .get(getMessagesUrl, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.result.length) {
+          dispatch(setAllMessages(result.data.result));
+        }
+      })
+      .catch((error) => {});
+  };
+  //a function that eletes the room between two users:
+  const deleteRoom = () => {
+    let removeRoomUrl = `http://localhost:5000/message/room/${modalId}`;
+    axios
+      .put(removeRoomUrl, {}, { headers: { authorization: token } })
+      .then((result) => {
+        clearModalBox();
+        getAllMessages();
+      })
+      .catch((error) => {
+        console.log({ removeRoome_error: error });
       });
   };
 
@@ -385,8 +437,8 @@ const ModalBox = () => {
           {modalType === "notOk" && <img src={notOk} alt="notOk" />}
           {modalType === "alert" && <img src={alert} alt="alert" />}
           {modalType === "deletePost" && <img src={alert} alt="alert" />}
-          {modalType === "deleteComment" && <img src={alert} alt="alert" />}
-
+          {modalType === "deleteComment" ||
+            (modalType == "deleteRoom" && <img src={alert} alt="alert" />)}
 
           {/* IMAGE TO BE CHECKED SINCE MODAL IS NOT CLEARED WHEN TRYING TO MODIFY ANOTHER POST WITHOUT IMAGE*/}
           {modalType === "updatePost" && (
@@ -395,7 +447,7 @@ const ModalBox = () => {
               alt="alert"
             />
           )}
-            {modalType === "updateComment" && (
+          {modalType === "updateComment" && (
             <img
               src={modalDetails ? modalDetails : previewPostImg}
               alt="alert"
@@ -424,7 +476,8 @@ const ModalBox = () => {
             modalType == "notOk" ||
             modalType == "alert" ||
             modalType == "deletePost" ||
-            modalType == "deleteComment"? (
+            modalType == "deleteComment" ||
+            modalType == "deleteRoom" ? (
               <h2>{modalDetails}</h2>
             ) : null}
             {actionTypes.includes(modalType) && (
@@ -465,7 +518,8 @@ const ModalBox = () => {
                     modalType !== "updatePost" &&
                     modalType !== "deletePost" &&
                     modalType !== "deleteComment" &&
-                    modalType !== "updateProfile" && (
+                    modalType !== "updateProfile" &&
+                    modalType !== "deleteRoom" && (
                       <button
                         className="actionButton"
                         onClick={() => clearModalBox()}
@@ -498,10 +552,18 @@ const ModalBox = () => {
                       Delete
                     </button>
                   )}
-                   {modalType == "deleteComment" && (
+                  {modalType == "deleteComment" && (
                     <button
                       className="actionButton"
                       onClick={() => deleteComment()}
+                    >
+                      Delete
+                    </button>
+                  )}
+                  {modalType == "deleteRoom" && (
+                    <button
+                      className="actionButton"
+                      onClick={() => deleteRoom()}
                     >
                       Delete
                     </button>
@@ -513,18 +575,22 @@ const ModalBox = () => {
 
             {/* a state is going to be used to count the letters to ensure that it's filled */}
             {/* update post box and button start here */}
-            {modalType=="updateComment" && (
+            {modalType == "updateComment" && (
               <div className="boxContent">
                 <textarea
                   placeholder="Write your updated here..."
                   onChange={(e) => setEnteredChar(e.target.value)}
-                />  <div className="actionButtonsContainer">
-                 <button className="actionButton" onClick={() => updateComment()}>
-                Update
-              </button>
-            </div>
-            </div>
-                )}
+                />{" "}
+                <div className="actionButtonsContainer">
+                  <button
+                    className="actionButton"
+                    onClick={() => updateComment()}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            )}
             {modalType == "updatePost" && (
               <div className="boxContent">
                 <textarea
