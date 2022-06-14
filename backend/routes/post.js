@@ -18,7 +18,7 @@ postRouter.get("/",getAllPosts);
 
 
 //endpoint for GET request ==> http://localhost:5000/post/user/:id==> getPostByUserId
-postRouter.get("/user/:id",getPostByUserId);
+postRouter.get("/user/:id",authentication,getPostByUserId);
 
 //endpoint for PUT request ==> http://localhost:5000/post/:id==> updatePostById
 postRouter.put("/:id",authentication,updatePostById);

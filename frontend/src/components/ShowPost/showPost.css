@@ -215,6 +215,11 @@ gap: 0.5em;
 .createdTime{
     font-size: 0.8em;
 }
-.commentLike{
+.commentLiked{
     cursor: pointer;
+    color: blue;
+}
+.commentNotLiked{
+    cursor: pointer;
+    
 }
