@@ -28,6 +28,7 @@
     /* align-items: center; */
     gap:0.5em;
 
+
 }
 .boxMessage{
     border-bottom:0.1em solid;
@@ -35,6 +36,7 @@
     justify-content: space-between;
     height: 2em;
     padding-bottom:2.3em ;
+
 }
 
 .boxMessage h3{
@@ -49,12 +51,12 @@
     transform: scale(1.2);
     cursor: pointer;
 }
-
+.modalPhoto{
+    text-align: center;
+}
 .modalPhoto img {
     width: 8em;
     height:8em;
-    border-radius: 50%;
-    margin-left: 40%;
     margin-right: auto;
     margin-top: 1em;
     object-fit:fill;
@@ -74,6 +76,7 @@
 .boxContent {
     display: flex;
     flex-direction: column;
+
 }
 
 
@@ -83,6 +86,7 @@
     justify-content: space-between;
     text-align: center;
     padding: 0.1em;
+
 }
 
 .modalBottom .boxContent textarea {

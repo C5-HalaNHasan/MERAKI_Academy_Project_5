@@ -8,18 +8,21 @@
     height: 14em;
     padding-bottom: 0.1em;
     padding-top: 0;
+
+
 }
 .boxTitle{
     background-color:var(--mainColor) ;
-    border-radius: 0.5em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
     text-align: center;
+
 }
 
 
 .boxTitle h3{
     font-size:1.2em !important;  
     padding: 0.3em;
-   border-radius: 0.5em;
    color:white;
  }
 

@@ -35,6 +35,10 @@ const ModalBox = () => {
   //state to update profile images:
   const [updatedImg, setUpdatedImg] = useState("");
   const [previewImg, setPreviewImg] = useState("");
+  //to show reported post in the admin dashboard
+  const [reportedPostText, setReportedPostText] = useState("");
+  const [reportedPostImg, setReportedPostImg] = useState("");
+
   //message states to be used to rerender the inbox:
   const { allMessages } = useSelector((state) => {
     return {
@@ -86,6 +90,7 @@ const ModalBox = () => {
     "deletePost",
     "updateProfile",
     "deleteRoom",
+    "showPost",
   ];
   // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
 
@@ -103,6 +108,7 @@ const ModalBox = () => {
       })
     );
     setPreviewImg("");
+    setUpdatedImg("");
   };
   //! action buttons in ACTION COMPONENT:
   //a function to send messages to users:
@@ -277,14 +283,15 @@ const ModalBox = () => {
       .then((result) => {
         setUpdatedImg(result.data.url);
         setPreviewImg(result.data.url);
+        dispatch(setModalBox({ modalDetails: result.data.url }));
         console.log(result.data.url);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  //updatePost
-  //! new updatePost function:
+
+  //updatePost function:
   const updatePost = () => {
     axios
       .put(
@@ -311,6 +318,8 @@ const ModalBox = () => {
         );
         getAllPosts();
         clearModalBox();
+        setPreviewImg("");
+        setUpdatedImg("");
       })
       .catch((error) => {
         console.log(error);
@@ -344,8 +353,7 @@ const ModalBox = () => {
       });
   };
 
-  //deletePost
-  //! new deletePost function:
+  //deletePost function:
   const deletePost = () => {
     axios
       .delete(` http://localhost:5000/post/${modalId}`, {
@@ -363,7 +371,6 @@ const ModalBox = () => {
       });
   };
   // new delete comment function
-
   const deleteComment = () => {
     axios
       .delete(`http://localhost:5000/comment/${modalId}`, {
@@ -391,6 +398,30 @@ const ModalBox = () => {
       });
   };
 
+  //a function that will be dispatched from the admin dashBoard: //!
+  //since this action (showPost) requires the post photo to be viewed;it will be invoked when the moalType==showPost:
+  const getReportedPost = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/post/${userId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (res.data.success) {
+        dispatch(setAllPosts(res.data.result));
+        let filtForReported = res.data.result.filter((post) => {
+          return (post.id = userId);
+        });
+        setReportedPostImg(filtForReported[0].postImg);
+        setReportedPostText(filtForReported[0].postText);
+      }
+    } catch {}
+  };
+
+  if (modalType == "showPost") {
+    getReportedPost();
+  }
   //a function that rerenders the inbox after the room is deleted:
   const getAllMessages = () => {
     let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
@@ -445,7 +476,13 @@ const ModalBox = () => {
           {modalType === "updatePost" && (
             <img
               src={modalDetails ? modalDetails : previewPostImg}
-              alt="alert"
+              alt="post img"
+            />
+          )}
+          {modalType === "showPost" && (
+            <img
+              src={reportedPostImg ? reportedPostImg : previewPostImg}
+              alt="post img"
             />
           )}
           {modalType === "updateComment" && (
@@ -475,7 +512,8 @@ const ModalBox = () => {
             modalType == "alert" ||
             modalType == "deletePost" ||
             modalType == "deleteComment" ||
-            modalType == "deleteRoom" ? (
+            modalType == "deleteRoom" ||
+            modalType == "showPost" ? (
               <h2>{modalDetails}</h2>
             ) : null}
             {actionTypes.includes(modalType) && (
@@ -743,3 +781,20 @@ const ModalBox = () => {
 };
 
 export default ModalBox;
+
+/* 
+//!task2:
+//modalBox to be added to the admin panel:
+const showPostAdmin = () => {
+  dispatch(
+    setModalBox({
+      modalId: id, //postId
+      modalType: "showPost",
+      modalMessage: "Reported Post",
+      modalDetails: "",
+      modalShow: true,
+    })
+  );
+};
+
+*/

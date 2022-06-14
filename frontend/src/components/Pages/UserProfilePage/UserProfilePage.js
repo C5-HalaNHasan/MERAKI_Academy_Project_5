@@ -29,7 +29,18 @@ const UserProfilePage = () => {
       <UserInfo id={usedId} />
       <ProfileImgs id={usedId} />
       {id == userId && <CreatePost />}
-      <ShowPost id={usedId} />
+      {/* <div style={{ visibility: "hidden" }}>
+        {id !== userId && <CreatePost style={{ visibility: "hidden" }} />}
+      </div> */}
+      {usedId == userId ? (
+        <div>
+          <ShowPost id={usedId} />
+        </div>
+      ) : (
+        <div style={{ alignSelf: "start" }}>
+          <ShowPost id={usedId} />
+        </div>
+      )}
       {id == userId ? <Adv /> : <Actions id={id} />}
     </>
   );
