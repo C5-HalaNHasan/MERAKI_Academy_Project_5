@@ -108,12 +108,12 @@ const ModalBox = () => {
   //a function to send messages to users:
   //!first open room==> from result get roomId then add the sent message with the room id to the database
   const sendMessage = () => {
-    //! before sending message to the user: get room id or create on if not exists:
-    let openRoomUrl = `http://localhost:5000/message/room/${modalId}`;
-    axios
-      .post(openRoomUrl, {}, { headers: { authorization: token } })
-      .then((result) => {
-        if (result.data.success) {
+    if (enteredChar.length > 1) {
+      //! before sending message to the user: get room id or create on if not exists:
+      let openRoomUrl = `http://localhost:5000/message/room/${modalId}`;
+      axios
+        .post(openRoomUrl, {}, { headers: { authorization: token } })
+        .then((result) => {
           let roomId = result.data.result;
           let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
           if (enteredChar.length > 10) {
@@ -132,12 +132,13 @@ const ModalBox = () => {
               .catch((error1) => {
                 console.log({ fromSendMessage_error: error1 });
               });
-          } else {
-            setNotification("at least 30 characters must be entered!"); //! by toast
           }
-        }
-      })
-      .catch((error) => {});
+        })
+        .catch((error) => {});
+    } else {
+      setNotification("at least 30 characters must be provided!");
+    }
+
     clearModalBox();
   };
 
@@ -158,7 +159,6 @@ const ModalBox = () => {
           console.log({ fromReportUser_error: error }); //! to be deleted and replaced by toast notification
         });
     } else {
-      setNotification("at least 30 characters must be provided!");
     }
   };
   // a function that gets currentUserInfo sothat the cover & profile photos will be directly shown when modal box is closed:
@@ -391,7 +391,6 @@ const ModalBox = () => {
       });
   };
 
-  //a function to remove the room between two users: //!
   //a function that rerenders the inbox after the room is deleted:
   const getAllMessages = () => {
     let getMessagesUrl = `http://localhost:5000/message/get/user/room`;

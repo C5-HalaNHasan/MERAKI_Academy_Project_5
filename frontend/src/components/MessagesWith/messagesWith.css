@@ -15,7 +15,7 @@
 
 .messageContent h6{
     font-size:0.7em !important;  
-    color:  rgb(54, 54, 237);
+    color: var(--mainColor) ;
 }
 
 .messageInput{
@@ -37,8 +37,14 @@
     background-color: var(--mainBgColor);
 }
 
- .rightSide{
+ /* .rightSide{
     display: flex;
     flex-direction: row-reverse;
 
+} */
+
+.MW{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
 }

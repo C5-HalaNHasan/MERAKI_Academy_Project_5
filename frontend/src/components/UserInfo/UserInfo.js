@@ -3,10 +3,11 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentUserInfo,
-  setVisitedUserInfo
+  setVisitedUserInfo,
 } from "../redux/reducers/user/index";
 import "./userInfo.css";
 import { useNavigate } from "react-router-dom";
+import { setModalBox } from "../redux/reducers/modalBox/index";
 
 const UserInfo = ({ id }) => {
   const navigate = useNavigate();
@@ -17,17 +18,45 @@ const UserInfo = ({ id }) => {
         token: state.user.token,
         userId: state.user.userId,
         visitedUserInfo: state.user.visitedUserInfo,
-        currentUserInfo: state.user.currentUserInfo
+        currentUserInfo: state.user.currentUserInfo,
       };
     }
   );
+
+  //modalBox states(modal box is going to be used to update user profile):
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
+  const updateUserProfile = () => {
+    dispatch(
+      setModalBox({
+        modalId: "",
+        modalType: "updateProfile",
+        modalMessage: "Update Profile Info",
+        modalDetails: "",
+        modalShow: true,
+      })
+    );
+  };
   useEffect(() => {
     // console.log(id)
     // console.log(userId);;
 
     axios
       .get(`http://localhost:5000/user/${id}`, {
-        headers: { authorization: token }
+        headers: { authorization: token },
       })
       .then((respon) => {
         let result = respon.data.result[0];
@@ -65,45 +94,65 @@ const UserInfo = ({ id }) => {
   //if id!=userId: disptch(setVisitedUserInfo({getUserById from backend}))
   return (
     <div className="userInfoComponent">
-      userInfoComponent
-      {id === userId ? (
-        <div className="currentUser">
-          <h4>
-            {currentUserInfo.firstName}
-            {currentUserInfo.lastName}
-          </h4>
-          <h4> {currentUserInfo.country}</h4>
-          {currentUserInfo.birthday ? (
-            <h4>{currentUserInfo.birthday.split("T")[0]}</h4>
-          ) : (
-            ""
-          )}
-
-          <h4>{currentUserInfo.country}</h4>
-          {currentUserInfo.gender === 0 ? <h4>Male</h4> : <h4>Female</h4>}
-          <button
-            onClick={(e) => {
-              navigate(`/user/update/${id}`);
-            }}
-          >
-            update
-          </button>
+      <div className="userInfo">
+        <div className="boxTitle">
+          <h3>User Info</h3>
         </div>
-      ) : (
-        <div className="visitUser">
-          <h4>
-            {visitedUserInfo.firstName} {visitedUserInfo.lastName}
-          </h4>
-          <h4>{visitedUserInfo.country}</h4>
-          {visitedUserInfo.birthday ? (
-            <h4>{visitedUserInfo.birthday.split("T")[0]}</h4>
+        <div className="userInfoContents">
+          {id === userId ? (
+            <>
+              <div className="currentUser">
+                <h4>
+                  {"Name: " +
+                    currentUserInfo.firstName +
+                    " " +
+                    currentUserInfo.lastName}
+                </h4>
+                <h4> {"Country: " + currentUserInfo.country}</h4>
+                {currentUserInfo.birthday ? (
+                  <h4>
+                    {"Birthday: " + currentUserInfo.birthday.split("T")[0]}
+                  </h4>
+                ) : null}
+                {+currentUserInfo.gender === 0 ? (
+                  <h4>Gender: Male</h4>
+                ) : (
+                  <h4>Gender: Female</h4>
+                )}
+              </div>
+              <div className="userInfoButton">
+                <button
+                  onClick={() => {
+                    updateUserProfile();
+                  }}
+                >
+                  update
+                </button>
+              </div>
+            </>
           ) : (
-            ""
+            <div className="currentUser">
+              <h4>
+                {"Name: " +
+                  visitedUserInfo.firstName +
+                  " " +
+                  visitedUserInfo.lastName}
+              </h4>
+              <h4>{"Country: " + visitedUserInfo.country}</h4>
+              {visitedUserInfo.birthday ? (
+                <h4>{"Birthday: " + visitedUserInfo.birthday.split("T")[0]}</h4>
+              ) : (
+                ""
+              )}
+              {visitedUserInfo.gender === 0 ? (
+                <h4>Gender: Male</h4>
+              ) : (
+                <h4>Gender: Female</h4>
+              )}
+            </div>
           )}
-          <h4>{visitedUserInfo.country}</h4>
-          {visitedUserInfo.gender === 0 ? <h4>Male</h4> : <h4>Female</h4>}
         </div>
-      )}
+      </div>
     </div>
   );
 };

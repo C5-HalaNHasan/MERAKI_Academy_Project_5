@@ -64,7 +64,7 @@
 .modalBoxIcon{
     display: inline-block;
     font-size: 3.5em;
-    color:rgb(54, 54, 237);
+    color:var(--mainColor);
     cursor: pointer;
 }
 .modalBottom {
@@ -112,7 +112,7 @@
     min-height: 2em;
     padding:0.5em ;
     border-radius: 1em;
-    background-color:  rgb(54, 54, 237);
+    background-color:  var(--mainColor);
     color: var(--spanColor);
     border: none;
     font-size: 1.3em;

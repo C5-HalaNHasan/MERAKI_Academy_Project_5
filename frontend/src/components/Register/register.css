@@ -57,7 +57,7 @@ font-size: 1.1rem;
 
 .loginBox .btn {
     /* background-color: var(--mainText); */
-    background-color:  rgb(54, 54, 237);;
+    background-color:  var(--mainColor);
     color: var(--spanColor);
     font-size: 1.1rem;
     font-weight: 400;
