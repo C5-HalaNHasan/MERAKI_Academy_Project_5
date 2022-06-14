@@ -229,7 +229,7 @@ const removeCommentByIdAdmin = (req, res) => {
 };
 
 const getReportedComments = (req, res) => {
-  const limit = 4;
+  const limit = 6;
   const page = req.query.page;
   const offset = (page-1)*limit;
   const query = `SELECT comment.id,createdAt,comment.isDeleted ,comment,author_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id  WHERE comment.isDeleted =0 AND comment.isReported =1 limit `+limit+" OFFSET " + offset;

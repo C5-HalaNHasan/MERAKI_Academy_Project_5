@@ -147,7 +147,7 @@ const getAllUsers = (req, res) => {
 
 //
 const getAllUsersPag = (req, res) => {
-  const limit = 4;
+  const limit = 6;
   const page = req.query.page;
   const offset = (page - 1) * limit;
   const query =
@@ -406,7 +406,7 @@ const removeUserByIdAdmin = (req, res) => {
 
 //a function that returns all reported users
 const getReportedUsers = (req, res) => {
-  const limit = 4;
+  const limit = 6;
   const page = req.query.page;
   const offset = (page - 1) * limit;
   const query =
@@ -486,7 +486,24 @@ const getSuggestedUser = (req, res) => {
       .json({ success: true, message: `suggested friends `, result });
   });
 };
+const usersBirthday =(req,res)=>{
+const query =`SELECT  COUNT(*),YEAR(birthday) FROM user GROUP BY YEAR(birthday)
+`
+connection.query(query, (error, result) => {
+  if (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+  res.status(200).json({
+    success: true,
+    
+    result: result
+  });
+});
 
+}
 module.exports = {
   createUser,
   loginUser,
@@ -500,5 +517,6 @@ module.exports = {
   getReportedUsers,
   getUserById,
   getSuggestedUser,
-  getAllUsersPag
+  getAllUsersPag,
+  usersBirthday
 };
