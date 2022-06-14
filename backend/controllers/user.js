@@ -147,7 +147,7 @@ const getAllUsers = (req, res) => {
 
 //
 const getAllUsersPag = (req, res) => {
-  const limit = 4;
+  const limit = 6;
   const page = req.query.page;
   const offset = (page - 1) * limit;
   const query =
@@ -406,7 +406,7 @@ const removeUserByIdAdmin = (req, res) => {
 
 //a function that returns all reported users
 const getReportedUsers = (req, res) => {
-  const limit = 4;
+  const limit = 6;
   const page = req.query.page;
   const offset = (page - 1) * limit;
   const query =

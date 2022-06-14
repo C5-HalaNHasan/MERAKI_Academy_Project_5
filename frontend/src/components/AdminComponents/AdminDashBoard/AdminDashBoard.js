@@ -45,7 +45,7 @@ const AdminDashBoard = ({ type }) => {
   const [commentLength, setCommentLength] = useState(0);
 
   const getAllUsers = () => {
-    let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=4`;
+    let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=6`;
     axios
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -61,7 +61,7 @@ const AdminDashBoard = ({ type }) => {
   const [page, setPage] = useState(1);
   const [show, setShow] = useState(false);
   const getAllUsersNext = (page) => {
-    let allUsersUrl = `http://localhost:5000/user/pag?page=${page}&limit=4`;
+    let allUsersUrl = `http://localhost:5000/user/pag?page=${page}&limit=6`;
     axios
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -75,7 +75,7 @@ const AdminDashBoard = ({ type }) => {
 
   //to get reportedUsers:
   const getReportedUsers = () => {
-    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=1&limit=4`;
+    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=1&limit=6`;
     axios
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -91,7 +91,7 @@ const AdminDashBoard = ({ type }) => {
   };
 
   const getReportedUsersNext = (page) => {
-    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=${page}&limit=4`;
+    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=${page}&limit=6`;
     axios
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -130,7 +130,7 @@ const AdminDashBoard = ({ type }) => {
 
   //to get reportedPosts: //! authorizatioin needed
   const getReportedPosts = () => {
-    let reportedPostsUrl = `http://localhost:5000/post/remove?page=1&limit=4`;
+    let reportedPostsUrl = `http://localhost:5000/post/remove?page=1&limit=6`;
     axios
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -175,7 +175,7 @@ const AdminDashBoard = ({ type }) => {
   // get all reported comments
   const getAllReportedComments = () => {
     axios
-      .get(`http://localhost:5000/comment/remove/?page=1&limit=4`, {
+      .get(`http://localhost:5000/comment/remove/?page=1&limit=6`, {
         headers: { authorization: token },
       })
       .then((result) => {
@@ -188,7 +188,7 @@ const AdminDashBoard = ({ type }) => {
   };
   const getAllReportedCommentsNext = (page) => {
     axios
-      .get(`http://localhost:5000/comment/remove/?page=${page}&limit=4`, {
+      .get(`http://localhost:5000/comment/remove/?page=${page}&limit=6`, {
         headers: { authorization: token },
       })
       .then((result) => {
@@ -272,7 +272,7 @@ const AdminDashBoard = ({ type }) => {
               return (
                 <div className="adminUserInfo">
                   <img src={user.profileImg} />
-                  <p>{user.firstName + " " + user.lastName}</p>
+                    <p>{user.firstName + " " + user.lastName}</p>
                   <p>{user.birthday.split("T")[0].split("")}</p>
                   <p>{user.country.toUpperCase()}</p>
                   <div>
@@ -388,7 +388,7 @@ const AdminDashBoard = ({ type }) => {
               Back
             </button>
           )}
-    {type=="allUsers" && usersLength >= 4  && <button
+    {type=="allUsers" && usersLength >= 6  && <button
             className="nextBtn"
             onClick={() => {
               getAllUsersNext(page + 1);
@@ -397,7 +397,7 @@ const AdminDashBoard = ({ type }) => {
           >
             Next
           </button>}
-         {type=="reportedUsers" && reportedUsersLength >4  && <button
+         {type=="reportedUsers" && reportedUsersLength >=6  && <button
             className="nextBtn"
             onClick={() => {
       
@@ -407,7 +407,7 @@ const AdminDashBoard = ({ type }) => {
           >
             Next
           </button>}
-          {type=="reportedPosts" && postLength >4  && <button
+          {type=="reportedPosts" && postLength >=6  && <button
             className="nextBtn"
             onClick={() => {
           
@@ -418,7 +418,7 @@ const AdminDashBoard = ({ type }) => {
           >
             Next
           </button>}
-          {type=="reportedComments" && commentLength >4  && <button
+          {type=="reportedComments" && commentLength >=6  && <button
             className="nextBtn"
             onClick={() => {
     

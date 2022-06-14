@@ -271,7 +271,7 @@ const removePostByIdAdmin = (req, res) => {
 
 // this function will get all reported posts and not deleted yet
 const getReportedPosts = (req, res) => {
-  const limit = 4;
+  const limit = 6;
   const page = req.query.page;
   const offset = (page - 1) * limit;
   const query =
