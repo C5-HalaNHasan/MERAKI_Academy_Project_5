@@ -1,66 +1,51 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generatePath, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   setAllUsers,
   addToFriendsList,
-  currentUserFriends
-} from "../redux/reducers/user";
+  setSuggestedFriends
+} from "../redux/reducers/user/index";
 import "./suggested.css";
 const Suggested = () => {
   const dispatch = useDispatch();
-  const { token, allUsers, currentUserFriends } = useSelector((state) => {
+  const { token, allUsers, suggestedFriends, userId } = useSelector((state) => {
     return {
       token: state.user.token,
       userId: state.user.userId,
       allUsers: state.user.allUsers,
-      currentUserFriends: state.user.currentUserFriends
+      suggestedFriends: state.user.suggestedFriends
     };
   });
-  // console.log(currentUserFriends);
   const navigate = useNavigate();
-  const getAllUsers = async () => {
-    const res = await axios
-      .get(`http://localhost:5000/user`, {
+  const suggest = () => {
+    axios
+      .get(`http://localhost:5000/user/Friend/suggestedUser`, {
         headers: {
           Authorization: token
         }
       })
       .then((res) => {
-        // console.log(res.data.result);
-        dispatch(setAllUsers(res.data.result));
+        console.log(res.data.result);
+        dispatch(setSuggestedFriends(res.data.result));
+        // console.log(suggestedFriends);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  useEffect(() => {
-    getAllUsers();
-  }, []);
-  // console.log(allUsers);
-  // __________
-  // for loop to check if the allUsers include the id of the currentFriend
-  // if not include push it to new array
-  // after that you need to pick 3 user randomly
+  useEffect(() => suggest(), []);
+  console.log(suggestedFriends);
 
+  // loop to get three random suggest friend
   const arr = [];
   const list = () => {
     for (let i = 0; i < 3; i++) {
-      let x = Math.floor(Math.random() * allUsers.length);
-     
+      let x = Math.floor(Math.random() * suggestedFriends.length);
 
       arr.push(x);
     }
-    // currentUserFriends.map((currentFriend, index) => {
-    //   console.log(currentFriend.id);
-    //   console.log(x);
-    //   if (x == currentFriend.id) {
-    //     arr.push(x);
-    //   }
-    // });
-    // console.log(x);
-    // console.log(arr);
   };
 
   list();
@@ -71,24 +56,23 @@ const Suggested = () => {
       <div className="suggestedComponent">
         suggestedComponent
         <div className="userIcon">
-          {allUsers.map((user, index) => {
+          {suggestedFriends.map((user, index) => {
             console.log(arr.includes(user.id));
-            if (!arr.includes(user.id)) {
+            if (arr.includes(user.id)) {
               // console.log(user.id);
 
               return (
-                <>
-                  <div className="userImg">
+                <div className="suggestedFriend">
+                  <div className="userI">
                     <img
                       src={user.profileImg}
                       onClick={(e) => navigate(`/user/${user.id}`)}
                     ></img>
-                  </div>
-                  <div className="userName">
                     <h4>
-                      {user.firstName}.{user.lastName}
+                      {user.firstName} {user.lastName}
                     </h4>
-
+                  </div>
+                  <div className="userButton">
                     <button
                       //   to make function that send request to add friend
                       onClick={() => {
@@ -115,7 +99,7 @@ const Suggested = () => {
                       Add
                     </button>
                   </div>
-                </>
+                </div>
               );
             }
           })}

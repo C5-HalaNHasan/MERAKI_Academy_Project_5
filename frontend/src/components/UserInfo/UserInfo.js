@@ -69,8 +69,10 @@ const UserInfo = ({ id }) => {
       {id === userId ? (
         <div className="currentUser">
           <h4>
-            {currentUserInfo.firstName} {currentUserInfo.lastName}
+            {currentUserInfo.firstName}
+            {currentUserInfo.lastName}
           </h4>
+          <h4> {currentUserInfo.country}</h4>
           {currentUserInfo.birthday ? (
             <h4>{currentUserInfo.birthday.split("T")[0]}</h4>
           ) : (
@@ -92,6 +94,7 @@ const UserInfo = ({ id }) => {
           <h4>
             {visitedUserInfo.firstName} {visitedUserInfo.lastName}
           </h4>
+          <h4>{visitedUserInfo.country}</h4>
           {visitedUserInfo.birthday ? (
             <h4>{visitedUserInfo.birthday.split("T")[0]}</h4>
           ) : (

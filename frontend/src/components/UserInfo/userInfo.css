@@ -3,17 +3,54 @@
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
+  grid-gap: 20px;
+  grid-gap: 1em;
+  gap: 1em;
+  height: 40vh;
+  align-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 1em;
+  background-color: var(--lightBgColor);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 .currentUser {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 10px;
+  gap: 1em;
+  background-color: #898f9c;
+  align-content: flex-end;
+  align-items: center;
+  border-radius: 1em;
+  height: 24vh;
+  width: 19vw;
+  padding: 0.6em;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
-.visitUser{
-    display: flex;
+.visitUser {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 10px;
+  grid-gap: 10px;
+  grid-gap: 1em;
+  gap: 1em;
+  background-color: #898f9c;
+  align-content: flex-end;
+  align-items: center;
+  border-radius: 1em;
+  height: 24vh;
+  width: 19vw;
+  padding: 0.6em;
+}
+.currentUser button {
+  transition: 0.5s ease;
+  border: none;
+  padding: 0.4em;
+  background-color: rgb(54, 54, 237);
+  color: var(--spanColor);
+  border-radius: 1em;
+  width: 30%;
+}
+.currentUser button:hover {
+  transform: scale(1.2);
+  cursor: pointer;
 }

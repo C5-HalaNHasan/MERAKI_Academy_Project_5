@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setAllUsers,
   setCurrentUserFriends,
-  addToFriendsList
+  addToFriendsList,
+  removeFromFriendsList
 } from "../redux/reducers/user";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 
@@ -118,7 +119,7 @@ const Users = ({ type, name }) => {
                       onClick={() => {
                         dispatch(
                           setModalBox({
-                            // modalId: id,
+                            modalId: user.id,
                             modalType: "sendMessage",
                             modalMessage: "Send Message",
                             modalDetails: "",
@@ -161,9 +162,54 @@ const Users = ({ type, name }) => {
                       </h3>
                     </div>
                     <div className="actionButton">
-                      <button>Remove</button>
-                      <button>Message</button>
-                      <button>Report</button>
+                      <button
+                        onClick={axios
+                          .delete(`http://localhost:5000/user/${friend.id}`, {
+                            headers: { authorization: token }
+                          })
+                          .then((result) => {
+                            if (result.data.success) {
+                              dispatch(
+                                removeFromFriendsList(result.data.result[0].id)
+                              );
+                            }
+                          })
+                          .catch((error) => {
+                            console.log({ fromRemoveFriend_error: error });
+                          })}
+                      >
+                        Remove
+                      </button>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            setModalBox({
+                              modalId: friend.id,
+                              modalType: "sendMessage",
+                              modalMessage: "Send Message",
+                              modalDetails: "",
+                              modalShow: true
+                            })
+                          );
+                        }}
+                      >
+                        Message
+                      </button>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            setModalBox({
+                              modalId: friend.id,
+                              modalType: "report",
+                              modalMessage: "Report User",
+                              modalDetails: "",
+                              modalShow: true
+                            })
+                          );
+                        }}
+                      >
+                        Report
+                      </button>
                     </div>
                   </div>
                 </>
