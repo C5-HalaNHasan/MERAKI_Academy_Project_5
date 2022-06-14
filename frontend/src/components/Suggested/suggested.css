@@ -1,4 +1,4 @@
-.suggestedComponent{    display: flex;
+/* .suggestedComponent{    display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-content: flex-end;
@@ -8,47 +8,67 @@
   background-color: var(--lightBgColor);
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 
-}
-.userIcon{
-
+} */
+.userIcon {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5em;
+  margin: 0;
+  background-color: var(--spanColor);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+  height: 14em;
+  padding-bottom: 0.1em;
+  padding-top: 0;
 }
 .suggestedFriend {
-      display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    grid-gap: 1%;
-    gap: 1em;
-    justify-content: center;
-    align-items: center;
-    background-color: crimson;
-    border-radius: 1em;
-    padding: 0.2em;
-    margin: 0.6em;
-}
-.userI{
+  background-color: var(--spanColor);
+  box-shadow: 0px 0px 18px 0px var(--mainBgColor);
+  border-radius: 1em;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-content: center;
+  margin: 0.3em;
+  grid-gap: 0.8em;
+  grid-gap: 0.8em;
+  gap: 0.8em;
+  align-items: center;
+  justify-content: space-around;
+}
+.userI {
+  background-color: var(--spanColor);
+  display: flex;
+  margin: 0.3em;
+  gap: 0.8em;
+  padding: 0.3em;
   align-items: center;
 }
 .userI img {
-  width: 40px;
+  width: 2em;
   border-radius: 50%;
   cursor: pointer;
-   margin-left: 80px;
 }
-.userI{
-display: flex;
-flex-direction: row;
-}
-.userButton {
+/* .userButton {
     display: flex;
   flex-direction: row;
 justify-content: space-around;
+} */
+.userButton button {
+  border-radius: 1em;
+  width: 100%;
+  font-size: 0.9em;
+  font-weight: 500;
+  background-color: var(--mainColor);
+  color: var(--spanColor);
+  transition: 0.5s ease;
+  border: none;
+  padding: 0.4em;
 }
-.userName button{
-    border-radius: 10px;
-    width: 50%;
-    background-color: rgb(67, 67, 203);
+.suggest {
+  background-color: var(--mainColor);
+  border-radius: 0.5em;
+  text-align: center;
+}
+.suggest h3 {
+  font-size: 1.2em !important;
+  padding: 0.3em;
+  border-radius: 0.5em;
+  color: white;
 }
