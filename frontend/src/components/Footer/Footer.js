@@ -38,9 +38,9 @@ const Footer = () => {
         <br></br>
         <p>
           Facebook is a website which allows users, who sign-up for free
-          profiles, to connect with friends, work colleagues or people they
+          profiles, to connect with friends,<br></br> work colleagues or people they
           don't know, online. It allows users to share pictures, music, videos,
-          and articles, as well as their own thoughts and opinions with however
+          and articles,<br></br> as well as their own thoughts and opinions with however
           many people they like.
         </p>
       </div>

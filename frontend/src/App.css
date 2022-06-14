@@ -24,6 +24,7 @@
   text-decoration: none;
   list-style: none;
   font-family: 'Helvetica', 'Arial', sans-serif;
+
 }
 
 #root {
@@ -52,7 +53,7 @@
   "ls2 m3 rs2"
   "ls2 m4 rs2"
   "ftr ftr ftr";
-  width: 100%;
+  max-width: 100%;
   height: 100%;
    /* overflow-y: scroll; */
   /* overflow-x: hidden;  */
