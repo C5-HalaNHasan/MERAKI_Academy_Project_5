@@ -29,16 +29,21 @@ import { setModalBox } from "../redux/reducers/modalBox/index";
 
 const ShowPost = ({ type, id }) => {
   //! modalBox states:
-  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
-    useSelector((state) => {
-      return {
-        modalId: state.modalBox.modalId,
-        modalType: state.modalBox.modalType,
-        modalMessage: state.modalBox.modalMessage,
-        modalDetails: state.modalBox.modalDetails,
-        modalShow: state.modalBox.modalShow,
-      };
-    });
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
 
   const {
     currentUserInfo,
@@ -184,29 +189,29 @@ const ShowPost = ({ type, id }) => {
     );
   };
   // new update comment function
-const updateComment =(id)=>{
-  dispatch(
-    setModalBox({
-      modalId: id,
-      modalType: "updateComment",
-      modalMessage: "Update Comment",
-      modalShow: true,
-    })
-  );
-}
+  const updateComment = (id) => {
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "updateComment",
+        modalMessage: "Update Comment",
+        modalShow: true,
+      })
+    );
+  };
 
-// new delete comment func
-const deleteCommentById = (id) => {
-  dispatch(
-    setModalBox({
-      modalId: id,
-      modalType: "deleteComment",
-      modalMessage: "Delete Comment",
-      modalDetails: "Do you want to delete this comment?",
-      modalShow: true,
-    })
-  );
-};
+  // new delete comment func
+  const deleteCommentById = (id) => {
+    dispatch(
+      setModalBox({
+        modalId: id,
+        modalType: "deleteComment",
+        modalMessage: "Delete Comment",
+        modalDetails: "Do you want to delete this comment?",
+        modalShow: true,
+      })
+    );
+  };
   // const deletePostById = (id) => {
   //   axios
   //     .delete(` http://localhost:5000/post/${id}`, {
@@ -433,20 +438,12 @@ const deleteCommentById = (id) => {
 
     return addReactionToComment(comment);
   };
-  const colorFunc = (author, post) => {
-    if (postsReaction.length == 0) {
-      return setLikeColor(false);
-    }
-    postsReaction.map((element, index) => {
-      if (
-        element.author_id == author &&
-        element.post_id == post &&
-        element.isDeleted == 0
-      ) {
-        setLikeColor(true);
-      }
-    });
-  };
+  // const colorFunc = (author, post) => {
+  //   posts.map((element, index) => {
+
+  //     }
+
+  // });}
 
   useEffect(() => {
     getAllPosts();
@@ -508,32 +505,32 @@ const deleteCommentById = (id) => {
                       /> */}
                       <div>
                         <div className="btnStyling">
-                      <button
-                        className="updateBtn"
-                        id={element.id}
-                        onClick={(e) => {
-                          {
-                            updatePost(element.id, element.postImg);
-                            //   postImg
-                            //     ? uploadImage(e.target.className)
-                            //  : updatePost(element.id, postImg, postText);
-                            setUpdateClick(false);
-                          }
-                          // setUpdateClick(false);
-                        }}
-                      >
-                        Update
-                      </button>
-                      
-                      <button
-                        className="deleteBtn"
-                        onClick={() => {
-                          deletePostById(element.id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                      </div>
+                          <button
+                            className="updateBtn"
+                            id={element.id}
+                            onClick={(e) => {
+                              {
+                                updatePost(element.id, element.postImg);
+                                //   postImg
+                                //     ? uploadImage(e.target.className)
+                                //  : updatePost(element.id, postImg, postText);
+                                setUpdateClick(false);
+                              }
+                              // setUpdateClick(false);
+                            }}
+                          >
+                            Update
+                          </button>
+
+                          <button
+                            className="deleteBtn"
+                            onClick={() => {
+                              deletePostById(element.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </>
                   ) : (
@@ -566,21 +563,46 @@ const deleteCommentById = (id) => {
                 </div>
                 <div className="postBottom">
                   <div>
-                  
+                    {console.log(element)}
 
                     <AiOutlineLike
-                      // style={{color:`${ currentUserInfo.id?"blue":"red"}`}}
-
-                      // if current user id liked the post -- blue else false
-                      // we need function to check if user liked the post
-                      // call function and send current user and post id
-                      // check reactionspost array if included
-                      // if return blue then class name = liked else not liked
-                      className="likeColor"
+                      className={element.isLiked ? "liked" :"likeColor"}
                       onClick={() => {
                         checkIfLiked(element.id, currentUserInfo.id);
+    getAllPosts();
+
                       }}
                     />
+
+                    {false
+                      ? element.reacts.map((react, ind) => {
+                          return (
+                            <>
+                              {react.author_id == currentUserInfo.id ? (
+                                <AiOutlineLike
+                                  className="liked"
+                                  onClick={() => {
+                                    checkIfLiked(
+                                      element.id,
+                                      currentUserInfo.id
+                                    );
+                                  }}
+                                />
+                              ) : (
+                                <AiOutlineLike
+                                  className=""
+                                  onClick={() => {
+                                    checkIfLiked(
+                                      element.id,
+                                      currentUserInfo.id
+                                    );
+                                  }}
+                                />
+                              )}
+                            </>
+                          );
+                        })
+                      : ""}
 
                     {reactionCounter &&
                       reactionCounter.map((count, ind) => {
@@ -688,8 +710,7 @@ const deleteCommentById = (id) => {
                                 </div>
                                 <div className="settingComments">
                                   <BsThreeDots
-                                  className="settingBtn"
-
+                                    className="settingBtn"
                                     id={comment.id}
                                     onClick={(e) => {
                                       setUpdateClickComment(
@@ -716,26 +737,26 @@ const deleteCommentById = (id) => {
                                         }}
                                       /> */}
                                       <div className="btnStyling">
-                                      <button
-                                        className="updateBtn"
-                                        id={element.id}
-                                        onClick={(e) => {
-                                          {
-                                            updateComment(comment.id);
-                                            setClear("");
-                                          }
-                                        }}
-                                      >
-                                        Update
-                                      </button>
-                                      <button
-                                      className="deleteBtn"
-                                        onClick={() => {
-                                          deleteCommentById(comment.id);
-                                        }}
-                                      >
-                                        delete
-                                      </button>
+                                        <button
+                                          className="updateBtn"
+                                          id={element.id}
+                                          onClick={(e) => {
+                                            {
+                                              updateComment(comment.id);
+                                              setClear("");
+                                            }
+                                          }}
+                                        >
+                                          Update
+                                        </button>
+                                        <button
+                                          className="deleteBtn"
+                                          onClick={() => {
+                                            deleteCommentById(comment.id);
+                                          }}
+                                        >
+                                          delete
+                                        </button>
                                       </div>
                                     </>
                                   ) : (

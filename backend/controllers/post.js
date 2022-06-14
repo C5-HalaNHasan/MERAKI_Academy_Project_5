@@ -52,7 +52,7 @@ const getAllPosts = (req, res) => {
         message: error.message,
       });
     }
-    
+
     res.status(201).json({
       success: true,
       message: `All posts`,
@@ -60,7 +60,6 @@ const getAllPosts = (req, res) => {
     });
   });
 };
-
 
 // create function to get posts by use
 
@@ -77,7 +76,6 @@ const getPostByUserId = (req, res) => {
     }
     const query2 = `SELECT comment.author_id, comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0 ORDER BY comment.createdAt DESC`;
     connection.query(query2, (error, result2) => {
-      
       result2.forEach((comment) => {
         result.forEach((post) => {
           if (post.id == comment.post_id) {
@@ -89,13 +87,13 @@ const getPostByUserId = (req, res) => {
           }
         });
       });
-    
-    res.status(200).json({
-      success: true,
-      massage: "All the posts",
-      result: result,
+
+      res.status(200).json({
+        success: true,
+        massage: "All the posts",
+        result: result,
+      });
     });
-  });
   });
 };
 
@@ -244,9 +242,13 @@ const removePostByIdAdmin = (req, res) => {
 const getReportedPosts = (req, res) => {
   const limit = 4;
   const page = req.query.page;
-  const offset = (page-1)*limit;
-  const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id  WHERE post.isReported = 1 AND post.isDeleted=0 limit `+limit+ " OFFSET "+offset;
-  const query2 = `SELECT COUNT(*) FROM post WHERE isReported =1 AND isDeleted =0`
+  const offset = (page - 1) * limit;
+  const query =
+    `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id  WHERE post.isReported = 1 AND post.isDeleted=0 limit ` +
+    limit +
+    " OFFSET " +
+    offset;
+  const query2 = `SELECT COUNT(*) FROM post WHERE isReported =1 AND isDeleted =0`;
 
   connection.query(query, (error, result) => {
     if (error) {
@@ -256,27 +258,28 @@ const getReportedPosts = (req, res) => {
         error: error,
       });
     }
-    connection.query(query2,(error2,result2)=>{
+    connection.query(query2, (error2, result2) => {
       if (error2) {
         return res.status(500).json({
           success: false,
           message: error2.message,
         });
       }
-    res.status(201).json({
-      success: true,
-      message: `All Reported posts`,
-      users_count: result2[0]["COUNT(*)"],
-      result: result,
+      res.status(201).json({
+        success: true,
+        message: `All Reported posts`,
+        users_count: result2[0]["COUNT(*)"],
+        result: result,
+      });
     });
-  });})
+  });
 };
 
 // this function will get friends posts with the logged user posts
 const getFriendsPosts = (req, res) => {
   const friendshipRequest = req.token.userId;
   const query = `SELECT post.id,createdAt,post.isDeleted ,postText,postImg,postVideo,author_id,post.isPrivate,post.isReported,firstName,lastName,profileImg FROM post INNER JOIN user ON post.author_id=user.id WHERE post.isDeleted=0 AND post.author_id =? OR post.isDeleted=0 AND post.author_id IN(SELECT friendshipAccept FROM friendship  WHERE friendshipRequest=?  AND isDeleted=0) OR post.isDeleted=0 AND post.author_id IN(SELECT friendshipRequest FROM friendship  WHERE friendshipAccept=?  AND isDeleted=0) AND post.isDeleted=0  ORDER BY post.createdAt DESC `;
-  const data = [friendshipRequest, friendshipRequest,friendshipRequest];
+  const data = [friendshipRequest, friendshipRequest, friendshipRequest];
   connection.query(query, data, (error, result) => {
     if (error) {
       return res.status(404).json({
@@ -287,7 +290,6 @@ const getFriendsPosts = (req, res) => {
     }
     const query2 = `SELECT comment.author_id, comment.id,createdAt,comment.isDeleted,comment,comment.post_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id WHERE comment.isDeleted=0 ORDER BY comment.createdAt DESC`;
     connection.query(query2, (error, result2) => {
-      
       result2.forEach((comment) => {
         result.forEach((post) => {
           if (post.id == comment.post_id) {
@@ -299,13 +301,34 @@ const getFriendsPosts = (req, res) => {
           }
         });
       });
-    
-    res.status(200).json({
-      success: true,
-      massage: "All the posts",
-      result: result,
+      const query3 = `SELECT   post_reaction.author_id,post_reaction.post_id,post_reaction.isDeleted from post_reaction INNER JOIN post ON post.id = post_reaction.post_id WHERE post_reaction.isDeleted=0`;
+      connection.query(query3, (error3, result3) => {
+        result3.forEach((react) => {
+          result.forEach((post) => {
+            if (
+              react.author_id === friendshipRequest &&
+              post.id == react.post_id
+            ) {
+              post.isLiked = true;
+            }
+            if (post.id == react.post_id) {
+              if (post.reacts) {
+                post.reacts.push(react);
+              } else {
+                post.reacts = [react];
+              }
+            }
+          });
+        });
+
+        res.status(200).json({
+          success: true,
+          massage: "All the posts",
+          result: result,
+          result3: result3,
+        });
+      });
     });
-  });
   });
 };
 // this function will get friends posts
