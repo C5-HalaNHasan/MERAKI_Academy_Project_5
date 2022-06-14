@@ -5,7 +5,7 @@ import {
   setAllUsers,
   setCurrentUserFriends,
   addToFriendsList,
-  removeFromFriendsList
+  removeFromFriendsList,
 } from "../redux/reducers/user";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 
@@ -13,20 +13,21 @@ import "./users.css";
 
 //Users component will take two props:type(search or friendlist) & name (name of the searched user)
 const Users = ({ type, name }) => {
+  //! PROBLEM: CHECK FRIENDLIST RENDER!
   //modalBox states:
   const {
     modalId,
     modalType,
     modalMessage,
     modalDetails,
-    modalShow
+    modalShow,
   } = useSelector((state) => {
     return {
       modalId: state.modalBox.modalId,
       modalType: state.modalBox.modalType,
       modalMessage: state.modalBox.modalMessage,
       modalDetails: state.modalBox.modalDetails,
-      modalShow: state.modalBox.modalShow
+      modalShow: state.modalBox.modalShow,
     };
   });
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const Users = ({ type, name }) => {
         allUsers: state.user.allUsers,
         token: state.user.token,
         userId: state.user.userId,
-        currentUserFriends: state.user.currentUserFriends
+        currentUserFriends: state.user.currentUserFriends,
       };
     }
   );
@@ -69,7 +70,7 @@ const Users = ({ type, name }) => {
     useEffect(() => {
       axios
         .get(`http://localhost:5000/user/friends/:${userId}`, {
-          headers: { authorization: token }
+          headers: { authorization: token },
         })
         .then((res) => {
           dispatch(setCurrentUserFriends(res.data.result));
@@ -93,7 +94,7 @@ const Users = ({ type, name }) => {
                       {user.firstName} {user.lastName}{" "}
                     </h3>
                   </div>
-                  <div className="actionB">
+                  <div className="inboxButtons">
                     <button
                       onClick={() => {
                         let addFriendUrl = `http://localhost:5000/user/${user.id}`;
@@ -123,7 +124,7 @@ const Users = ({ type, name }) => {
                             modalType: "sendMessage",
                             modalMessage: "Send Message",
                             modalDetails: "",
-                            modalShow: true
+                            modalShow: true,
                           })
                         );
                       }}
@@ -138,7 +139,7 @@ const Users = ({ type, name }) => {
                             modalType: "report",
                             modalMessage: "Report User",
                             modalDetails: "",
-                            modalShow: true
+                            modalShow: true,
                           })
                         );
                       }}
@@ -165,7 +166,7 @@ const Users = ({ type, name }) => {
                       <button
                         onClick={axios
                           .delete(`http://localhost:5000/user/${friend.id}`, {
-                            headers: { authorization: token }
+                            headers: { authorization: token },
                           })
                           .then((result) => {
                             if (result.data.success) {
@@ -188,7 +189,7 @@ const Users = ({ type, name }) => {
                               modalType: "sendMessage",
                               modalMessage: "Send Message",
                               modalDetails: "",
-                              modalShow: true
+                              modalShow: true,
                             })
                           );
                         }}
@@ -203,7 +204,7 @@ const Users = ({ type, name }) => {
                               modalType: "report",
                               modalMessage: "Report User",
                               modalDetails: "",
-                              modalShow: true
+                              modalShow: true,
                             })
                           );
                         }}
@@ -216,7 +217,6 @@ const Users = ({ type, name }) => {
               );
             }
           })}
-      usersComponent
     </div>
   );
 };

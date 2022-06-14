@@ -1,4 +1,4 @@
-.userInfoComponent {
+/* .userInfoComponent {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -11,46 +11,53 @@
   align-items: center;
   border: none;
   border-radius: 1em;
-  background-color: var(--lightBgColor);
+} */
+
+.userInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 0.5em;
+  margin: 0;
+  background-color: var(--spanColor);
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  height: 12em;
+  padding: 0.1em;
+}
+
+.userInfoContents{
+  display: flex;
+  flex-direction: column;
 }
 .currentUser {
+  border-radius: 1em;;
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  background-color: #898f9c;
-  align-content: flex-end;
-  align-items: center;
-  border-radius: 1em;
-  height: 24vh;
-  width: 19vw;
-  padding: 0.6em;
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  margin:0.3em;
+  gap: 0.8em;
+  padding: 0.3em;
+  align-items: left;
 }
-.visitUser {
-  display: flex;
-  flex-direction: column;
-  grid-gap: 10px;
-  grid-gap: 1em;
-  gap: 1em;
-  background-color: #898f9c;
-  align-content: flex-end;
-  align-items: center;
-  border-radius: 1em;
-  height: 24vh;
-  width: 19vw;
-  padding: 0.6em;
+.userInfoButton {
+margin-top: -0.5em;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
-.currentUser button {
+
+.userInfoButton button {
   transition: 0.5s ease;
   border: none;
-  padding: 0.4em;
-  background-color: rgb(54, 54, 237);
+  padding: 0.3em 0.1em;
+  background-color: var(--mainColor);
   color: var(--spanColor);
   border-radius: 1em;
-  width: 30%;
+  width:6em;
+  font-size:1em!important;
+
 }
-.currentUser button:hover {
+.userInfoButton button:hover {
   transform: scale(1.2);
   cursor: pointer;
 }

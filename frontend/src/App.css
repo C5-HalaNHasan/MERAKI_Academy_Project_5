@@ -8,7 +8,10 @@
   --onHover: rgba(255, 226, 76, 0.6);
   /* --mainBgImg: url("../src/components/assets/bgReg.jpg"); */
   --regBgImg: url("../src/components/assets/bgReg.jpg");
+  /* used colors */
+  --spanColor: rgba(255, 255, 255, 0.9);
   --mainColor:#4267B2;
+  --lightBlueBgColor:rgba(66, 103, 178,0.5);
   --mainBackColor:#898F9C;
 }
 
@@ -93,10 +96,7 @@
 }
 
 .friendListComponent {
-  border: 2px blue solid;
-  background-color: red;
-  grid-area: ls1;
-  
+  grid-area: ls1/ls1/ls2/ls2;
 }
 
 .suggestedComponent {
@@ -108,40 +108,20 @@
 
 
 .messagesComponent {
-  /* border: 2px blue solid;
-  background-color: red; */
   grid-area: m1/m2/m3/m3;
-
 }
 
 .messagesWithComponent {
-  /* border: 2px blue solid;
-  background-color: red; */
   grid-area: m1/m2/m3/m3;
-  
-}
-
-/* this component to be removed and replaced with modal box */
-.updateProfileComponent {
-  border: 2px blue solid;
-  background-color: red;
-  grid-area: m1/m2/m3/m3;
-  
 }
 
 .userInfoComponent {
-  border: 2px blue solid;
-  background-color: red;
   grid-area: ls2;
-  
 }
 
 /* still not given by mutaz! */
 .usersComponent {
-  border: 2px blue solid;
-  background-color: red;
   grid-area: m1/ m2/m3/m3;
-  
 }
 
 .footerComponent {
@@ -154,28 +134,18 @@
   box-shadow: 0px 0px 18px 0px var(--mainBgColor);
   border-radius: 1.5vw;
   grid-area: m2/m3;
-  
 }
 
 .actionsComponent {
   grid-area: rs2;
-  
 }
 
 .adminDashBoardComponent {
-  
-  background-color: red;
   grid-area: m1/m2/m3/rs1;
-  
-  
 }
 
 .adminSideBarComponent{
-  
-  background-color: red;
   grid-area:cvr/ls1/ls2;
-  
-
 }
 
 h3{

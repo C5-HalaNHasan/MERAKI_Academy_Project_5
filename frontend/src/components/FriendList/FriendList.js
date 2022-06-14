@@ -9,9 +9,6 @@ import {
 } from "../redux/reducers/user/index";
 
 const FriendList = ({ id }) => {
-  //! FriendList component to be modified based on the following:
-  //if id=userId: dispatch(setCurrentUserFriends ({getAllFriendsByUserId from backend}))
-  //if id!=userId: disptch(setVisitedUserFriends({getAllFriendsByUserId from backend}))
   const dispatch = useDispatch();
   const { token, userId, currentUserFriends, visitedUserFriends } = useSelector(
     (state) => {
@@ -33,9 +30,9 @@ const FriendList = ({ id }) => {
       })
       .then((response) => {
         if (id == userId) {
-          dispatch(setCurrentUserFriends(response.data.result)); //! to be used later
+          dispatch(setCurrentUserFriends(response.data.result));
         } else {
-          dispatch(setVisitedUserFriends(response.data.result)); //! to be used later
+          dispatch(setVisitedUserFriends(response.data.result));
         }
       })
       .catch((err) => {
@@ -51,44 +48,71 @@ const FriendList = ({ id }) => {
   //! problem: id of friendship table is used not user id// to be solved in the backend
   return (
     <div className="friendListComponent">
-      friendListComponent
-      <div className="friendIcon ">
+      <div className="friendList">
+        <div className="boxTitle">
+          <h3>FriendList</h3>
+        </div>
         {userId == id ? (
           <>
             {currentUserFriends.length &&
               currentUserFriends.map((friend, index) => {
-                return (
-                  <>
-                    <div key={index}>
-                      <img
-                        src={friend.profileImg}
-                        id={friend.id}
-                        onClick={(e) => navigate(`/user/${e.target.id}`)}
-                      ></img>
-                      <h4>{friend.firstName}</h4>
-                    </div>
-                  </>
-                );
+                if (index < 3) {
+                  return (
+                    <>
+                      <div key={index} className="renderedFriend">
+                        <img
+                          src={friend.profileImg}
+                          id={friend.id}
+                          onClick={(e) => navigate(`/user/${e.target.id}`)}
+                        ></img>
+                        <h4>{friend.firstName + " " + friend.lastName}</h4>
+                      </div>
+                    </>
+                  );
+                }
               })}
           </>
         ) : (
           <>
             {visitedUserFriends.length &&
               visitedUserFriends.map((friend, index) => {
-                return (
-                  <>
-                    <div key={index}>
-                      <img
-                        src={friend.profileImg}
-                        id={friend.id}
-                        onClick={(e) => navigate(`/user/${e.target.id}`)}
-                      ></img>
-                      <h4>{friend.firstName}</h4>
-                    </div>
-                  </>
-                );
+                if (index < 3) {
+                  return (
+                    <>
+                      <div key={index} className="renderedFriend">
+                        <img
+                          src={friend.profileImg}
+                          id={friend.id}
+                          onClick={(e) => navigate(`/user/${e.target.id}`)}
+                        ></img>
+                        <h4>{friend.firstName + " " + friend.lastName}</h4>
+                      </div>
+                    </>
+                  );
+                }
               })}
           </>
+        )}
+        {currentUserFriends.length > 3 && id == userId && (
+          <h3
+            className="showMore"
+            onClick={() => {
+              navigate(`/users/friendlist/${userId}`);
+            }}
+          >
+            Show More...
+          </h3>
+        )}
+
+        {visitedUserFriends.length > 3 && id !== userId && (
+          <h3
+            className="showMore"
+            onClick={() => {
+              navigate(`/users/friendlist/${id}`);
+            }}
+          >
+            Show More...
+          </h3>
         )}
       </div>
     </div>

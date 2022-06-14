@@ -129,7 +129,7 @@ const MessagesWith = ({ roomId, id }) => {
               <div className="messagesCardContainer">
                 {message.sentBy != userId && (
                   <div className="messageCard leftSide">
-                    <div className="senderInfo">
+                    <div className="senderInfo MW">
                       <img src={message.profileImg} />
                       <h3>{message.firstName}</h3>
                     </div>
@@ -152,9 +152,9 @@ const MessagesWith = ({ roomId, id }) => {
                 {/* from user */}
                 {message.sentBy == userId && (
                   <div className=" messageCard rightSide">
-                    <div className="senderInfo">
-                      <h3>you</h3>
+                    <div className="senderInfo MW">
                       <img src={currentUserInfo.profileImg} />
+                      <h3>you</h3>
                     </div>
                     <div className="messageContent">
                       <p>{message.message}</p>

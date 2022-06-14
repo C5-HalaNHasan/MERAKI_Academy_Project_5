@@ -1,63 +1,36 @@
 .usersComponent {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2em;
-  padding: 1em;
-  background-color: var(--lightBgColor);
-  border-radius: 1em;
-  border: none;
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
 }
 .users {
+  background-color: var(--spanColor);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  border-radius: 1em;;
   display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-around;
-  background-color: #898f9c;
-  border-radius: 1em;
-  height: 10vh;
+  justify-content: space-between;
+  margin:0.7em;
+  gap: 0.8em;
+  padding: 0.8em;
 }
-.username {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 1vw;
+
+.username{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
 }
-.username h3 {
-  font-family: cursive;
-}
+
 .username img {
-  width: 4vw;
-  height: 6vh;
+  width: 3em;
   border-radius: 50%;
-}
-.actionB {
-  display: flex;
-  flex-direction: row;
-  grid-gap: 1vh;
-  gap: 1vh;
-  margin: 1vh 1vw;
-  padding: 1vh;
-  align-items: center;
-  width: 15vw;
-}
-.actionB button {
-  border-radius: 1vw;
-  width: 100vw;
-  font-size: 0.8rem;
-  font-weight: 200;
-  background-color: rgb(54, 54, 237);
-  color: var(--spanColor);
-  transition: 0.5s ease;
-  border: none;
-  padding: 1vh;
-}
-.actionB button:hover {
-  transform: scale(1.2);
   cursor: pointer;
 }
+
+.senderInfo h3{
+font-size:0.9em !important;  
+cursor: pointer;
+}
+
+
 .friendContainer {
   display: flex;
   align-items: center;
@@ -76,35 +49,11 @@
   gap: 1vw;
 }
 .friendInfo h3 {
-  font-family: cursive;
+  /* font-family: cursive; */
 }
 .friendInfo img {
   width: 4vw;
   height: 6vh;
   border-radius: 50%;
 }
-.actionButton {
-  display: flex;
-  flex-direction: row;
-  grid-gap: 1vh;
-  gap: 1vh;
-  margin: 1vh 1vw;
-  padding: 1vh;
-  align-items: center;
-  width: 15vw;
-}
-.actionButton button {
-  border-radius: 1vw;
-  width: 100vw;
-  font-size: 0.8rem;
-  font-weight: 200;
-  background-color: rgb(54, 54, 237);
-  color: var(--spanColor);
-  transition: 0.5s ease;
-  border: none;
-  padding: 1vh;
-}
-.actionButton button:hover {
-  transform: scale(1.2);
-  cursor: pointer;
-}
+
