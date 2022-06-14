@@ -19,8 +19,8 @@ const Suggested = () => {
     };
   });
   const navigate = useNavigate();
-  const suggest = async () => {
-    await axios
+  const suggest = () => {
+    axios
       .get(`http://localhost:5000/user/Friend/suggestedUser`, {
         headers: {
           Authorization: token
@@ -38,7 +38,7 @@ const Suggested = () => {
   useEffect(() => suggest(), []);
   console.log(suggestedFriends);
 
-// loop to get three random suggest friend
+  // loop to get three random suggest friend
   const arr = [];
   const list = () => {
     for (let i = 0; i < 3; i++) {
@@ -62,8 +62,8 @@ const Suggested = () => {
               // console.log(user.id);
 
               return (
-                 <div className="suggestedFriend">
-                  <div className="userImg">
+                <div className="suggestedFriend">
+                  <div className="userI">
                     <img
                       src={user.profileImg}
                       onClick={(e) => navigate(`/user/${user.id}`)}
@@ -72,7 +72,7 @@ const Suggested = () => {
                       {user.firstName} {user.lastName}
                     </h4>
                   </div>
-                  <div className="userName">
+                  <div className="userButton">
                     <button
                       //   to make function that send request to add friend
                       onClick={() => {
@@ -99,7 +99,7 @@ const Suggested = () => {
                       Add
                     </button>
                   </div>
-                  </div>
+                </div>
               );
             }
           })}
