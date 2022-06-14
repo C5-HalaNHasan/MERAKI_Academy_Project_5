@@ -676,12 +676,13 @@ const ShowPost = ({ type, id }) => {
                                       </div>
                                       <div>
                                         <AiOutlineLike
-                                          className="commentLike"
+                                          className={element.isLikedComment?"commentLiked":"commentNotLiked"}
                                           onClick={() => {
                                             checkCommentsLiked(
                                               comment.id,
                                               currentUserInfo.id
                                             );
+                                            getAllPosts()
                                           }}
                                         />
                                         {commentReactionsCounter &&
