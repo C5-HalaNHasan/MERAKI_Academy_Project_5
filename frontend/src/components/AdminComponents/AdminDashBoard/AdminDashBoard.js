@@ -3,6 +3,8 @@ import "./adminDashBoard.css";
 import { TiUserDelete } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
+
+
 import {
   setAllUsers,
   setAllReportedUsers,
@@ -43,7 +45,9 @@ const AdminDashBoard = ({ type }) => {
   const [reportedUsersLength, setReportedUsersLength] = useState(0);
   const [postLength, setPostLength] = useState(0);
   const [commentLength, setCommentLength] = useState(0);
+  const [data, setData] = useState([])
 
+ 
   const getAllUsers = () => {
     let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=6`;
     axios
@@ -208,7 +212,14 @@ const AdminDashBoard = ({ type }) => {
       .catch((error) => {});
   };
   //to vie charts and statistics:
-  const showCharts = () => {};
+  const showCharts = () => {
+    axios.get(`http://localhost:5000/user/birthday`).then((result)=>{
+      // setData(result.data.result)
+      console.log(result,"char");
+    }).catch((error)=>{
+
+    })
+  };
   //! based on the props: the targeted action is going to be called:
   const action = () => {
     if (type == "allUsers") {
@@ -258,6 +269,7 @@ const AdminDashBoard = ({ type }) => {
     getAllReportedComments();
     usersPagination();
     action();
+    showCharts();
   }, []);
   return (
     <>
@@ -369,6 +381,8 @@ const AdminDashBoard = ({ type }) => {
                 </div>
               );
             })}
+
+          
         </div>
         {/* pagination bar starts here */}
         <div className="paginationBar">

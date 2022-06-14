@@ -486,7 +486,24 @@ const getSuggestedUser = (req, res) => {
       .json({ success: true, message: `suggested friends `, result });
   });
 };
+const usersBirthday =(req,res)=>{
+const query =`SELECT  COUNT(*),YEAR(birthday) FROM user GROUP BY YEAR(birthday)
+`
+connection.query(query, (error, result) => {
+  if (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+  res.status(200).json({
+    success: true,
+    
+    result: result
+  });
+});
 
+}
 module.exports = {
   createUser,
   loginUser,
@@ -500,5 +517,6 @@ module.exports = {
   getReportedUsers,
   getUserById,
   getSuggestedUser,
-  getAllUsersPag
+  getAllUsersPag,
+  usersBirthday
 };

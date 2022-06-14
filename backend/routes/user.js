@@ -13,6 +13,7 @@ const {
   getReportedUsers,
   getUserById,getSuggestedUser,
   getAllUsersPag,
+  usersBirthday,
 
 } = require("../controllers/user");
 const { authentication } = require("../middlewares/authentication");
@@ -28,6 +29,9 @@ userRouter.post("/login", loginUser);
 
 //endpoint for GET request ==> http://localhost:5000/user ==>getAllUsers
 userRouter.get("/", getAllUsers);
+
+//endpoint for GET request ==> http://localhost:5000/user/birthday ==>usersBirthday
+userRouter.get("/birthday", usersBirthday);
 
 //endpoint for GET request ==> http://localhost:5000/user ==>getAllUsersPag
 userRouter.get("/pag", getAllUsersPag);
