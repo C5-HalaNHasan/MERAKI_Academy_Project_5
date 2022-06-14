@@ -54,11 +54,13 @@ const Suggested = () => {
   return (
     <>
       <div className="suggestedComponent">
-        suggestedComponent
         <div className="userIcon">
+          <div className="suggest">
+            <h3>suggestedFriend</h3>
+          </div>
           {suggestedFriends.map((user, index) => {
             console.log(arr.includes(user.id));
-            if (arr.includes(user.id)) {
+            if (index < 3) {
               // console.log(user.id);
 
               return (
