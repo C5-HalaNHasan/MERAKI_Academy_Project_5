@@ -58,11 +58,11 @@ io.on("connection", (socket) => {
     socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
   });
 
-  //thirs event://! to be checked
-  // socket.on("DELETE_MESSAGE", (data) => {
-  //   console.log({ data });
-  //   socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
-  // });
+  //third event:
+  socket.on("DELETE_MESSAGE", (data) => {
+    console.log({ data });
+    socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.messageId);
+  });
 
   //fourth event (automatic event):
   socket.on("disconnect", () => {

@@ -102,6 +102,11 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function that removes sent message:
   const removeSentMessage = (messageId) => {
+    const messageContent = {
+      roomId,
+      messageId,
+    };
+    socket.emit("DELETE_MESSAGE", messageContent);
     let removeMessageFromUrl = `http://localhost:5000/message/${messageId}`;
     axios
       .put(removeMessageFromUrl, {}, { headers: { authorization: token } })
@@ -116,7 +121,7 @@ const MessagesWith = ({ roomId, id }) => {
 
   useEffect(() => {
     receiveMessageFrom();
-    // removeMessageFrom();
+    removeMessageFrom();
     getMessagesWith();
   }, []);
 
