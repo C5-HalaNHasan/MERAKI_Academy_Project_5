@@ -35,7 +35,7 @@ const server = app.listen(PORT, () => {
 const io = socket(server, {
   cors: {
     origin: "http://localhost:3000",
-    method: ["GET", "POST", "DELETE"], //! check if DELETE is required here!
+    method: ["GET", "POST", "DELETE"],
   },
 });
 
@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
   socket.on("JOIN_ROOM", (data) => {
     //data has the id of the room
     socket.join(data);
-    console.log({ joinedRoom: data }); //!
+    console.log({ joinedRoom: data });
   });
 
   //second event:
