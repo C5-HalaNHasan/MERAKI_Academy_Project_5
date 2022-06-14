@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./messagesWith.css";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -46,16 +45,16 @@ const MessagesWith = ({ roomId, id }) => {
   };
 
   // a function that sends message to a user:
-  const sendMessageTo = () => {
-    socket.emit("JOIN_ROOM", roomId); //!
+  const sendMessageTo = (e) => {
+    socket.emit("JOIN_ROOM", roomId);
     console.log(roomId);
     const messageContent = {
       roomId,
       content: {
         room: roomId,
         message: sentMessage,
-        sentBy: userId, //!
-        receivedBy: id, //!
+        sentBy: userId,
+        receivedBy: id,
         createdAt: Date.now(),
       },
     };
@@ -92,16 +91,21 @@ const MessagesWith = ({ roomId, id }) => {
     });
   };
 
-  //! to be checked/backend
+  //a function that will be emitted through socket whenever one of the users deletes a message
   const removeMessageFrom = () => {
     socket.on("DELETE_MESSAGE", (data) => {
-      dispatch(removeFromMessagesWith(data)); //! data is the messageId
+      dispatch(removeFromMessagesWith(data)); // data is the messageId
       getMessagesWith();
     });
   };
 
   // a function that removes sent message:
   const removeSentMessage = (messageId) => {
+    const messageContent = {
+      roomId,
+      messageId,
+    };
+    socket.emit("DELETE_MESSAGE", messageContent);
     let removeMessageFromUrl = `http://localhost:5000/message/${messageId}`;
     axios
       .put(removeMessageFromUrl, {}, { headers: { authorization: token } })
@@ -114,9 +118,14 @@ const MessagesWith = ({ roomId, id }) => {
       });
   };
 
+  //to clear the input box:
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    e.target.reset();
+  };
   useEffect(() => {
     receiveMessageFrom();
-    // removeMessageFrom();
+    removeMessageFrom();
     getMessagesWith();
   }, []);
 
@@ -136,14 +145,9 @@ const MessagesWith = ({ roomId, id }) => {
                     <div className="messageContent">
                       <p>{message.message}</p>
                       <h6>{message.createdAt}</h6>
-
-                      {/* <h6>{message.createdAt.split("T")[0]}</h6>
-                      <h6>
-                        {message.createdAt.split("T")[1].replace(".000Z", "")}
-                      </h6> */}
                     </div>
                     <div className="inboxButtons">
-                      <button id={message.id} style={{ display: "none" }}>
+                      <button id={message.id} style={{ opacity: "0" }}>
                         dummy
                       </button>
                     </div>
@@ -152,19 +156,16 @@ const MessagesWith = ({ roomId, id }) => {
                 {/* from user */}
                 {message.sentBy == userId && (
                   <div className=" messageCard rightSide">
-                    <div className="senderInfo MW">
-                      <img src={currentUserInfo.profileImg} />
-                      <h3>you</h3>
+                    <div className="nearby">
+                      <div className="senderInfo MW">
+                        <img src={currentUserInfo.profileImg} />
+                        <h3>you</h3>
+                      </div>
+                      <div className="messageContent">
+                        <p>{message.message}</p>
+                        <h6>{message.createdAt}</h6>
+                      </div>
                     </div>
-                    <div className="messageContent">
-                      <p>{message.message}</p>
-                      <h6>{message.createdAt}</h6>
-                      {/* <h6>{message.createdAt.split("T")[0]}</h6>
-                      <h6>
-                        {message.createdAt.split("T")[1].replace(".000Z", "")}
-                      </h6> */}
-                    </div>
-                    {/* query in the backend to be updated to get message id */}
                     <div className="inboxButtons">
                       <button
                         id={message.id}
@@ -179,15 +180,23 @@ const MessagesWith = ({ roomId, id }) => {
             </>
           );
         })}
-      <div className="messageInput">
-        <input
-          placeholder="write your message here..."
-          onChange={(e) => setSentMessage(e.target.value)}
-        />
-        <div className="inboxButtons">
-          <button onClick={() => sendMessageTo()}>send</button>
+      <form
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+      >
+        <div className="messageInput">
+          <input
+            placeholder="write your message here..."
+            onChange={(e) => setSentMessage(e.target.value)}
+          />
+          <div className="inboxButtons sendButton">
+            <button type="submit" onClick={() => sendMessageTo()}>
+              send
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
@@ -197,5 +206,4 @@ export default MessagesWith;
 /*
 to be resolved:
 1-message.createdAt is not taking split or replace each time
-2-DELETE_MESSAGE
 */

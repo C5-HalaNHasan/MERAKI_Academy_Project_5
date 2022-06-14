@@ -35,7 +35,7 @@ const server = app.listen(PORT, () => {
 const io = socket(server, {
   cors: {
     origin: "http://localhost:3000",
-    method: ["GET", "POST", "DELETE"], //! check if DELETE is required here!
+    method: ["GET", "POST", "DELETE"],
   },
 });
 
@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
   socket.on("JOIN_ROOM", (data) => {
     //data has the id of the room
     socket.join(data);
-    console.log({ joinedRoom: data }); //!
+    console.log({ joinedRoom: data });
   });
 
   //second event:
@@ -58,11 +58,11 @@ io.on("connection", (socket) => {
     socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
   });
 
-  //thirs event://! to be checked
-  // socket.on("DELETE_MESSAGE", (data) => {
-  //   console.log({ data });
-  //   socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.content);
-  // });
+  //third event:
+  socket.on("DELETE_MESSAGE", (data) => {
+    console.log({ data });
+    socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.messageId);
+  });
 
   //fourth event (automatic event):
   socket.on("disconnect", () => {

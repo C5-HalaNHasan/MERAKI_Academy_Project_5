@@ -17,7 +17,9 @@ const Register = () => {
   const [country, setCountry] = useState("");
   const [gender, setGender] = useState("0");
   const [birthday, setBirthday] = useState("");
-  const [profileImg,setProfileImg]= useState("http://res.cloudinary.com/difjgm3tp/image/upload/v1654090247/xercgf8pjvjgrnwbeucm.jpg")
+  const [profileImg, setProfileImg] = useState(
+    "http://res.cloudinary.com/difjgm3tp/image/upload/v1654090247/xercgf8pjvjgrnwbeucm.jpg"
+  );
 
   const RegisterAction = async () => {
     //when the user clicks on the register button: the userData is going to be sent to the BE by axios!

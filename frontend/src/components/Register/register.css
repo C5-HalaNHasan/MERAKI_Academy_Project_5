@@ -1,73 +1,80 @@
+.registerComponent{
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+
+}
 .loginBox {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5vh;
-    border-radius: 1vw;
+    gap: 0.9em;
+    border-radius: 2em;
     background-color: var(--spanColor);
-    padding: 1% 1%;
+    padding: 0.4em;
 }
 
 .loginBox span a {
     text-decoration: underline;
     display: inline;
-    font-size: 1.1rem;
+    font-size: 0.9em;
     padding-left: 10px;
 }
 .loginBox h3 {
     text-decoration: none;
     display: inline-block;
+    font-size: 1.3em !important;
 }
 
 .loginBox label {
 font-weight: 600;
-font-size: 1.1rem;
+font-size: 1em;
 }
 
 .inputField {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .inputField label {
-    width: 140px;
+    width:8em;
 }
 
 .inputField input {
-    border-radius: 2vh;
-    height: 5vh;
+    border-radius:2em;
+    width: 20em;
+    height: 3em;
     border: 1px solid var(--spanColor);
-    padding: 0.3rem 0.8rem;
+    padding: 0.3em 0.8em;
     display: block;
     background-color: var(--mainBgColor);
-    width: 20vw;
 }
 
 .dropDown {
     display: flex;
+    align-items: center;
 }
 
 .dropDown select {
-    border-radius: 1vw;
-    width: 20vw;
-    height: 5vh;
-    padding: 0.3rem 0.8rem;
+    border-radius: 1em;
+    width:20em;
+    height: 3em;
+    padding: 0.3em 0.8em;
 }
 
 
 .loginBox .btn {
-    /* background-color: var(--mainText); */
     background-color:  var(--mainColor);
     color: var(--spanColor);
-    font-size: 1.1rem;
+    font-size: 1.3em !important;
     font-weight: 400;
     cursor: pointer;
-    padding: 1vh 2vw;
-    border-radius: 2vh;
+    padding: 0.5em;
+    border-radius: 1em;
     transition:0.5s ease;
-    width: 70%;
+    width:70%;
     border: none;
-    margin-top: 1.5vh;
 }
 
 .loginBox .btn:hover {

@@ -1,13 +1,13 @@
 .friendList{
     display: flex;
     flex-direction: column;
-    /* background-color: var(--lightBlueBgColor); */
     border-radius: 0.5em;
     margin: 0;
     background-color: var(--spanColor);
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     height: 14em;
-    padding: 0.1em;
+    padding-bottom: 0.1em;
+    padding-top: 0;
 }
 .boxTitle{
     background-color:var(--mainColor) ;
