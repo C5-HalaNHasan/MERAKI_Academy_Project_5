@@ -131,11 +131,14 @@ const MessagesWith = ({ roomId, id }) => {
 
   return (
     <div className="messagesWithComponent">
-      {messagesWith.length &&
-        messagesWith.map((message, ind) => {
-          return (
-            <>
-              <div className="messagesCardContainer">
+      <div className="messagesCardContainer">
+        <div className="boxTitle">
+          <h3>Chat</h3>
+        </div>
+        {messagesWith.length &&
+          messagesWith.map((message, ind) => {
+            return (
+              <>
                 {message.sentBy != userId && (
                   <div className="messageCard leftSide">
                     <div className="senderInfo MW">
@@ -176,10 +179,11 @@ const MessagesWith = ({ roomId, id }) => {
                     </div>
                   </div>
                 )}
-              </div>
-            </>
-          );
-        })}
+              </>
+            );
+          })}
+      </div>
+
       <form
         onSubmit={(e) => {
           handleSubmit(e);

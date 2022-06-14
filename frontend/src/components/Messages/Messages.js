@@ -107,11 +107,14 @@ const Messages = () => {
   }, []);
   return (
     <div className="messagesComponent">
-      {allMessages.length &&
-        allMessages.map((room, ind) => {
-          return (
-            <>
-              <div className="messageCardsContainer">
+      <div className="messageCardsContainer">
+        <div className="boxTitle">
+          <h3>Inbox</h3>
+        </div>
+        {allMessages.length &&
+          allMessages.map((room, ind) => {
+            return (
+              <>
                 {room.receivedBy == userId ? (
                   <div className="messageCard">
                     <div className="senderInfo">
@@ -175,11 +178,11 @@ const Messages = () => {
                     </div>
                   </div>
                 )}
-              </div>
-              {/* to render sent messages */}
-            </>
-          );
-        })}
+                {/* to render sent messages */}
+              </>
+            );
+          })}
+      </div>
     </div>
   );
 };

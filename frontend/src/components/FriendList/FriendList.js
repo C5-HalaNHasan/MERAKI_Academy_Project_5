@@ -21,26 +21,60 @@ const FriendList = ({ id }) => {
     }
   );
   const navigate = useNavigate();
-  const getAllFriends = async () => {
-    const response = await axios
-      .get(`http://localhost:5000/user/friends/${userId}`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((response) => {
-        if (id == userId) {
-          dispatch(setCurrentUserFriends(response.data.result));
-        } else {
-          dispatch(setVisitedUserFriends(response.data.result));
+  // const getAllFriends = () => {
+  //   axios
+  //     .get(`http://localhost:5000/user/friends/${userId}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       if (id == userId) {
+  //         dispatch(setVisitedUserFriends([]));
+  //         dispatch(setCurrentUserFriends(response.data.result));
+  //       } else {
+  //         dispatch(setCurrentUserFriends([]));
+  //         dispatch(setVisitedUserFriends(response.data.result));
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  //to re-render visitedUser Friends:
+  const getAllFriendsOfVisitedUser = async () => {
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${id}`;
+    axios
+      .get(getFriendsUrl, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(setVisitedUserFriends(result.data.result));
         }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log({ fromGetAllFriends_error: error });
+      });
+  };
+
+  //to re-render the currentUser Friends
+  const getAllFriendsOfCurrentUser = async () => {
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${userId}`;
+    axios
+      .get(getFriendsUrl, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(setCurrentUserFriends(result.data.result));
+        }
+      })
+      .catch((error) => {
+        console.log({ fromGetAllFriends_error: error });
       });
   };
   useEffect(() => {
-    getAllFriends();
+    // getAllFriends();
+    getAllFriendsOfVisitedUser();
+    getAllFriendsOfCurrentUser();
   }, []);
   console.log({ currentUserFriends });
   console.log({ visitedUserFriends });

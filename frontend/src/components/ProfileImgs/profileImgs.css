@@ -1,4 +1,5 @@
 .profileImgsComponent{
+    /* border: 1em red solid; */
 }
 
 .imgContainer{
@@ -7,6 +8,7 @@
     align-items: center;
     width:100%;
     min-height: 15em;
+    max-height: 28em;
     text-align: center;
     cursor: pointer;
 }
