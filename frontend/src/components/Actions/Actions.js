@@ -48,7 +48,6 @@ const Actions = ({ id }) => {
       setModalBox({
         modalId: id,
         modalType: "report",
-        // modalType: "updatePost",
         modalMessage: "Report User",
         modalDetails: "",
         modalShow: true,
@@ -75,9 +74,9 @@ const Actions = ({ id }) => {
       .then((result) => {
         if (result.data.success) {
           dispatch(addToFriendsList(result.data.result[0])); //! to be deleted if not used
-          setIsFriend(true);
           getAllFriendsOfCurrentUser();
           getAllFriendsOfVisitedUser();
+          setIsFriend(true);
         }
       })
       .catch((error) => {

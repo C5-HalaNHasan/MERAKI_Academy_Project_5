@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAllUsers,
@@ -10,9 +11,12 @@ import {
 import { setModalBox } from "../redux/reducers/modalBox/index";
 
 import "./users.css";
+import { Navigate } from "react-router-dom";
 
 //Users component will take two props:type(search or friendlist) & name (name of the searched user)
 const Users = ({ type, name }) => {
+  const [list, setList] = useState([]);
+  const navigate = useNavigate();
   //modalBox states:
   const {
     modalId,
@@ -118,7 +122,6 @@ const Users = ({ type, name }) => {
         .then((result) => {
           console.log(result.data.result);
           dispatch(setAllUsers(result.data.result));
-          getAllFriendsOfCurrentUser();
         })
         .catch((err) => {
           console.log(err);
@@ -132,7 +135,6 @@ const Users = ({ type, name }) => {
         })
         .then((res) => {
           dispatch(setCurrentUserFriends(res.data.result));
-          getAllFriendsOfCurrentUser();
           console.log(currentUserFriends);
         })
         .catch((err) => {
@@ -151,8 +153,9 @@ const Users = ({ type, name }) => {
         {type == "search"
           ? allUsers.map((user, index) => {
               if (
-                user.firstName.toLowerCase().includes(name.toLowerCase()) ||
-                user.lastName.toLowerCase().includes(name.toLowerCase())
+                (user.firstName.toLowerCase().includes(name.toLowerCase()) ||
+                  user.lastName.toLowerCase().includes(name.toLowerCase())) &&
+                user.id !== userId
               ) {
                 return (
                   <div className="friendCard">
@@ -160,6 +163,9 @@ const Users = ({ type, name }) => {
                       <img
                         src={user.profileImg}
                         style={{ width: "3em", height: "3em" }}
+                        onClick={() => {
+                          navigate(`/user/${user.id}`);
+                        }}
                       ></img>
                       <h3>{user.firstName + " " + user.lastName}</h3>
                     </div>
@@ -210,6 +216,9 @@ const Users = ({ type, name }) => {
                     <img
                       src={friend.profileImg}
                       style={{ width: "3em", height: "3em" }}
+                      onClick={() => {
+                        navigate(`/user/${friend.id}`);
+                      }}
                     ></img>
                     <h3>
                       {friend.firstName} {friend.lastName}{" "}
