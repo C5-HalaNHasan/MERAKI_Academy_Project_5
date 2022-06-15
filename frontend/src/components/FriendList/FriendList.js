@@ -92,16 +92,23 @@ const FriendList = ({ id }) => {
               currentUserFriends.map((friend, index) => {
                 if (index < 3) {
                   return (
-                    <>
-                      <div key={index} className="renderedFriend">
+                    <div key={index} className="friendCard">
+                      <div className="friendInfo">
                         <img
                           src={friend.profileImg}
-                          id={friend.id}
-                          onClick={(e) => navigate(`/user/${e.target.id}`)}
+                          style={{ width: "3em", height: "3em" }}
                         ></img>
                         <h4>{friend.firstName + " " + friend.lastName}</h4>
                       </div>
-                    </>
+                      <div className="friendButtons">
+                        <button
+                          id={friend.id}
+                          onClick={(e) => navigate(`/user/${e.target.id}`)}
+                        >
+                          Visit
+                        </button>
+                      </div>
+                    </div>
                   );
                 }
               })}
@@ -112,16 +119,23 @@ const FriendList = ({ id }) => {
               visitedUserFriends.map((friend, index) => {
                 if (index < 3) {
                   return (
-                    <>
-                      <div key={index} className="renderedFriend">
+                    <div key={index} className="friendCard">
+                      <div className="friendInfo">
                         <img
                           src={friend.profileImg}
-                          id={friend.id}
-                          onClick={(e) => navigate(`/user/${e.target.id}`)}
+                          style={{ width: "3em", height: "3em" }}
                         ></img>
                         <h4>{friend.firstName + " " + friend.lastName}</h4>
                       </div>
-                    </>
+                      <div className="friendButtons">
+                        <button
+                          id={friend.id}
+                          onClick={(e) => navigate(`/user/${e.target.id}`)}
+                        >
+                          Visit
+                        </button>
+                      </div>
+                    </div>
                   );
                 }
               })}
@@ -135,6 +149,16 @@ const FriendList = ({ id }) => {
             }}
           >
             Show More...
+          </h3>
+        )}
+        {currentUserFriends.length < 3 && id == userId && (
+          <h3
+            className="showMore"
+            onClick={() => {
+              navigate(`/users/search/a`);
+            }}
+          >
+            Discover...
           </h3>
         )}
 
