@@ -233,7 +233,7 @@ const getReportedComments = (req, res) => {
   const page = req.query.page;
   const offset = (page-1)*limit;
   const query = `SELECT comment.id,createdAt,comment.isDeleted ,comment,author_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id  WHERE comment.isDeleted =0 AND comment.isReported =1 limit `+limit+" OFFSET " + offset;
-  const query2 = `SELECT COUNT(*) FROM post WHERE isReported =1 AND isDeleted =0`
+  const query2 = `SELECT COUNT(*) FROM comment WHERE isReported =1 AND isDeleted =0`
 
   connection.query(query, (error, result) => {
     if (error) {

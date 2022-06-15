@@ -438,7 +438,7 @@ const AdminDashBoard = ({ type }) => {
                       showReportedComment(e.target.id);
                     }}
                   >
-                    Show Post
+                    Show Comment
                   </button>
                   {/* <p>{comment.comment}</p> */}
 
