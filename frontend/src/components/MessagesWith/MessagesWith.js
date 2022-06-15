@@ -182,25 +182,26 @@ const MessagesWith = ({ roomId, id }) => {
               </>
             );
           })}
-      </div>
-
-      <form
-        onSubmit={(e) => {
-          handleSubmit(e);
-        }}
-      >
-        <div className="messageInput">
-          <input
-            placeholder="write your message here..."
-            onChange={(e) => setSentMessage(e.target.value)}
-          />
-          <div className="inboxButtons sendButton">
-            <button type="submit" onClick={() => sendMessageTo()}>
-              send
-            </button>
-          </div>
+        <div className="messageCard">
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          >
+            <div className="messageInput">
+              <input
+                placeholder="write your message here..."
+                onChange={(e) => setSentMessage(e.target.value)}
+              />
+              <div className="inboxButtons sendButton">
+                <button type="submit" onClick={() => sendMessageTo()}>
+                  send
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

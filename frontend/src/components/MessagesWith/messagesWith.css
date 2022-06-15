@@ -25,26 +25,21 @@
     border-radius: 1vh;;
     display: flex;
     justify-content: space-between;
-    margin:0.7em;
     gap: 0.8em;
     padding: 0.8em;
+    margin-left: -0.5em;
 }
 
 .messageInput input{
     border-radius: 2vh;
     height: 3em;
-    width:40em;
+    width:47em;
     border: 1px solid var(--spanColor);
     padding: 1em;
     display: block;
     background-color: var(--mainBgColor);
 }
 
- /* .rightSide{
-    display: flex;
-    flex-direction: row-reverse;
-
-} */
 
 .MW{
     display: flex;
