@@ -8,6 +8,7 @@ import Adv from "../../Adv/Adv";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ModalBox from "../../ModalBox/ModalBox";
+import Banner from "../../Banner/Banner";
 
 const MessagePageWith = () => {
   const { roomId, id } = useParams();
@@ -20,6 +21,7 @@ const MessagePageWith = () => {
     <>
       <ModalBox />
       <NavBar />
+      <Banner />
       <FriendList id={userId} />
       <Suggested />
       <MessageWith id={id} roomId={roomId} />

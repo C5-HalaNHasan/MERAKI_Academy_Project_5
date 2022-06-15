@@ -7,6 +7,7 @@ import Messages from "../../Messages/Messages";
 import Adv from "../../Adv/Adv";
 import { useSelector } from "react-redux";
 import ModalBox from "../../ModalBox/ModalBox";
+import Banner from "../../Banner/Banner";
 
 const MessagePage = () => {
   const { userId } = useSelector((state) => {
@@ -18,6 +19,7 @@ const MessagePage = () => {
     <>
       <ModalBox />
       <NavBar />
+      <Banner />
       <FriendList id={userId} />
       <Suggested />
       <Messages />

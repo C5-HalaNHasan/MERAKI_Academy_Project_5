@@ -119,7 +119,6 @@ const Suggested = () => {
                     <img
                       src={user.profileImg}
                       onClick={(e) => navigate(`/user/${user.id}`)}
-                      style={{ width: "3em", height: "3em" }}
                     ></img>
                     <h4>
                       {user.firstName} {user.lastName}

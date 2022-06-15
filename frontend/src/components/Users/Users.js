@@ -162,7 +162,6 @@ const Users = ({ type, name }) => {
                     <div className="friendInfo">
                       <img
                         src={user.profileImg}
-                        style={{ width: "3em", height: "3em" }}
                         onClick={() => {
                           navigate(`/user/${user.id}`);
                         }}
@@ -215,7 +214,6 @@ const Users = ({ type, name }) => {
                   <div className="friendInfo">
                     <img
                       src={friend.profileImg}
-                      style={{ width: "3em", height: "3em" }}
                       onClick={() => {
                         navigate(`/user/${friend.id}`);
                       }}

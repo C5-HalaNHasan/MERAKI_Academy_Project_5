@@ -9,6 +9,7 @@ import CreatePost from "../../CreatePost/CreatePost";
 import ShowPost from "../../ShowPost/ShowPost";
 import { useSelector } from "react-redux";
 import ModalBox from "../../ModalBox/ModalBox";
+import Banner from "../../Banner/Banner";
 
 const HomePage = () => {
   const { userId } = useSelector((state) => {
@@ -20,6 +21,7 @@ const HomePage = () => {
     <>
       <ModalBox />
       <NavBar />
+      <Banner />
       <FriendList id={userId} />
       <Suggested />
       <CreatePost />

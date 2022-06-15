@@ -94,10 +94,7 @@ const FriendList = ({ id }) => {
                   return (
                     <div key={index} className="friendCard">
                       <div className="friendInfo">
-                        <img
-                          src={friend.profileImg}
-                          style={{ width: "3em", height: "3em" }}
-                        ></img>
+                        <img src={friend.profileImg}></img>
                         <h4>{friend.firstName + " " + friend.lastName}</h4>
                       </div>
                       <div className="friendButtons">
