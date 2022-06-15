@@ -1,5 +1,4 @@
 .profileImgsComponent{
-    /* border: 1em red solid; */
 }
 
 .imgContainer{
@@ -11,10 +10,12 @@
     max-height: 28em;
     text-align: center;
     cursor: pointer;
+    margin-top: -1.5em;
 }
 
 .coverImg{
     width: 100vw;
+    margin-right: -0.75em;
 }
 
 .coverImg img{

@@ -146,7 +146,7 @@ const Users = ({ type, name }) => {
   console.log({ allUsersFromUserSCOMPONENT: allUsers });
   return (
     <div className="usersComponent">
-      <div className="friendList">
+      <div className="friendList usersList">
         <div className="boxTitle">
           <h3>Result</h3>
         </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import "./homePage.css";
 import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
 import FriendList from "../../FriendList/FriendList";
 import Suggested from "../../Suggested/Suggested";
 import Adv from "../../Adv/Adv";
@@ -18,6 +17,7 @@ const HomePage = () => {
     };
   });
   return (
+    // <div className="home">
     <>
       <ModalBox />
       <NavBar />
@@ -27,8 +27,8 @@ const HomePage = () => {
       <CreatePost />
       <ShowPost type={"home"} />
       <Adv />
-      {/* <Footer /> */}
     </>
+    // </div>
   );
 };
 

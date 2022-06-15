@@ -8,6 +8,7 @@
   height: 12em;
   padding-bottom: 0.1em;
   padding-top: 0;
+  margin-left: 1.5em;
 }
 
 .userInfoContents{
@@ -15,6 +16,7 @@
   flex-direction: column;
   margin-top: 0%;
 }
+
 .currentUser {
   border-radius: 1em;;
   display: flex;
