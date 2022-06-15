@@ -14,7 +14,7 @@ const {
   getUserById,getSuggestedUser,
   getAllUsersPag,
   usersBirthday,
-
+  usersGender,
 } = require("../controllers/user");
 const { authentication } = require("../middlewares/authentication");
 const { authorization } = require("../middlewares/authorization");
@@ -32,6 +32,9 @@ userRouter.get("/", getAllUsers);
 
 //endpoint for GET request ==> http://localhost:5000/user/birthday ==>usersBirthday
 userRouter.get("/birthday", usersBirthday);
+
+//endpoint for GET request ==> http://localhost:5000/user/gender ==>usersBirthday
+userRouter.get("/gender", usersGender);
 
 //endpoint for GET request ==> http://localhost:5000/user ==>getAllUsersPag
 userRouter.get("/pag", getAllUsersPag);

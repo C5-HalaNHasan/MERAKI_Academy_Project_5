@@ -504,6 +504,38 @@ connection.query(query, (error, result) => {
 });
 
 }
+const usersGender =(req,res)=>{
+  const query = `SELECT gender,
+
+  COUNT(CASE WHEN gender="0" THEN 1  END) As count,
+  
+  COUNT(CASE WHEN gender="1" THEN 1  END) As count,
+  
+  COUNT(*) as Total
+
+  FROM user WHERE isDeleted=0 group by gender `
+  connection.query(query, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+   
+    delete result[0].count 
+    delete result[1].count 
+    result[0].gender=2
+    result[1].gender=1
+
+
+
+    res.status(200).json({
+      success: true,
+      
+      result: result
+    });
+  });
+}
 module.exports = {
   createUser,
   loginUser,
@@ -518,5 +550,6 @@ module.exports = {
   getUserById,
   getSuggestedUser,
   getAllUsersPag,
-  usersBirthday
+  usersBirthday,
+  usersGender
 };

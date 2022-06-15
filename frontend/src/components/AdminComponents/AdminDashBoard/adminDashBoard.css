@@ -7,6 +7,11 @@
    border-radius: 1em;
    
 }
+.Gender{
+    border: solid var(--mainBackColor);
+    border-radius: 2em;
+    padding: 1em;
+}
 .adminResultUsers {
     display:flex;
     flex-direction: column;
