@@ -54,7 +54,6 @@ const ModalBox = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [country, setCountry] = useState();
-  const [isPrivate, setIsPrivate] = useState();
   const [birthday, setBirthday] = useState();
 
   //to use user token for axios calls
@@ -93,7 +92,7 @@ const ModalBox = () => {
     "updateProfile",
     "deleteRoom",
     "showPost",
-    "showComment"
+    "showComment",
   ];
   const clearModalBox = () => {
     dispatch(
@@ -109,7 +108,7 @@ const ModalBox = () => {
     setUpdatedImg("");
     setReportedPostImg("");
     setReportedPostText("");
-    setReportedCommentText("")
+    setReportedCommentText("");
   };
   useEffect(() => {
     if (modalType === "showPost" && modalShow === true) {
@@ -118,7 +117,6 @@ const ModalBox = () => {
     if (modalType === "showComment" && modalShow === true) {
       getReportedComment();
     }
-
   }, [modalId]);
 
   if (modalShow === false) {
@@ -205,7 +203,6 @@ const ModalBox = () => {
       password,
       country,
       birthday,
-      isPrivate,
     };
     let updateProfileUrl = `http://localhost:5000/user`;
     await axios
@@ -432,18 +429,17 @@ const ModalBox = () => {
       }
     } catch {}
   };
-  const getReportedComment = async()=>{
+  const getReportedComment = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/comment/id/${modalId}`);
-      console.log("hiiiiiiiiiiiiii",res.data);
+      const res = await axios.get(
+        `http://localhost:5000/comment/id/${modalId}`
+      );
+      console.log("hiiiiiiiiiiiiii", res.data);
       if (res.data.success) {
-       
-     
-      
         setReportedCommentText(res.data.result[0].comment);
       }
     } catch {}
-  }
+  };
 
   // if (modalType == "showPost") {
   //   getReportedPost();
@@ -741,19 +737,6 @@ const ModalBox = () => {
                       onChange={(e) => setLastName(e.target.value)}
                       autoComplete="off"
                     ></input>
-                  </div>
-
-                  <div className="inputField">
-                    <div className="dropDown">
-                      <label>Acc. Privacy:</label>
-                      <select
-                        name="isPrivate"
-                        onChange={(e) => setIsPrivate(e.target.value)}
-                      >
-                        <option value="0">Public Account</option>
-                        <option value="1">Private Account</option>
-                      </select>
-                    </div>
                   </div>
 
                   <div className="inputField">

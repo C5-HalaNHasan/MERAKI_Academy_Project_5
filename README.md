@@ -72,15 +72,15 @@ npm run start
 ## 🎈 Usage <a name="usage"></a>
 
 Fist you have to use Postman to add your own data or you can contact us to set you a program can suite you.
-You can register from this page ![plot](</frontend/public/Screenshot%20(4).png>)
-You can Login from this page ![plot](</frontend/public/Screenshot%20(5).png>)
-you acn login with google from this page ![plot](</frontend/public/Screenshot%20(6).png>)
-You can see the main page ![plot](</frontend/public/Screenshot%20(7).png>)
-You can see your profile page ![plot](</frontend/public/Screenshot%20(8).png>)
-You can see the post img ![plot](</frontend/public/Screenshot%20(9).png>)
-You can see the page that search friend ![plot](</frontend/public/Screenshot%20(10).png>)
+You can register from this page ![plot]()
+You can Login from this page ![plot]()
+you acn login with google from this page ![plot]()
+You can see the main page ![plot]()
+You can see your profile page ![plot]()
+You can see the post img ![plot]()
+You can see the page that search friend ![plot]()
 You can see your comment ![plot](/frontend/public/Screenshot_11.png.png)
-You can see your friend and suggest friend page ![plot](/frontend/public/Screenshot_12.png)
+You can see your friend and suggest friend page ![plot]()
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 

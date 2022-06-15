@@ -15,7 +15,13 @@ import {
 const Suggested = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, allUsers, suggestedFriends, userId } = useSelector((state) => {
+  const {
+    token,
+    allUsers,
+    suggestedFriends,
+    userId,
+    currentUserFriends,
+  } = useSelector((state) => {
     return {
       token: state.user.token,
       userId: state.user.userId,
@@ -86,22 +92,17 @@ const Suggested = () => {
   };
   useEffect(() => {
     suggest();
-    getAllFriendsOfCurrentUser();
   }, []);
-  console.log(suggestedFriends);
 
   // loop to get three random suggest friend
   const arr = [];
   const list = () => {
     for (let i = 0; i < 3; i++) {
       let x = Math.floor(Math.random() * suggestedFriends.length);
-
       arr.push(x);
     }
   };
-
   list();
-  console.log(arr);
 
   return (
     <>
@@ -112,7 +113,12 @@ const Suggested = () => {
           </div>
           {suggestedFriends.map((user, index) => {
             console.log(arr.includes(user.id));
-            if (index < 3) {
+            if (
+              arr.includes(user.id) &&
+              !currentUserFriends.some(
+                (currentFriend) => currentFriend.id == user.id
+              )
+            ) {
               return (
                 <div className="friendCard">
                   <div className="friendInfo">
@@ -126,7 +132,7 @@ const Suggested = () => {
                   </div>
                   <div className="friendButtons">
                     {/* for add and remove buttons */}
-                    {/* {currentUserFriends.some(
+                    {currentUserFriends.some(
                       (currentFriend) => currentFriend.id == user.id
                     ) ? (
                       <button
@@ -144,7 +150,7 @@ const Suggested = () => {
                       >
                         Add
                       </button>
-                    )} */}
+                    )}
                     {/* end of add and remove buttons */}
                   </div>
                 </div>

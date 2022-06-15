@@ -1,17 +1,14 @@
 .actionsComponent {
-    width: 80%;
     height: 100%;
-
 }
 
 .actionButtons {
     display: flex;
     flex-direction: column;
     gap: 0.8em;
-    /* margin: 0.9em; */
     padding:1em ;
     align-items: center;
-    width: 90%;
+    width: 100%;
     background-color: var(--spanColor);
     box-shadow: 0px 0px 18px 0px var(--mainBgColor);
     border-radius: 1em;
