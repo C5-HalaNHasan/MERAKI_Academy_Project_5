@@ -4,7 +4,9 @@ import { TiUserDelete } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../../redux/reducers/modalBox/index";
-
+import ReactDOM from 'react-dom';
+import * as V from 'victory';
+import { VictoryBar ,VictoryChart,VictoryTheme} from 'victory';
 import {
   setAllUsers,
   setAllReportedUsers,
@@ -62,6 +64,12 @@ const AdminDashBoard = ({ type }) => {
   const [postLength, setPostLength] = useState(0);
   const [commentLength, setCommentLength] = useState(0);
   const [data, setData] = useState([]);
+  // const data = [
+  //   {quarter: 1, earnings: 13000},
+  //   {quarter: 2, earnings: 16500},
+  //   {quarter: 3, earnings: 14250},
+  //   {quarter: 4, earnings: 19000}
+  // ];
 
   const getAllUsers = () => {
     let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=6`;
@@ -231,7 +239,7 @@ const AdminDashBoard = ({ type }) => {
     axios
       .get(`http://localhost:5000/user/birthday`)
       .then((result) => {
-        // setData(result.data.result)
+        setData(result.data.result)
         console.log(result, "char");
       })
       .catch((error) => {});
@@ -292,13 +300,13 @@ const AdminDashBoard = ({ type }) => {
   };
 
   useEffect(() => {
+    showCharts();
     getAllUsers();
     getReportedUsers();
     getReportedPosts();
     getAllReportedComments();
     usersPagination();
     action();
-    showCharts();
   }, []);
   return (
     <>
@@ -409,6 +417,28 @@ const AdminDashBoard = ({ type }) => {
                 </div>
               );
             })}
+            { type=="charts" && data.length !=0?
+             <VictoryChart
+            
+             theme={VictoryTheme.material}
+             eight={1000} width={1500}
+            
+             domainPadding={{ x: 50, y: [0, 20] }}
+          
+             >
+            <VictoryBar
+           
+        data={data}
+        // data accessor for x values
+        x="YEAR(birthday)"
+        // data accessor for y values
+        y="COUNT(*)"
+        style={{
+          data: { fill: "#4267B2" }
+        }}
+      />
+      </VictoryChart>
+      :""}
         </div>
         {/* pagination bar starts here */}
         <div className="paginationBar">
