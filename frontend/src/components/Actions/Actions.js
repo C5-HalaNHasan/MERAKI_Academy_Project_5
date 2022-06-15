@@ -92,7 +92,7 @@ const Actions = ({ id }) => {
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          dispatch(removeFromFriendsList(result.data.result[0].id)); //! to be deleted if not used
+          dispatch(removeFromFriendsList(result.data.result[0].id));
           setIsFriend(false);
           getAllFriendsOfCurrentUser();
           getAllFriendsOfVisitedUser();
