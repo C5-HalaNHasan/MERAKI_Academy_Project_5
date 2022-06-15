@@ -25,24 +25,24 @@ const createComment = (req, res) => {
 };
 
 // create function to get all comment in the post.
-// const getCommentsByPostId = (req, res) => {
-//   const post_id = req.params.id;
-//   const query = `SELECT * FROM comment WHERE post_id =? AND isDeleted=0`;
-//   const data = [post_id];
-//   connection.query(query, data, (error, result) => {
-//     if (error) {
-//       return res.status(500).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     }
-//     res.status(201).json({
-//       success: true,
-//       message: `All comment for post_id => ${post_id}`,
-//       result: result,
-//     });
-//   });
-// };
+const getCommentById = (req, res) => {
+  const id = req.params.id;
+  const query = `SELECT * FROM comment WHERE id =? AND isDeleted=0`;
+  const data = [id];
+  connection.query(query, data, (error, result) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: ` comment for post`,
+      result: result,
+    });
+  });
+};
 
 // function to get all comments
 const getAllComments = (req, res) => {
@@ -233,7 +233,7 @@ const getReportedComments = (req, res) => {
   const page = req.query.page;
   const offset = (page-1)*limit;
   const query = `SELECT comment.id,createdAt,comment.isDeleted ,comment,author_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id  WHERE comment.isDeleted =0 AND comment.isReported =1 limit `+limit+" OFFSET " + offset;
-  const query2 = `SELECT COUNT(*) FROM post WHERE isReported =1 AND isDeleted =0`
+  const query2 = `SELECT COUNT(*) FROM comment WHERE isReported =1 AND isDeleted =0`
 
   connection.query(query, (error, result) => {
     if (error) {
@@ -261,7 +261,7 @@ const getReportedComments = (req, res) => {
 
 module.exports = {
   createComment,
-  //   getCommentsByPostId,
+  getCommentById,
   getAllComments,
   updateCommentById,
   deleteCommentById,

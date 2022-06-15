@@ -89,7 +89,7 @@ const CreatePost = () => {
             autoComplete="off"
             type={"text"}
             className="userPostInput"
-            placeholder={"What is in your mind " + currentUserInfo.firstName +"?"}
+            placeholder={"What is in your mind, " + currentUserInfo.firstName +"?"}
             onChange={(e) => {
               setPostText(e.target.value);
             }}

@@ -37,6 +37,8 @@ const ModalBox = () => {
   const [previewImg, setPreviewImg] = useState("");
   //to show reported post in the admin dashboard
   const [reportedPostText, setReportedPostText] = useState("");
+  const [reportedCommentText, setReportedCommentText] = useState("");
+
   const [reportedPostImg, setReportedPostImg] = useState("");
 
   //message states to be used to rerender the inbox:
@@ -91,6 +93,7 @@ const ModalBox = () => {
     "updateProfile",
     "deleteRoom",
     "showPost",
+    "showComment"
   ];
   const clearModalBox = () => {
     dispatch(
@@ -106,11 +109,16 @@ const ModalBox = () => {
     setUpdatedImg("");
     setReportedPostImg("");
     setReportedPostText("");
+    setReportedCommentText("")
   };
   useEffect(() => {
     if (modalType === "showPost" && modalShow === true) {
       getReportedPost();
     }
+    if (modalType === "showComment" && modalShow === true) {
+      getReportedComment();
+    }
+
   }, [modalId]);
 
   if (modalShow === false) {
@@ -424,6 +432,18 @@ const ModalBox = () => {
       }
     } catch {}
   };
+  const getReportedComment = async()=>{
+    try {
+      const res = await axios.get(`http://localhost:5000/comment/id/${modalId}`);
+      console.log("hiiiiiiiiiiiiii",res.data);
+      if (res.data.success) {
+       
+     
+      
+        setReportedCommentText(res.data.result[0].comment);
+      }
+    } catch {}
+  }
 
   // if (modalType == "showPost") {
   //   getReportedPost();
@@ -523,6 +543,8 @@ const ModalBox = () => {
             ) : null}
             {/* add details whenevr a backend sends an error */}
             {modalType == "showPost" && <h2>{reportedPostText}</h2>}
+            {modalType == "showComment" && <h2>{reportedCommentText}</h2>}
+
             {actionTypes.includes(modalType) && (
               <>
                 <div className="actionButtonsContainer">

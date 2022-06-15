@@ -127,7 +127,7 @@ const NavBar = () => {
             className="adminIcon"
               onClick={() => {
                 
-                navigate("/admin");
+                navigate("/charts");
               }}
             />
           </div>:""}

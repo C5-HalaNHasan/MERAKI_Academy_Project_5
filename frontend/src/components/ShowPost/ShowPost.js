@@ -791,7 +791,10 @@ const ShowPost = ({ type, id }) => {
                       <textarea
                         value={clear}
                         className="commentBox"
-                        placeholder="comment..."
+                        placeholder="Write a comment..."
+                        onClick={() => {
+                          setClear();
+                        }}
                         onChange={(e) => {
                           setComment(e.target.value);
                         }}
