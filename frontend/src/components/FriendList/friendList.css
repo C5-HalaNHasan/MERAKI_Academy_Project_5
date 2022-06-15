@@ -1,45 +1,79 @@
+.friendListComponent{
+}
+
 .friendList{
     display: flex;
     flex-direction: column;
     border-radius: 0.5em;
-    margin: 0;
     background-color: var(--spanColor);
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-    height: 14em;
-    padding-bottom: 0.1em;
-    padding-top: 0;
-
-
+    padding-bottom: 0.3em;
+    min-height: 20em;
 }
 .boxTitle{
     background-color:var(--mainColor) ;
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
     text-align: center;
-
 }
-
 
 .boxTitle h3{
     font-size:1.2em !important;  
     padding: 0.3em;
    color:white;
  }
-
-.renderedFriend{
+ .friendCard{
     background-color: var(--spanColor);
     box-shadow: 0px 0px 18px 0px var(--mainBgColor);
     border-radius: 1em;;
     display: flex;
-    margin:0.3em;
+    justify-content: space-between;
     gap: 0.8em;
-    padding: 0.3em;
-    align-items: center;
+    padding: 0.8em;
+    margin:0.4em;
 }
 
-.renderedFriend img{
-    width: 2em;
+ .friendInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+}
+.friendInfo img {
     border-radius: 50%;
+    cursor: pointer;
+}
+
+.friendInfo h3{
+font-size:0.9em !important;  
+ cursor: pointer;
+}
+
+
+.friendButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 0.8em;
+    align-items: center;
+    text-align: center;
+
+
+}
+
+.friendButtons button{
+    border: none;
+    padding:0.5em ;
+    color: var(--spanColor);
+    background-color: var(--mainColor) ;;
+    border-radius: 1em;
+    cursor: pointer;
+    width: 4.8em;
+    font-size: 0.9em;
+    transition: 0.5s ease;
+}
+
+.friendButtons button:hover{
+    transform: scale(1.2);
     cursor: pointer;
 }
 

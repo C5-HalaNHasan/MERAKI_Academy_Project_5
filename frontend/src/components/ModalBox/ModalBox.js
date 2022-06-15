@@ -92,11 +92,6 @@ const ModalBox = () => {
     "deleteRoom",
     "showPost",
   ];
-  // const actionTypes = ["ok", "notOk", "alert", "coverImg", "profileImg"];
-
-  if (modalShow === false) {
-    return null;
-  }
   const clearModalBox = () => {
     dispatch(
       setModalBox({
@@ -109,7 +104,19 @@ const ModalBox = () => {
     );
     setPreviewImg("");
     setUpdatedImg("");
+    setReportedPostImg("");
+    setReportedPostText("");
   };
+  useEffect(() => {
+    if (modalType === "showPost" && modalShow === true) {
+      getReportedPost();
+    }
+  }, [modalId]);
+
+  if (modalShow === false) {
+    return null;
+  }
+
   //! action buttons in ACTION COMPONENT:
   //a function to send messages to users:
   //!first open room==> from result get roomId then add the sent message with the room id to the database
@@ -316,10 +323,10 @@ const ModalBox = () => {
             // postVideo, //! to be checked
           })
         );
-        getAllPosts();
         clearModalBox();
         setPreviewImg("");
         setUpdatedImg("");
+        getAllPosts();
       })
       .catch((error) => {
         console.log(error);
@@ -402,26 +409,25 @@ const ModalBox = () => {
   //since this action (showPost) requires the post photo to be viewed;it will be invoked when the moalType==showPost:
   const getReportedPost = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/post/${userId}`, {
+      const res = await axios.get(`http://localhost:5000/post`, {
         headers: {
           Authorization: token,
         },
       });
-
       if (res.data.success) {
-        dispatch(setAllPosts(res.data.result));
         let filtForReported = res.data.result.filter((post) => {
-          return (post.id = userId);
+          return post.id == modalId;
         });
+        console.log({ reportedPost_fromModal: filtForReported });
         setReportedPostImg(filtForReported[0].postImg);
         setReportedPostText(filtForReported[0].postText);
       }
     } catch {}
   };
 
-  if (modalType == "showPost") {
-    getReportedPost();
-  }
+  // if (modalType == "showPost") {
+  //   getReportedPost();
+  // }
   //a function that rerenders the inbox after the room is deleted:
   const getAllMessages = () => {
     let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
@@ -512,10 +518,11 @@ const ModalBox = () => {
             modalType == "alert" ||
             modalType == "deletePost" ||
             modalType == "deleteComment" ||
-            modalType == "deleteRoom" ||
-            modalType == "showPost" ? (
+            modalType == "deleteRoom" ? (
               <h2>{modalDetails}</h2>
             ) : null}
+            {/* add details whenevr a backend sends an error */}
+            {modalType == "showPost" && <h2>{reportedPostText}</h2>}
             {actionTypes.includes(modalType) && (
               <>
                 <div className="actionButtonsContainer">
@@ -781,20 +788,3 @@ const ModalBox = () => {
 };
 
 export default ModalBox;
-
-/* 
-//!task2:
-//modalBox to be added to the admin panel:
-const showPostAdmin = () => {
-  dispatch(
-    setModalBox({
-      modalId: id, //postId
-      modalType: "showPost",
-      modalMessage: "Reported Post",
-      modalDetails: "",
-      modalShow: true,
-    })
-  );
-};
-
-*/

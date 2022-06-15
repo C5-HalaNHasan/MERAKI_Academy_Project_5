@@ -3,7 +3,7 @@ import "./adminDashBoard.css";
 import { TiUserDelete } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-
+import { setModalBox } from "../../redux/reducers/modalBox/index";
 
 import {
   setAllUsers,
@@ -39,22 +39,37 @@ const AdminDashBoard = ({ type }) => {
       allReportedUsers: state.user.allReportedUsers,
     };
   });
+  //modalBox states:
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
 
   //to get allUsers in the dataBase:
   const [usersLength, setUsersLength] = useState(0);
   const [reportedUsersLength, setReportedUsersLength] = useState(0);
   const [postLength, setPostLength] = useState(0);
   const [commentLength, setCommentLength] = useState(0);
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
- 
   const getAllUsers = () => {
     let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=6`;
     axios
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllUsers(result.data.result));
-        setPage(1)
+        setPage(1);
 
         setUsersLength(result.data.users_count);
       })
@@ -84,7 +99,7 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllReportedUsers(result.data.result));
-        setPage(1)
+        setPage(1);
 
         setReportedUsersLength(result.data.users_count);
         console.log(result.data);
@@ -139,9 +154,9 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllPosts(result.data.result));
-        setPage(1)
+        setPage(1);
 
-        setPostLength(result.data.users_count)
+        setPostLength(result.data.users_count);
         // setArrLength(result.data.result.length);
       })
       .catch((error) => {
@@ -155,7 +170,7 @@ const AdminDashBoard = ({ type }) => {
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
         dispatch(setAllPosts(result.data.result));
-        setPostLength(result.data.result.length)
+        setPostLength(result.data.result.length);
         // setArrLength(result.data.result.length);
       })
       .catch((error) => {
@@ -184,9 +199,9 @@ const AdminDashBoard = ({ type }) => {
       })
       .then((result) => {
         dispatch(setAllComments(result.data.result));
-        setPage(1)
+        setPage(1);
 
-        setCommentLength(result.data.users_count)
+        setCommentLength(result.data.users_count);
       })
       .catch((error) => {});
   };
@@ -197,7 +212,7 @@ const AdminDashBoard = ({ type }) => {
       })
       .then((result) => {
         dispatch(setAllComments(result.data.result));
-        setCommentLength(result.data.result.length)
+        setCommentLength(result.data.result.length);
       })
       .catch((error) => {});
   };
@@ -213,12 +228,13 @@ const AdminDashBoard = ({ type }) => {
   };
   //to vie charts and statistics:
   const showCharts = () => {
-    axios.get(`http://localhost:5000/user/birthday`).then((result)=>{
-      // setData(result.data.result)
-      console.log(result,"char");
-    }).catch((error)=>{
-
-    })
+    axios
+      .get(`http://localhost:5000/user/birthday`)
+      .then((result) => {
+        // setData(result.data.result)
+        console.log(result, "char");
+      })
+      .catch((error) => {});
   };
   //! based on the props: the targeted action is going to be called:
   const action = () => {
@@ -262,6 +278,19 @@ const AdminDashBoard = ({ type }) => {
   };
   //!users pagination logic ends here
 
+  //! dispatching showReportedPost:
+  const showReportedPost = (reportedPostId) => {
+    dispatch(
+      setModalBox({
+        modalId: reportedPostId,
+        modalType: "showPost",
+        modalMessage: "Reported Post",
+        modalDetails: "",
+        modalShow: true,
+      })
+    );
+  };
+
   useEffect(() => {
     getAllUsers();
     getReportedUsers();
@@ -277,14 +306,13 @@ const AdminDashBoard = ({ type }) => {
         {/* all usersDiv starts here */}
 
         <div className="adminResultUsers">
-          {
-          type == "allUsers" &&
+          {type == "allUsers" &&
             allUsers.length &&
             allUsers.map((user) => {
               return (
                 <div className="adminUserInfo">
                   <img src={user.profileImg} />
-                    <p>{user.firstName + " " + user.lastName}</p>
+                  <p>{user.firstName + " " + user.lastName}</p>
                   <p>{user.birthday.split("T")[0].split("")}</p>
                   <p>{user.country.toUpperCase()}</p>
                   <div>
@@ -296,9 +324,7 @@ const AdminDashBoard = ({ type }) => {
                   </div>
                 </div>
               );
-            })
-           
-            }
+            })}
           {type == "reportedUsers" &&
             allReportedUsers.length &&
             allReportedUsers.map((user) => {
@@ -327,9 +353,11 @@ const AdminDashBoard = ({ type }) => {
                   <p>{post.firstName + " " + post.lastName}</p>
                   <p>{post.createdAt.split("T")[0].split("")}</p>
                   <button
-                  className="nextBtn"
-                    onClick={() => {
-                      setShow(!show);
+                    className="nextBtn"
+                    id={post.id}
+                    onClick={(e) => {
+                      // setShow(!show);
+                      showReportedPost(e.target.id);
                     }}
                   >
                     Show Post
@@ -381,8 +409,6 @@ const AdminDashBoard = ({ type }) => {
                 </div>
               );
             })}
-
-          
         </div>
         {/* pagination bar starts here */}
         <div className="paginationBar">
@@ -402,48 +428,52 @@ const AdminDashBoard = ({ type }) => {
               Back
             </button>
           )}
-    {type=="allUsers" && usersLength >= 6  && <button
-            className="nextBtn"
-            onClick={() => {
-              getAllUsersNext(page + 1);
-              setPage(page + 1);
-            }}
-          >
-            Next
-          </button>}
-         {type=="reportedUsers" && reportedUsersLength >=6  && <button
-            className="nextBtn"
-            onClick={() => {
-      
-              getReportedUsersNext(page + 1);
-              setPage(page + 1);
-            }}
-          >
-            Next
-          </button>}
-          {type=="reportedPosts" && postLength >=6  && <button
-            className="nextBtn"
-            onClick={() => {
-          
-              getReportedPostsNext(page + 1);
-           
-              setPage(page + 1);
-            }}
-          >
-            Next
-          </button>}
-          {type=="reportedComments" && commentLength >=6  && <button
-            className="nextBtn"
-            onClick={() => {
-    
-              getAllReportedCommentsNext(page + 1);
-              setPage(page + 1);
-            }}
-          >
-            Next
-          </button>}
-        
-      
+          {type == "allUsers" && usersLength >= 6 && (
+            <button
+              className="nextBtn"
+              onClick={() => {
+                getAllUsersNext(page + 1);
+                setPage(page + 1);
+              }}
+            >
+              Next
+            </button>
+          )}
+          {type == "reportedUsers" && reportedUsersLength >= 6 && (
+            <button
+              className="nextBtn"
+              onClick={() => {
+                getReportedUsersNext(page + 1);
+                setPage(page + 1);
+              }}
+            >
+              Next
+            </button>
+          )}
+          {type == "reportedPosts" && postLength >= 6 && (
+            <button
+              className="nextBtn"
+              onClick={() => {
+                getReportedPostsNext(page + 1);
+
+                setPage(page + 1);
+              }}
+            >
+              Next
+            </button>
+          )}
+          {type == "reportedComments" && commentLength >= 6 && (
+            <button
+              className="nextBtn"
+              onClick={() => {
+                getAllReportedCommentsNext(page + 1);
+                setPage(page + 1);
+              }}
+            >
+              Next
+            </button>
+          )}
+
           {/* <ul className="pageNumbers">
           {pageNumbers.map((number) => {
             return (

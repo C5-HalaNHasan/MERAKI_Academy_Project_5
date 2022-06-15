@@ -24,6 +24,7 @@
   padding: 0.3em;
   align-items: left;
 }
+
 .userInfoButton {
 margin-top: -0.5em;
 display: flex;
@@ -41,7 +42,6 @@ align-items: center;
   border-radius: 1em;
   width:6em;
   font-size:1em!important;
-
 }
 .userInfoButton button:hover {
   transform: scale(1.2);

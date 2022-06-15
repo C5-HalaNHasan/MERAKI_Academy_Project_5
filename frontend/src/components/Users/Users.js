@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAllUsers,
@@ -10,10 +11,12 @@ import {
 import { setModalBox } from "../redux/reducers/modalBox/index";
 
 import "./users.css";
+import { Navigate } from "react-router-dom";
 
 //Users component will take two props:type(search or friendlist) & name (name of the searched user)
 const Users = ({ type, name }) => {
-  //! PROBLEM: CHECK FRIENDLIST RENDER!
+  const [list, setList] = useState([]);
+  const navigate = useNavigate();
   //modalBox states:
   const {
     modalId,
@@ -41,19 +44,77 @@ const Users = ({ type, name }) => {
       };
     }
   );
-  // const addFriend = () => {
-  //   let addFriendUrl = `http://localhost:5000/user/${id}`;
-  //   axios
-  //     .post(addFriendUrl, {}, { headers: { authorization: token } })
-  //     .then((result) => {
-  //       if (result.data.success) {
-  //         dispatch(addToFriendsList(result.data.result[0]));
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log({ fromAddFriend_error: error });
-  //     });
-  // };
+  //to re-render the currentUser Friends (for Add/Remove)
+  const getAllFriendsOfCurrentUser = async () => {
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${userId}`;
+    axios
+      .get(getFriendsUrl, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(setCurrentUserFriends(result.data.result));
+        }
+      })
+      .catch((error) => {
+        console.log({ fromGetAllFriends_error: error });
+      });
+  };
+  //a function that adds a user as a friend if not in currentUserFriends
+  const addFriend = (id) => {
+    let addFriendUrl = `http://localhost:5000/user/${id}`;
+    axios
+      .post(addFriendUrl, {}, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(addToFriendsList(result.data.result[0]));
+          getAllFriendsOfCurrentUser();
+        }
+      })
+      .catch((error) => {
+        console.log({ fromAddFriend_error: error });
+      });
+  };
+  //a function that sends a message to user by id:
+  const sendMessageToUser = (toId) => {
+    console.log({ sendMessageToUser: toId });
+    dispatch(
+      setModalBox({
+        modalId: toId,
+        modalType: "sendMessage",
+        modalMessage: "Send Message",
+        modalDetails: "",
+        modalShow: true,
+      })
+    );
+  };
+  //a function that reports a user by id/ this function will be handeled inside ModalBox component:
+  const reportUserById = (toId) => {
+    dispatch(
+      setModalBox({
+        modalId: toId,
+        modalType: "report",
+        modalMessage: "Report User",
+        modalDetails: "",
+        modalShow: true,
+      })
+    );
+  };
+  //a function that removes a user from currentUserFriends if
+  const removeFriend = (toId) => {
+    let removeUserUrl = `http://localhost:5000/user/${toId}`;
+    axios
+      .delete(removeUserUrl, { headers: { authorization: token } })
+      .then((result) => {
+        if (result.data.success) {
+          dispatch(removeFromFriendsList(result.data.result[0].id));
+          getAllFriendsOfCurrentUser();
+        }
+      })
+      .catch((error) => {
+        console.log({ fromRemoveFriend_error: error });
+      });
+  };
+
+  //to check the type sent if search or friendlist and render the users based on that:
   if (type == "search") {
     useEffect(() => {
       axios
@@ -81,67 +142,119 @@ const Users = ({ type, name }) => {
         });
     }, []);
   }
+  console.log({ currentUserFriendsFromUserSCOMPONENT: currentUserFriends });
+  console.log({ allUsersFromUserSCOMPONENT: allUsers });
   return (
     <div className="usersComponent">
-      {type == "search"
-        ? allUsers.map((user, index) => {
-            if (user.firstName.includes(name)) {
+      <div className="friendList">
+        <div className="boxTitle">
+          <h3>Result</h3>
+        </div>
+        {type == "search"
+          ? allUsers.map((user, index) => {
+              if (
+                (user.firstName.toLowerCase().includes(name.toLowerCase()) ||
+                  user.lastName.toLowerCase().includes(name.toLowerCase())) &&
+                user.id !== userId
+              ) {
+                return (
+                  <div className="friendCard">
+                    <div className="friendInfo">
+                      <img
+                        src={user.profileImg}
+                        style={{ width: "3em", height: "3em" }}
+                        onClick={() => {
+                          navigate(`/user/${user.id}`);
+                        }}
+                      ></img>
+                      <h3>{user.firstName + " " + user.lastName}</h3>
+                    </div>
+                    <div className="friendButtons">
+                      {/* for add and remove buttons */}
+                      {currentUserFriends.some(
+                        (currentFriend) => currentFriend.id == user.id
+                      ) ? (
+                        <button
+                          onClick={() => {
+                            removeFriend(user.id);
+                          }}
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            addFriend(user.id);
+                          }}
+                        >
+                          Add
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          sendMessageToUser(user.id);
+                        }}
+                      >
+                        Message
+                      </button>
+                      <button
+                        onClick={() => {
+                          reportUserById(user.id);
+                        }}
+                      >
+                        Report
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+            })
+          : currentUserFriends.map((friend, index) => {
               return (
-                <div className="users">
-                  <div className="username">
-                    <img src={user.profileImg}></img>
+                <div className="friendCard">
+                  <div className="friendInfo">
+                    <img
+                      src={friend.profileImg}
+                      style={{ width: "3em", height: "3em" }}
+                      onClick={() => {
+                        navigate(`/user/${friend.id}`);
+                      }}
+                    ></img>
                     <h3>
-                      {user.firstName} {user.lastName}{" "}
+                      {friend.firstName} {friend.lastName}{" "}
                     </h3>
                   </div>
-                  <div className="inboxButtons">
+                  <div className="friendButtons">
+                    {currentUserFriends.some(
+                      (currentFriend) => currentFriend.id == friend.id
+                    ) ? (
+                      <button
+                        onClick={() => {
+                          removeFriend(friend.id);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          addFriend(friend.id);
+                        }}
+                      >
+                        Add
+                      </button>
+                    )}
+
                     <button
                       onClick={() => {
-                        let addFriendUrl = `http://localhost:5000/user/${user.id}`;
-                        axios
-                          .post(
-                            addFriendUrl,
-                            {},
-                            { headers: { authorization: token } }
-                          )
-                          .then((result) => {
-                            if (result.data.success) {
-                              dispatch(addToFriendsList(result.data.result[0]));
-                            }
-                          })
-                          .catch((error) => {
-                            console.log({ fromAddFriend_error: error });
-                          });
-                      }}
-                    >
-                      Add
-                    </button>
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          setModalBox({
-                            modalId: user.id,
-                            modalType: "sendMessage",
-                            modalMessage: "Send Message",
-                            modalDetails: "",
-                            modalShow: true,
-                          })
-                        );
+                        sendMessageToUser(friend.id);
                       }}
                     >
                       Message
                     </button>
                     <button
                       onClick={() => {
-                        dispatch(
-                          setModalBox({
-                            modalId: user.id,
-                            modalType: "report",
-                            modalMessage: "Report User",
-                            modalDetails: "",
-                            modalShow: true,
-                          })
-                        );
+                        reportUserById(friend.id);
                       }}
                     >
                       Report
@@ -149,74 +262,8 @@ const Users = ({ type, name }) => {
                   </div>
                 </div>
               );
-            }
-          })
-        : currentUserFriends.map((friend, index) => {
-            if (friend.firstName.includes(name)) {
-              return (
-                <>
-                  <div className="friendContainer">
-                    <div className="friendInfo">
-                      <img src={friend.profileImg}></img>
-                      <h3>
-                        {friend.firstName} {friend.lastName}{" "}
-                      </h3>
-                    </div>
-                    <div className="actionButton">
-                      <button
-                        onClick={axios
-                          .delete(`http://localhost:5000/user/${friend.id}`, {
-                            headers: { authorization: token },
-                          })
-                          .then((result) => {
-                            if (result.data.success) {
-                              dispatch(
-                                removeFromFriendsList(result.data.result[0].id)
-                              );
-                            }
-                          })
-                          .catch((error) => {
-                            console.log({ fromRemoveFriend_error: error });
-                          })}
-                      >
-                        Remove
-                      </button>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            setModalBox({
-                              modalId: friend.id,
-                              modalType: "sendMessage",
-                              modalMessage: "Send Message",
-                              modalDetails: "",
-                              modalShow: true,
-                            })
-                          );
-                        }}
-                      >
-                        Message
-                      </button>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            setModalBox({
-                              modalId: friend.id,
-                              modalType: "report",
-                              modalMessage: "Report User",
-                              modalDetails: "",
-                              modalShow: true,
-                            })
-                          );
-                        }}
-                      >
-                        Report
-                      </button>
-                    </div>
-                  </div>
-                </>
-              );
-            }
-          })}
+            })}
+      </div>
     </div>
   );
 };
