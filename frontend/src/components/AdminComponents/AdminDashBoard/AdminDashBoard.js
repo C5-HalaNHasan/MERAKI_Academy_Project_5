@@ -430,7 +430,17 @@ const AdminDashBoard = ({ type }) => {
                   <img src={comment.profileImg} />
                   <p>{comment.firstName + " " + comment.lastName}</p>
                   <p>{comment.createdAt.split("T")[0].split("")}</p>
-                  <p>{comment.comment}</p>
+                  <button
+                    className="nextBtn"
+                    id={comment.id}
+                    onClick={(e) => {
+                      // setShow(!show);
+                      showReportedComment(e.target.id);
+                    }}
+                  >
+                    Show Post
+                  </button>
+                  {/* <p>{comment.comment}</p> */}
 
                   <div>
                     <AiFillDelete
