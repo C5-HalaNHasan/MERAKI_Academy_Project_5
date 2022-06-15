@@ -23,12 +23,13 @@
     color: var(--spanColor);
     font-size: 1rem;
     cursor: pointer;
-    padding: 0.25vh 1vw;
+    padding: 0.02vh 2vw;
     border-radius: 2vh;
     transition:0.5s ease;
     border: none;
     margin-left: 0.75rem;
     margin-bottom: 0.25rem;
+    font-size: 1.3em;
     
 }
 .adminUserInfo{

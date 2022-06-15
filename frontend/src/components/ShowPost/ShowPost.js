@@ -616,7 +616,7 @@ const ShowPost = ({ type, id }) => {
                           </>
                         );
                       })}
-                    <span className="tags"> Like</span>
+                    <span className={element.isLiked ? "likedTags" :"tags"}> Like</span>
                   </div>
                   <div>
                     <BiComment
@@ -705,6 +705,7 @@ const ShowPost = ({ type, id }) => {
                                               );
                                             }
                                           )}
+                                          <span className={element.isLikedComment ? "likedTagsComment" :"tagsComment"}> Like</span>
                                       </div>
                                     </div>
                                   </div>
