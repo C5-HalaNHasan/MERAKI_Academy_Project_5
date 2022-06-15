@@ -11,7 +11,7 @@
 .leftFooter{
     flex:2;
     flex-direction: column;
-    padding: 2em;
+    padding-left:2.5em;
 align-items: center;    
 }
 .centerFooter{

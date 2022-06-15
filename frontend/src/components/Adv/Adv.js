@@ -34,7 +34,7 @@ const Adv = () => {
 
   return (
     <div className="advComponent">
-      <div className="friendList">
+      <div className="friendList advList">
         <div className="boxTitle">
           <h3>Advertisment</h3>
         </div>

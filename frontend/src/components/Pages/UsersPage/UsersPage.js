@@ -8,6 +8,7 @@ import Users from "../../Users/Users";
 import Adv from "../../Adv/Adv";
 import { useSelector } from "react-redux";
 import ModalBox from "../../ModalBox/ModalBox";
+import Banner from "../../Banner/Banner";
 
 const UsersPage = () => {
   const { userId } = useSelector((state) => {
@@ -21,6 +22,7 @@ const UsersPage = () => {
     <>
       <ModalBox />
       <NavBar />
+      <Banner />
       <FriendList id={userId} />
       <Suggested />
       <Users type={type} name={name} />
