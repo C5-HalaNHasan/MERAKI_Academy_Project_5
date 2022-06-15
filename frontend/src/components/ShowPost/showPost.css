@@ -6,7 +6,7 @@
     
 }
 .liked{
-    color:blue;
+    color:var(--mainColor);
     font-size: 1.75em;
 cursor: pointer;
     
@@ -53,6 +53,21 @@ cursor: pointer;
 .tags{
     font-size: 1em;
     font-weight: bold;
+}
+.likedTags{
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--mainColor); 
+}
+.tagsComment{
+    font-weight: bold;
+
+    font-size: 0.9em;  
+}
+.likedTagsComment{
+    font-weight: bold;
+    color: var(--mainColor); 
+    font-size: 0.9em;  
 }
 .postTopLeft{
 display: flex;
@@ -222,9 +237,10 @@ font-size: 2em;
 }
 .commentLiked{
     cursor: pointer;
-    color: blue;
+    color: var(--mainColor);
+    font-size: 1.3em;
 }
 .commentNotLiked{
     cursor: pointer;
-    
+    font-size: 1.3em;
 }
