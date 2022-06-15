@@ -22,20 +22,23 @@
     background-color: var(--spanColor);
     box-shadow: 0px 0px 18px 0px var(--mainBgColor);
     border-radius:2em;
-    padding: 0.6em 1em;
+    /* padding: 0.6em 1em; */
     display: flex;
     flex-direction: column;
     /* align-items: center; */
     gap:0.5em;
-
-
 }
 .boxMessage{
-    border-bottom:0.1em solid;
     display: flex;
     justify-content: space-between;
-    height: 2em;
-    padding-bottom:2.3em ;
+    align-items: center;
+    height: 3em;
+    padding:0.5em 1.5em ;
+    color: whitesmoke;
+    background-color:var(--mainColor) ;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    text-align: center;
 
 }
 
@@ -46,6 +49,7 @@
 .closeModalBox {
     font-size: 2em;
     transition: 0.5s ease;
+    color: whitesmoke;
 }
 .closeModalBox:hover {
     transform: scale(1.2);
@@ -77,7 +81,6 @@
 .boxContent {
     display: flex;
     flex-direction: column;
-
 }
 
 
@@ -87,7 +90,9 @@
     justify-content: space-between;
     text-align: center;
     padding: 0.1em;
-
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 0.5em;
 }
 
 .modalBottom .boxContent textarea {
@@ -104,8 +109,6 @@
     display: flex;
     justify-content: space-around;
     margin-top: 1em;
-    /* to center the icon and the button on one line but it didn't work */
-    /* height: 5vh; */
     gap: 0.8em;
     align-items: center;
     text-align: center;
@@ -126,7 +129,6 @@
 }
 
  .actionButton:hover ,.modalBoxIcon:hover {
-    /* might be checked later with the number of buttons that are going to be rendered */
     cursor: pointer;
     transform: scale(1.2);
 
