@@ -300,7 +300,7 @@ const addFriendById = (req, res) => {
   });
 };
 
-// ______this function to removeFriendById__________
+//this function to removeFriendById
 const removeFriendById = (req, res) => {
   const friendshipAccept = req.params.id;
   const friendshipRequest = req.token.userId;
@@ -323,7 +323,7 @@ const removeFriendById = (req, res) => {
   });
 };
 
-// ________ this function to get all friends ____________
+//this function to get all friends
 const getAllFriendsByUserId = (req, res) => {
   const friendshipRequest = req.params.id;
   const friendshipAccept = friendshipRequest;
@@ -449,8 +449,6 @@ const getSuggestedUser = (req, res) => {
   const userId = req.token.userId;
   console.log(userId);
   const query = ` SELECT * FROM user WHERE id NOT IN(SELECT friendshipAccept FROM friendship WHERE friendshipAccept=?) AND id NOT IN(SELECT friendshipRequest FROM friendship WHERE friendshipRequest=?)`;
-
-  //   SELECT id FROM user WHERE id NOT IN(SELECT friendshipAccept FROM friendship) -> 100%
 
   const data = [userId, userId, userId];
   connection.query(query, data, (error, result) => {

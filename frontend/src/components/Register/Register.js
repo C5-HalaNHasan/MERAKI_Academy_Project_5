@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "./register.css";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setLogin, setLogout } from "../redux/reducers/user/index";
+import { setModalBox } from "../redux/reducers/modalBox/index";
 
 const Register = () => {
   //to redirect the user to the home page afetr a successful registration
@@ -20,7 +21,34 @@ const Register = () => {
   const [profileImg, setProfileImg] = useState(
     "http://res.cloudinary.com/difjgm3tp/image/upload/v1654090247/xercgf8pjvjgrnwbeucm.jpg"
   );
+  //modalBox states:
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
 
+  const regErrorMessage = (message) => {
+    dispatch(
+      setModalBox({
+        modalId: "",
+        modalType: "notOk",
+        modalMessage: "Regestration Error",
+        modalDetails: message,
+        modalShow: true,
+      })
+    );
+  };
   const RegisterAction = async () => {
     //when the user clicks on the register button: the userData is going to be sent to the BE by axios!
     let userData = {
@@ -35,38 +63,48 @@ const Register = () => {
       role_id: 1,
     };
     let registerUrl = "http://localhost:5000/user";
-    await axios
-      .post(registerUrl, userData)
-      .then(async (result) => {
-        // will make the login automatically so that the user can navigate the site once registered(by using the login component here
-        if (result.data.success == true) {
-          //an automatic login in is going to be made and the user will be redirected to the main page (once created)
-          await axios
-            .post("http://localhost:5000/user/login", {
-              email: userData.email,
-              password: userData.password,
-            })
-            .then(async (result1) => {
-              console.log({ fromregister: result1 });
-              dispatch(
-                setLogin({
-                  token: result1.data.token,
-                  userId: result1.data.userId,
-                })
-              );
-              navigate("/home");
-            })
-            .catch((error1) => {
-              dispatch(setLogout);
-              console.log(error1); //!toast notification to be added
-            });
-        }
-        //!toast notification to be added here
-      })
-      .catch((error) => {
-        dispatch(setLogout);
-        console.log(error); //!toast notification to be added
-      });
+    if (
+      firstName &&
+      lastName &&
+      email &&
+      password &&
+      country &&
+      gender &&
+      birthday
+    ) {
+      await axios
+        .post(registerUrl, userData)
+        .then(async (result) => {
+          // will make the login automatically so that the user can navigate the site once registered(by using the login component here
+          if (result.data.success == true) {
+            //an automatic login in is going to be made and the user will be redirected to the main page (once created)
+            await axios
+              .post("http://localhost:5000/user/login", {
+                email: userData.email,
+                password: userData.password,
+              })
+              .then(async (result1) => {
+                dispatch(
+                  setLogin({
+                    token: result1.data.token,
+                    userId: result1.data.userId,
+                  })
+                );
+                navigate("/home");
+              })
+              .catch((error1) => {
+                dispatch(setLogout);
+                regErrorMessage(error1.response.data.message);
+              });
+          }
+        })
+        .catch((error) => {
+          dispatch(setLogout);
+          regErrorMessage(error.response.data.message);
+        });
+    } else {
+      regErrorMessage("All fields must be filled!");
+    }
   };
 
   return (

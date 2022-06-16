@@ -51,9 +51,6 @@ const UserInfo = ({ id }) => {
     );
   };
   useEffect(() => {
-    // console.log(id)
-    // console.log(userId);;
-
     axios
       .get(`http://localhost:5000/user/${id}`, {
         headers: { authorization: token },
@@ -61,7 +58,6 @@ const UserInfo = ({ id }) => {
       .then((respon) => {
         let result = respon.data.result[0];
         console.log(result);
-        // console.log(result.gender);
         result.birthday = result.birthday.split("T")[0];
         if (result.gender === 0) {
           result.gender = "male";
@@ -71,8 +67,6 @@ const UserInfo = ({ id }) => {
           console.log(result.birthday);
           console.log(result.gender);
         } else {
-          // console.log(result.birthday);
-
           dispatch(setVisitedUserInfo(result));
           console.log(id);
           console.log(userId);
@@ -81,8 +75,6 @@ const UserInfo = ({ id }) => {
         console.log(result.gender);
       })
       .catch((err) => {
-        //   console.log(id)
-        //     console.log(userId);;
         console.log(err);
       });
   }, []);

@@ -64,7 +64,7 @@ const getAllMessagesFromUserById = (req, res) => {
   });
 };
 
-// a function that returns all messages for the logged in user: //! not used/replaced by getCurrentUserRooms//! TO BE DELETED
+// a function that returns all messages for the logged in user: //! not used/replaced by getCurrentUserRooms
 const getAllUserMessages = (req, res) => {
   const userId = req.token.userId;
   const query = `SELECT m.id, m.sentBy,m.receivedBy,u1.id,u1.profileImg,u1.firstName,u1.lastName,u2.id AS u2Id,u2.firstName AS u2f,u2.lastName AS u2l,u2.profileImg AS u2Img FROM message m  INNER JOIN user u1 ON m.sentBy=u1.id INNER JOIN user u2 ON m.receivedBy=u2.id WHERE (m.sentBy =? OR m.receivedBy =?) AND m.isDeleted=0 GROUP BY m.sentBy,m.receivedBy`;
@@ -195,7 +195,7 @@ const openRoom = (req, res) => {
         res.status(201).json({
           success: true,
           message: "room created successfully!,your roomId is:",
-          result: result2.insertId, //! to be checked to get roomId instead of the whole result
+          result: result2.insertId,
         });
       });
     }
@@ -217,7 +217,7 @@ const getCurrentUserRooms = (req, res) => {
     res.status(200).json({
       success: true,
       message: "your rooms:",
-      result: result, //! to be checked to get roomId instead of the whole result
+      result: result,
     });
   });
 };
@@ -254,7 +254,6 @@ module.exports = {
   sendMessageToUserById,
   getAllMessagesFromUserById,
   removeSentMessageById,
-  //room functions:
   openRoom,
   getCurrentUserRooms,
   deleteRoom,

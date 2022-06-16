@@ -17,18 +17,16 @@ const HomePage = () => {
     };
   });
   return (
-    // <div className="home">
-    <>
-      <ModalBox />
-      <NavBar />
-      <Banner />
-      <FriendList id={userId} />
-      <Suggested />
-      <CreatePost />
-      <ShowPost type={"home"} />
-      <Adv />
-    </>
-    // </div>
+      <>
+        <ModalBox />
+        <NavBar />
+        <Banner />
+        <FriendList id={userId} />
+        <Suggested />
+        <CreatePost />
+        <ShowPost type={"home"} />
+        <Adv />
+      </>
   );
 };
 

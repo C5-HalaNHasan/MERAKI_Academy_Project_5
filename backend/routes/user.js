@@ -11,7 +11,8 @@ const {
   reportUserById,
   removeUserByIdAdmin,
   getReportedUsers,
-  getUserById,getSuggestedUser,
+  getUserById,
+  getSuggestedUser,
   getAllUsersPag,
   usersBirthday,
   usersGender,
@@ -38,7 +39,6 @@ userRouter.get("/gender", usersGender);
 
 //endpoint for GET request ==> http://localhost:5000/user ==>getAllUsersPag
 userRouter.get("/pag", getAllUsersPag);
-
 
 //endpoint for PUT request ==> http://localhost:5000/user ==>updateUserProfile
 userRouter.put("/", authentication, updateUserProfile);

@@ -10,8 +10,8 @@ const userSlice = createSlice({
     currentUserFriends: [],
     visitedUserFriends: [],
     allUsers: [],
-    allReportedUsers:[],
-    suggestedFriends:[]
+    allReportedUsers: [],
+    suggestedFriends: [],
   },
   reducers: {
     setLogin: (state, action) => {
@@ -55,12 +55,10 @@ const userSlice = createSlice({
       state.allReportedUsers = action.payload;
     },
     addToFriendsList: (state, action) => {
-      //! to be deleted if not used
       // action:{payload:{}}
       state.currentUserFriends.push(action.payload);
     },
     removeFromFriendsList: (state, action) => {
-      //! to be deleted if not used
       // action:{payload:id of removed user from friendlist}
       state.currentUserFriends = state.currentUserFriends.filter(
         (friend, index) => {
@@ -101,6 +99,7 @@ export const {
   setAllReportedUsers,
   addToFriendsList,
   removeFromFriendsList,
-  updateUserInfo,setSuggestedFriends
+  updateUserInfo,
+  setSuggestedFriends,
 } = userSlice.actions;
 export default userSlice.reducer;

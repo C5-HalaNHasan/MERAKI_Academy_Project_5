@@ -2,9 +2,10 @@ import "./login.css";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setLogin, setLogout } from "../redux/reducers/user/index";
-import {GoogleLogin} from "react-google-login"
+import { GoogleLogin } from "react-google-login";
+import { setModalBox } from "../redux/reducers/modalBox/index";
 
 const Login = () => {
   //to redirect the user to the home page
@@ -17,83 +18,105 @@ const Login = () => {
   const [country, setCountry] = useState("Jordan");
   const [gender, setGender] = useState("0");
   const [birthday, setBirthday] = useState("2001-01-01");
-  const clientId = "171142303177-dlklu0me533t11g37ll28pjmd603vh8c.apps.googleusercontent.com";
-  const onSuccess =(res)=>{
-    console.log(res);
-    axios.post("http://localhost:5000/user",{
-      firstName:res.profileObj.givenName,
-      lastName:res.profileObj.familyName,
-      email:res.profileObj.email,
-      password:newPassword,
-      profileImg:res.profileObj.imageUrl,
-      country,
-      gender,
-      birthday,
-      role_id: 1,
-    }).then(async (result) => {
-      // will make the login automatically so that the user can navigate the site once registered(by using the login component here
-      if (result.data.success == true) {
-        //an automatic login in is going to be made and the user will be redirected to the main page (once created)
-        await axios
-          .post("http://localhost:5000/user/login", {
-            email: res.profileObj.email,
-            password: newPassword,
-          })
-          .then(async (result1) => {
-            console.log({ fromregister: result1 });
-            dispatch(
-              setLogin({
-                token: result1.data.token,
-                userId: result1.data.userId,
-              })
-            );
-            navigate("/home");
-          })
-          .catch((error1) => {
-            dispatch(setLogout);
-            console.log(error1); //!toast notification to be added
-          });
-      }
-      //!toast notification to be added here
-    })
-    .catch(async (error) => {
-      dispatch(setLogout);
-      console.log(error); //!toast notification to be added
-      if(error.response.data.message == "this email exists in the dataBase"){
-        await axios
-        .post("http://localhost:5000/user/login", {
-          email: res.profileObj.email,
-          password: newPassword,
-        })
-        .then(async (result1) => {
-          console.log({ fromregister: result1 });
-          dispatch(
-            setLogin({
-              token: result1.data.token,
-              userId: result1.data.userId,
+  const clientId =
+    "171142303177-dlklu0me533t11g37ll28pjmd603vh8c.apps.googleusercontent.com";
+  //modalBox states:
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
+  const loginErrorMessage = (message) => {
+    dispatch(
+      setModalBox({
+        modalId: "",
+        modalType: "notOk",
+        modalMessage: "Login Error",
+        modalDetails: message,
+        modalShow: true,
+      })
+    );
+  };
+  const onSuccess = (res) => {
+    axios
+      .post("http://localhost:5000/user", {
+        firstName: res.profileObj.givenName,
+        lastName: res.profileObj.familyName,
+        email: res.profileObj.email,
+        password: newPassword,
+        profileImg: res.profileObj.imageUrl,
+        country,
+        gender,
+        birthday,
+        role_id: 1,
+      })
+      .then(async (result) => {
+        // will make the login automatically so that the user can navigate the site once registered(by using the login component here
+        if (result.data.success == true) {
+          //an automatic login in is going to be made and the user will be redirected to the main page (once created)
+          await axios
+            .post("http://localhost:5000/user/login", {
+              email: res.profileObj.email,
+              password: newPassword,
             })
-          );
-          navigate("/home");
-        })
-        .catch((error1) => {
-          dispatch(setLogout);
-          console.log(error1); //!toast notification to be added
-        });
-      }
-    });
-};
-
-
-
-   
-  
+            .then(async (result1) => {
+              dispatch(
+                setLogin({
+                  token: result1.data.token,
+                  userId: result1.data.userId,
+                })
+              );
+              navigate("/home");
+            })
+            .catch((error1) => {
+              dispatch(setLogout);
+              loginErrorMessage(error1.response.data.message);
+            });
+        }
+      })
+      .catch(async (error) => {
+        dispatch(setLogout);
+        loginErrorMessage(error.response.data.messagee);
+        if (
+          error.response.data.message == "this email exists in the dataBase"
+        ) {
+          await axios
+            .post("http://localhost:5000/user/login", {
+              email: res.profileObj.email,
+              password: newPassword,
+            })
+            .then(async (result1) => {
+              dispatch(
+                setLogin({
+                  token: result1.data.token,
+                  userId: result1.data.userId,
+                })
+              );
+              navigate("/home");
+            })
+            .catch((error1) => {
+              dispatch(setLogout);
+              loginErrorMessage(error1.response.data.message);
+            });
+        }
+      });
+  };
 
   const LoginAction = () => {
     const loginUrl = "http://localhost:5000/user/login";
     axios
       .post(loginUrl, { email, password })
       .then((result) => {
-        //!toast notification to be added
         if (result.data.token) {
           dispatch(
             setLogin({ token: result.data.token, userId: result.data.userId })
@@ -103,12 +126,11 @@ const Login = () => {
           } else {
             navigate("/home");
           }
-          console.log({ fromLogin: result.data.userInfo }); //! to be deleted
         }
       })
       .catch((error) => {
         dispatch(setLogout);
-        console.log(error); //!toast notification to be added
+        loginErrorMessage(error.response.data.message);
       });
   };
   return (
@@ -141,10 +163,7 @@ const Login = () => {
             autoComplete="off"
           ></input>
         </div>
-        <GoogleLogin
-        clientId={clientId}
-        onSuccess={onSuccess}
-        />
+        <GoogleLogin clientId={clientId} onSuccess={onSuccess} />
         <button
           onClick={() => {
             LoginAction();

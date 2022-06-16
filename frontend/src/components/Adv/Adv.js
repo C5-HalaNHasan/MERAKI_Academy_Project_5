@@ -39,10 +39,7 @@ const Adv = () => {
           <h3>Advertisement</h3>
         </div>
         <div className="advImg">
-          <img
-            // src={"https://image.tmdb.org/t/p/w500" + imgNews}
-            src={imgNews}
-          />
+          <img src={imgNews} />
         </div>
       </div>
     </div>
