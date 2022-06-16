@@ -24,8 +24,9 @@
 
 ## 🧐 About <a name = "about"></a>
 
-Facebook not only application has the way to shear your ideas, you can shear your photos, and videos
-with your friends around the world, you can chat with them, also can search peoples you know them, you can post anything you want ,you can comment on the posts, even you can react on the posts . Our application serve you to have a wonderful tour with your own world ..
+Facebook is a website which allows users, who sign-up for free profiles, to connect with friends,
+work colleagues or people they don't know, online. It allows users to share pictures, music, videos, and articles,
+as well as their own thoughts and opinions with however many people they like...
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -71,7 +72,7 @@ npm run start
 
 ## 🎈 Usage <a name="usage"></a>
 
-Fist you have to use Postman to add your own data or you can contact us to set you a program can suite you.
+First you have to use Postman to add your own data or you can contact us to set you a program can suite you.
 You can register from this page ![plot]()
 You can Login from this page ![plot]()
 you acn login with google from this page ![plot]()
