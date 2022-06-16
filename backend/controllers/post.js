@@ -354,7 +354,7 @@ const getFriendsPosts = (req, res) => {
                 react.author_id === friendshipRequest &&
                 comment.id == react.comment_id && comment.post_id==post.id
               ) {
-                post.isLikedComment = true;
+                comment.isLikedComment = true ;
               }
           
             });

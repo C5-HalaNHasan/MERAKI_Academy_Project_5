@@ -474,6 +474,11 @@ const ShowPost = ({ type, id }) => {
                         {element.createdAt
                           ? element.createdAt.split("T")[0]
                           : ""}
+                          
+                          {/* <br></br>
+                                         { element.createdAt ?  element.createdAt
+                              .split("T")[1]
+                              .replace(".000Z", ""):""} */}
                       </span>
                     </div>
                   </div>
@@ -673,10 +678,14 @@ const ShowPost = ({ type, id }) => {
                                         {comment.createdAt
                                           ? comment.createdAt.split("T")[0]
                                           : ""}
+                                          {/* <br></br>
+                                         { comment.createdAt ?  comment.createdAt
+                              .split("T")[1]
+                              .replace(".000Z", ""):""} */}
                                       </div>
                                       <div>
                                         <AiOutlineLike
-                                          className={element.isLikedComment?"commentLiked":"commentNotLiked"}
+                                          className={comment.isLikedComment?"commentLiked":"commentNotLiked"}
                                           onClick={() => {
                                             checkCommentsLiked(
                                               comment.id,
