@@ -84,7 +84,6 @@ const Register = () => {
                 password: userData.password,
               })
               .then(async (result1) => {
-                console.log({ fromregister: result1 });
                 dispatch(
                   setLogin({
                     token: result1.data.token,

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 const AdminSideBar = () => {
   const navigate = useNavigate();
 
-  //! a way to prevent nesting routes!(not done yet)
   const allUsers = () => {
     navigate(`/allUsers`);
   };

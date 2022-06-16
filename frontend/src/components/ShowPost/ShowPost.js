@@ -119,7 +119,7 @@ const ShowPost = ({ type, id }) => {
     };
   }
 
-  //! new updatePost function:
+  //new updatePost function:
   const updatePost = (id, postImg) => {
     dispatch(
       setModalBox({
@@ -132,7 +132,7 @@ const ShowPost = ({ type, id }) => {
     );
   };
 
-  //! new deletePost function:
+  //new deletePost function:
   const deletePostById = (id) => {
     dispatch(
       setModalBox({
@@ -347,12 +347,6 @@ const ShowPost = ({ type, id }) => {
 
     return addReactionToComment(comment);
   };
-  // const colorFunc = (author, post) => {
-  //   posts.map((element, index) => {
-
-  //     }
-
-  // });}
 
   useEffect(() => {
     getAllPosts();
@@ -399,7 +393,6 @@ const ShowPost = ({ type, id }) => {
                       setCurrentPost(e.target.id);
                     }}
                   />
-                  {/* {setAuthor(element.author_id)} */}
                   {currentUserInfo.id == element.author_id &&
                   updateClick &&
                   currentPost == element.id ? (

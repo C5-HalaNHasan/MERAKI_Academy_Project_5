@@ -48,7 +48,6 @@ const Login = () => {
     );
   };
   const onSuccess = (res) => {
-    console.log(res);
     axios
       .post("http://localhost:5000/user", {
         firstName: res.profileObj.givenName,
@@ -71,7 +70,6 @@ const Login = () => {
               password: newPassword,
             })
             .then(async (result1) => {
-              console.log({ fromregister: result1 });
               dispatch(
                 setLogin({
                   token: result1.data.token,
@@ -98,7 +96,6 @@ const Login = () => {
               password: newPassword,
             })
             .then(async (result1) => {
-              console.log({ fromregister: result1 });
               dispatch(
                 setLogin({
                   token: result1.data.token,

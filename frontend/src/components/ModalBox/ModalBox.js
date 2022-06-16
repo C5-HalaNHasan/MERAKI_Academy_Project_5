@@ -10,7 +10,6 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../redux/reducers/modalBox/index";
 import { setCurrentUserInfo } from "../redux/reducers/user";
-// import previewPostImg from "../assets/bgReg.jpg";
 import previewPostImg from "../assets/fbLogo.png";
 
 //! to update posts:
@@ -144,7 +143,6 @@ const ModalBox = () => {
               )
               .then((result1) => {
                 if (result1.data.success) {
-                  console.log({ fromSendMessage_result1: result1 });
                   clearModalBox();
                 }
               })
@@ -169,13 +167,11 @@ const ModalBox = () => {
         .put(reportUserUrl, {}, { headers: { authorization: token } })
         .then((result) => {
           if (result.data.success) {
-            console.log({ fromReportUser_result: result });
             clearModalBox();
-            //!toast notification to be added "reported successfully"
           }
         })
         .catch((error) => {
-          console.log({ fromReportUser_error: error }); //! to be deleted and replaced by toast notification
+          console.log({ fromReportUser_error: error });
         });
     } else {
     }
@@ -208,8 +204,6 @@ const ModalBox = () => {
     await axios
       .put(updateProfileUrl, userData, { headers: { authorization: token } })
       .then(async (result) => {
-        console.log({ result_from_updateuserProfile: result });
-
         if (result.data.success) {
           dispatch(setCurrentUserInfo(result.data.result[0]));
           getCurrentUserInfo();
@@ -235,7 +229,6 @@ const ModalBox = () => {
       .then((result) => {
         setUpdatedImg(result.data.url);
         setPreviewImg(result.data.url);
-        console.log(result.data.url);
       })
       .catch((error) => {
         console.log(error);
@@ -252,7 +245,6 @@ const ModalBox = () => {
       )
       .then((result) => {
         if (result.data.success) {
-          console.log("updated successfully");
           getCurrentUserInfo();
           clearModalBox();
         }
@@ -296,7 +288,6 @@ const ModalBox = () => {
         setUpdatedImg(result.data.url);
         setPreviewImg(result.data.url);
         dispatch(setModalBox({ modalDetails: result.data.url }));
-        console.log(result.data.url);
       })
       .catch((error) => {
         console.log(error);
@@ -311,7 +302,7 @@ const ModalBox = () => {
         {
           postText: enteredChar,
           postImg: updatedImg,
-          // postVideo, //! to be checked
+          // postVideo,
         },
         {
           headers: {
@@ -325,7 +316,7 @@ const ModalBox = () => {
             id: modalId,
             postText: enteredChar,
             postImg: updatedImg,
-            // postVideo, //! to be checked
+            // postVideo,
           })
         );
         clearModalBox();
@@ -423,7 +414,6 @@ const ModalBox = () => {
         let filtForReported = res.data.result.filter((post) => {
           return post.id == modalId;
         });
-        console.log({ reportedPost_fromModal: filtForReported });
         setReportedPostImg(filtForReported[0].postImg);
         setReportedPostText(filtForReported[0].postText);
       }
@@ -434,7 +424,6 @@ const ModalBox = () => {
       const res = await axios.get(
         `http://localhost:5000/comment/id/${modalId}`
       );
-      console.log("hiiiiiiiiiiiiii", res.data);
       if (res.data.success) {
         setReportedCommentText(res.data.result[0].comment);
       }

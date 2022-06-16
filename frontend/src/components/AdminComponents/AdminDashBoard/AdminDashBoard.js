@@ -29,7 +29,6 @@ import axios from "axios";
 
 const AdminDashBoard = ({ type }) => {
   const dispatch = useDispatch();
-  //to use user token for axios calls
   const {
     token,
     userId,
@@ -72,13 +71,6 @@ const AdminDashBoard = ({ type }) => {
   const [commentLength, setCommentLength] = useState(0);
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
-
-  // const data = [
-  //   {quarter: 1, earnings: 13000},
-  //   {quarter: 2, earnings: 16500},
-  //   {quarter: 3, earnings: 14250},
-  //   {quarter: 4, earnings: 19000}
-  // ];
 
   const getAllUsers = () => {
     let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=6`;
@@ -152,20 +144,7 @@ const AdminDashBoard = ({ type }) => {
       });
   };
 
-  //to get AllPosts:
-  // const getAllPosts = () => {
-  //   let allPostsUrl = `http://localhost:5000/post`;
-  //   axios
-  //     .get(allPostsUrl, { headers: { authorization: token } })
-  //     .then((result) => {
-  //       dispatch(setAllPosts(result.data.result));
-  //     })
-  //     .catch((error) => {
-  //       console.log({ fromAdminGetReportedPostsError: error });
-  //     });
-  // };
-
-  //to get reportedPosts: //! authorizatioin needed
+  //to get reportedPosts:
   const getReportedPosts = () => {
     let reportedPostsUrl = `http://localhost:5000/post/remove?page=1&limit=6`;
     axios
@@ -596,36 +575,10 @@ const AdminDashBoard = ({ type }) => {
               Next
             </button>
           )}
-
-          {/* <ul className="pageNumbers">
-          {pageNumbers.map((number) => {
-            return (
-              <li
-                onClick={() => {
-                  changePage(number);
-                }}
-              >
-                {number}
-              </li>
-            );
-          })}
-        </ul> */}
         </div>
         {/* pagination bar ends here  */}
 
         {/* allUsers Div ends here */}
-        {/* <button onClick={()=>{
-        getAllUsersNext(page-1)
-        setLimit(5)
-        setPage(page-1)
-
-      }} >Back</button>
-      <button onClick={()=>{
-        getAllUsersNext(page+1)
-        setPage(page+1)
-        setLimit(5)
-
-      }} >Next</button> */}
       </div>
     </>
   );

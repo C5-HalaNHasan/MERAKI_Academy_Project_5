@@ -13,7 +13,6 @@ import { setModalBox } from "../redux/reducers/modalBox/index";
 const Actions = ({ id }) => {
   const [isReported, setIsReported] = useState("Report");
   const [isFriend, setIsFriend] = useState();
-  //three buttons are going to be rendered with the following actions:
   //currentUser can addFriend(if not in  currentUserFriends) or removeFriend(if in currentUserFriends)/reportUser/sendMessage
   const dispatch = useDispatch();
   //user states:
@@ -80,7 +79,7 @@ const Actions = ({ id }) => {
         }
       })
       .catch((error) => {
-        console.log({ fromAddFriend_error: error }); //! to be deleted and replaced by toast notification
+        console.log({ fromAddFriend_error: error });
       });
   };
 
@@ -155,7 +154,6 @@ const Actions = ({ id }) => {
           <button onClick={() => addFriend(id)}>Add</button>
         )}
         <button onClick={() => sendMessageToUser()}>Send Message</button>
-        {/* function to be added later in the backend to remove report from user */}
         <button onClick={() => reportUserById()}>{isReported}</button>
       </div>
     </div>

@@ -40,8 +40,6 @@ const io = socket(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log({ roomConnectedId: socket.id });
-
   //first event:
   socket.on("JOIN_ROOM", (data) => {
     //data has the id of the room
@@ -60,7 +58,6 @@ io.on("connection", (socket) => {
 
   //third event:
   socket.on("DELETE_MESSAGE", (data) => {
-    console.log({ data });
     socket.to(data.roomId).emit("RECEIVE_MESSAGE", data.messageId);
   });
 

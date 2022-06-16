@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout, setCurrentUserInfo } from "../redux/reducers/user";
 import { setModalBox } from "../redux/reducers/modalBox/index";
-import {RiAdminFill} from "react-icons/ri"
+import { RiAdminFill } from "react-icons/ri";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -23,16 +23,21 @@ const NavBar = () => {
   });
   const [find, setFind] = useState("");
   //modalBox states(modal box is going to be used to update user profile):
-  const { modalId, modalType, modalMessage, modalDetails, modalShow } =
-    useSelector((state) => {
-      return {
-        modalId: state.modalBox.modalId,
-        modalType: state.modalBox.modalType,
-        modalMessage: state.modalBox.modalMessage,
-        modalDetails: state.modalBox.modalDetails,
-        modalShow: state.modalBox.modalShow,
-      };
-    });
+  const {
+    modalId,
+    modalType,
+    modalMessage,
+    modalDetails,
+    modalShow,
+  } = useSelector((state) => {
+    return {
+      modalId: state.modalBox.modalId,
+      modalType: state.modalBox.modalType,
+      modalMessage: state.modalBox.modalMessage,
+      modalDetails: state.modalBox.modalDetails,
+      modalShow: state.modalBox.modalShow,
+    };
+  });
   const updateUserProfile = () => {
     dispatch(
       setModalBox({
@@ -45,7 +50,7 @@ const NavBar = () => {
     );
   };
 
-  //!useEffect to be used to dispatch(setCurrentUserInf(data from BE))
+  //useEffect to be used to dispatch(setCurrentUserInf(data from BE))
   const getCurrentUser = () => {
     let getCurrentUserUrl = `http://localhost:5000/user/${userId}`;
     axios
@@ -68,78 +73,84 @@ const NavBar = () => {
         <span
           className="logo"
           onClick={() => {
-        if(token){
-          navigate("/home")
-        }
+            if (token) {
+              navigate("/home");
+            }
           }}
         >
           Facebook
         </span>
       </div>
 
-     {token? <> <div className="navBarCenter">
-        <div className="searchBar">
-          <BiSearch className="searchIcon" />
-          <input
-            placeholder="Search for a friend.."
-            className="inputSearch"
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                navigate(`/users/search/${find}`);
-              }
-            }}
-            onChange={(e) => {
-              setFind(e.target.value);
-            }}
-          />
-
-          {/* to be updated after users/search is done */}
-        </div>
-      </div>
-      <div className="navBarRight">
-        <div className="navBarIcons">
-          <div className="navBarMessages">
-            <BsMessenger
-              onClick={() => {
-                navigate("/message");
-              }}
-            />
+      {token ? (
+        <>
+          {" "}
+          <div className="navBarCenter">
+            <div className="searchBar">
+              <BiSearch className="searchIcon" />
+              <input
+                placeholder="Search for a friend.."
+                className="inputSearch"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    navigate(`/users/search/${find}`);
+                  }
+                }}
+                onChange={(e) => {
+                  setFind(e.target.value);
+                }}
+              />
+            </div>
           </div>
-          <div className="navBarMessages">
-            <FiSettings
+          <div className="navBarRight">
+            <div className="navBarIcons">
+              <div className="navBarMessages">
+                <BsMessenger
+                  onClick={() => {
+                    navigate("/message");
+                  }}
+                />
+              </div>
+              <div className="navBarMessages">
+                <FiSettings
+                  onClick={() => {
+                    updateUserProfile();
+                  }}
+                />
+              </div>
+              <div className="navBarMessages">
+                <HiOutlineLogout
+                  onClick={() => {
+                    dispatch(setLogout());
+                    navigate("/");
+                  }}
+                />
+              </div>
+              {currentUserInfo.role_id == 1 ? (
+                <div className="navBarMessages">
+                  <RiAdminFill
+                    className="adminIcon"
+                    onClick={() => {
+                      navigate("/charts");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <img
+              className="userImg"
+              src={currentUserInfo.profileImg}
               onClick={() => {
-                // navigate(`/user/update/${userId}`);
-                updateUserProfile();
+                navigate(`/user/${userId}`);
               }}
             />
-          </div>
-          <div className="navBarMessages">
-            <HiOutlineLogout
-              onClick={() => {
-                dispatch(setLogout());
-                navigate("/");
-              }}
-            />
-          </div>
-         {currentUserInfo.role_id ==1 ?
-         <div className="navBarMessages">
-            <RiAdminFill
-            className="adminIcon"
-              onClick={() => {
-                
-                navigate("/charts");
-              }}
-            />
-          </div>:""}
-        </div>
-        <img
-          className="userImg"
-          src={currentUserInfo.profileImg}
-          onClick={() => {
-            navigate(`/user/${userId}`);
-          }}
-        />
-      </div> </>:""}
+          </div>{" "}
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

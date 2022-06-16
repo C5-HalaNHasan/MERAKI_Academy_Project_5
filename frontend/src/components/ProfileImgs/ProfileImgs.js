@@ -23,16 +23,13 @@ const ProfileImgs = ({ id }) => {
   //a function that will get current page user to render ProfileImgs:
   const getUserInfo = () => {
     let getUserByIdUrl = `http://localhost:5000/user/${id}`;
-    console.log({ problemId: getUserByIdUrl }); //!
     axios
       .get(getUserByIdUrl, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success == true) {
           if (result.data.result[0].id == userId) {
-            console.log({ currentUserFromImgsComponent: currentUserInfo }); //!
             dispatch(setCurrentUserInfo(result.data.result[0]));
           } else {
-            console.log({ visitedUserInfo: visitedUserInfo }); //!not showing visited user info
             dispatch(setVisitedUserInfo(result.data.result[0]));
           }
         }
@@ -41,7 +38,6 @@ const ProfileImgs = ({ id }) => {
         console.log({ from_getUserInfo_ProfileImgs_error: error });
       });
   };
-  console.log({ visitedUserInfo: visitedUserInfo }); //!
 
   //to use & set modalBox states:
   const {

@@ -21,27 +21,6 @@ const FriendList = ({ id }) => {
     }
   );
   const navigate = useNavigate();
-  // const getAllFriends = () => {
-  //   axios
-  //     .get(`http://localhost:5000/user/friends/${userId}`, {
-  //       headers: {
-  //         Authorization: token,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       if (id == userId) {
-  //         dispatch(setVisitedUserFriends([]));
-  //         dispatch(setCurrentUserFriends(response.data.result));
-  //       } else {
-  //         dispatch(setCurrentUserFriends([]));
-  //         dispatch(setVisitedUserFriends(response.data.result));
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   //to re-render visitedUser Friends:
   const getAllFriendsOfVisitedUser = async () => {
     let getFriendsUrl = ` http://localhost:5000/user/friends/${id}`;
@@ -72,7 +51,6 @@ const FriendList = ({ id }) => {
       });
   };
   useEffect(() => {
-    // getAllFriends();
     getAllFriendsOfVisitedUser();
     getAllFriendsOfCurrentUser();
   }, []);

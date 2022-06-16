@@ -17,7 +17,6 @@ const Messages = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //user states:
-  //to use user token for axios calls
   const { token, userId } = useSelector((state) => {
     return {
       token: state.user.token,
@@ -59,31 +58,6 @@ const Messages = () => {
         }
       })
       .catch((error) => {});
-  };
-
-  //! not used yet
-  const modalAlerts = () => {
-    if (allMessages.length) {
-      dispatch(
-        setModalBox({
-          modalId: "",
-          modalType: "ok",
-          modalMessage: "Inbox",
-          modalDetails: `you have ${allMessages.length} conversations!`,
-          modalShow: true,
-        })
-      );
-    } else {
-      dispatch(
-        setModalBox({
-          modalId: "",
-          modalType: "alert",
-          modalMessage: "Inbox",
-          modalDetails: "Your inbox is empty",
-          modalShow: true,
-        })
-      );
-    }
   };
 
   //a function to join a room between two users

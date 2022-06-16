@@ -6,7 +6,7 @@ const Banner = () => {
     <div className="profileImgsComponent">
       <div className="imgContainer">
         <div className="coverImg">
-          <img src={bannerImg} style={{ borderRadius: "0" }} />
+          <img src={bannerImg} />
         </div>
       </div>
     </div>

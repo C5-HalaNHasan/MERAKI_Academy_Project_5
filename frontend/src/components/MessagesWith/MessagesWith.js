@@ -47,7 +47,6 @@ const MessagesWith = ({ roomId, id }) => {
   // a function that sends message to a user:
   const sendMessageTo = (e) => {
     socket.emit("JOIN_ROOM", roomId);
-    console.log(roomId);
     const messageContent = {
       roomId,
       content: {
@@ -73,7 +72,6 @@ const MessagesWith = ({ roomId, id }) => {
         )
         .then((result) => {
           getMessagesWith();
-          console.log({ sendMessageTo_result: result.data.result });
           setSentMessage("");
         })
         .catch((error) => {
@@ -84,7 +82,6 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function to receiveMessages from the server (by the other user):
   const receiveMessageFrom = () => {
-    console.log("message recieved");
     socket.on("RECEIVE_MESSAGE", (data) => {
       dispatch(addToMessagesWith(data));
       getMessagesWith();
@@ -111,7 +108,6 @@ const MessagesWith = ({ roomId, id }) => {
       .put(removeMessageFromUrl, {}, { headers: { authorization: token } })
       .then((result) => {
         getMessagesWith();
-        console.log({ removeSentMessage_result: result.data.result });
       })
       .catch((error) => {
         console.log({ removeSentMessage_error: error });
@@ -229,8 +225,3 @@ const MessagesWith = ({ roomId, id }) => {
 };
 
 export default MessagesWith;
-
-/*
-to be resolved:
-1-message.createdAt is not taking split or replace each time//
-*/
