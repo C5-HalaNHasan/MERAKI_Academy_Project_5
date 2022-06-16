@@ -82,9 +82,7 @@ const Suggested = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.result);
         dispatch(setSuggestedFriends(res.data.result));
-        // console.log(suggestedFriends);
       })
       .catch((err) => {
         console.log(err);
@@ -107,7 +105,7 @@ const Suggested = () => {
   return (
     <>
       <div className="suggestedComponent">
-        <div className="friendList">
+        <div className="friendList suggestedDiv" style={{ maxHeight: "15em" }}>
           <div className="boxTitle">
             <h3>Suggested Friend</h3>
           </div>

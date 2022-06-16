@@ -15,10 +15,10 @@
 }
 
 .loginBox span a {
-    text-decoration: underline;
+    color:  var(--mainColor);
     display: inline;
-    font-size: 0.9em;
-    padding-left: 10px;
+    font-size: 1.1em;
+    padding-left: 0.3em;
 }
 .loginBox h3 {
     text-decoration: none;
