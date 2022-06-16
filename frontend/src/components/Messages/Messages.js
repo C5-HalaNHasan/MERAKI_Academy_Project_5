@@ -61,7 +61,7 @@ const Messages = () => {
       .catch((error) => {});
   };
   const modalAlerts = () => {
-    //! might be removed!
+    //! not used yet
     if (allMessages.length) {
       dispatch(
         setModalBox({

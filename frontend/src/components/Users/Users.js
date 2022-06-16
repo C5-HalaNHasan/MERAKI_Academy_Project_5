@@ -154,9 +154,10 @@ const Users = ({ type, name }) => {
         {type == "search"
           ? allUsers.map((user, index) => {
               if (
-                (user.firstName.toLowerCase().includes(name.toLowerCase()) ||
-                  user.lastName.toLowerCase().includes(name.toLowerCase())) &&
-                user.id !== userId
+                (user.firstName.toLowerCase().includes(name.toLowerCase()) &&
+                  user.id !== userId) ||
+                (user.lastName.toLowerCase().includes(name.toLowerCase()) &&
+                  user.id !== userId)
               ) {
                 return (
                   <div className="friendCard">

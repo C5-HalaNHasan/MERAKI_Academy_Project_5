@@ -31,8 +31,6 @@ const CreatePost = () => {
 
       if (res.data.success) {
         dispatch(setAllPosts(res.data.result));
-        console.log(res.data.result);
-        // setShow(true);
       }
     } catch {}
   };
@@ -67,8 +65,6 @@ const CreatePost = () => {
     axios
       .post(uploadPicUrl, data)
       .then((result) => {
-        // setPostImg(result.data.url);
-        console.log(result.data);
         submit(result.data.url);
       })
       .catch((error) => {
@@ -89,28 +85,30 @@ const CreatePost = () => {
             autoComplete="off"
             type={"text"}
             className="userPostInput"
-            placeholder={"What is in your mind, " + currentUserInfo.firstName +"?"}
+            placeholder={
+              "What is in your mind, " + currentUserInfo.firstName + "?"
+            }
             onChange={(e) => {
               setPostText(e.target.value);
             }}
           />
         </div>
-        
+
         <div className="bottomPostCreate">
           <div className="leftBottomPost">
             <div className="ImgUpload">
-              <label for= "uploadImg">
-              <HiOutlinePhotograph
-                className="iconImg1"
-                onClick={() => {
-                  setClickedImg(!clickedImg);
-                }}
-              />
+              <label for="uploadImg">
+                <HiOutlinePhotograph
+                  className="iconImg1"
+                  onClick={() => {
+                    setClickedImg(!clickedImg);
+                  }}
+                />
               </label>
               {clickedImg ? (
                 <>
                   <input
-                  id = "uploadImg"
+                    id="uploadImg"
                     type={"file"}
                     style={{ display: "none" }}
                     onChange={(e) => {
@@ -123,21 +121,19 @@ const CreatePost = () => {
               )}
             </div>
             <div className="ImgUpload">
-              <label for="uploadVid" >
-              <BsFillCameraVideoFill
-                className="iconImg2"
-
-                onClick={() => {
-                  setClickedVideo(!clickedVideo);
-                }}
-              />
+              <label for="uploadVid">
+                <BsFillCameraVideoFill
+                  className="iconImg2"
+                  onClick={() => {
+                    setClickedVideo(!clickedVideo);
+                  }}
+                />
               </label>
               {clickedVideo ? (
                 <>
                   <input
-                  id ="uploadVid"
-                style={{ display: "none" }}
-
+                    id="uploadVid"
+                    style={{ display: "none" }}
                     type={"file"}
                     onChange={(e) => {
                       setPostVideo(e.target.files[0]);

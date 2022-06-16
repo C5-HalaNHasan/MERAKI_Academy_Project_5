@@ -113,56 +113,12 @@ const ShowPost = ({ type, id }) => {
 
         if (res.data.success) {
           dispatch(setAllPosts(res.data.result));
-
           setShow(true);
         }
       } catch {}
     };
   }
 
-  //! old updatePost & uploadImage functions:
-  // const updatePost = (id, postImg, postText) => {
-  //   axios
-  //     .put(
-  //       `http://localhost:5000/post/${id}`,
-  //       {
-  //         postText,
-  //         postImg,
-  //         postVideo,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: token,
-  //         },
-  //       }
-  //     )
-  //     .then((result) => {
-  //       dispatch(updatePosts({ id, postText, postImg, postVideo }));
-  //       getAllPosts();
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
-  // const uploadImage = (id) => {
-  //   const data = new FormData();
-  //   data.append("file", postImg);
-  //   // clickedVideo? data.append("file", postVideo): ""
-  //   data.append("upload_preset", "rapulojk");
-  //   data.append("cloud_name", "difjgm3tp");
-  //   let uploadPicUrl = "https://api.cloudinary.com/v1_1/difjgm3tp/image/upload";
-  //   axios
-  //     .post(uploadPicUrl, data)
-  //     .then((result) => {
-  //       setPostImg(result.data.url);
-  //       updatePost(id, result.data.url);
-  //       setPostImg("");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
   //! new updatePost function:
   const updatePost = (id, postImg) => {
     dispatch(
@@ -212,21 +168,6 @@ const ShowPost = ({ type, id }) => {
       })
     );
   };
-  // const deletePostById = (id) => {
-  //   axios
-  //     .delete(` http://localhost:5000/post/${id}`, {
-  //       headers: {
-  //         Authorization: token,
-  //       },
-  //     })
-  //     .then((result) => {
-  //       dispatch(removeFromPosts(id));
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
   const reportPostById = (id) => {
     axios
       .put(`http://localhost:5000/post/remove/${id}`)
@@ -256,19 +197,7 @@ const ShowPost = ({ type, id }) => {
       })
       .catch((error) => {});
   };
-  // const deleteCommentById = (id) => {
-  //   axios
-  //     .delete(`http://localhost:5000/comment/${id}`, {
-  //       headers: {
-  //         Authorization: token,
-  //       },
-  //     })
-  //     .then((result) => {
-  //       dispatch(removeFromComments(id));
-  //       getAllPosts();
-  //     })
-  //     .catch((error) => {});
-  // };
+
   const reportCommentById = (id) => {
     axios
       .put(`http://localhost:5000/comment/remove/${id}`)
@@ -277,25 +206,6 @@ const ShowPost = ({ type, id }) => {
         dispatch(updateComments({ id, isReported }));
       });
   };
-  // const updateCommentById = (id) => {
-  //   axios
-  //     .put(
-  //       `http://localhost:5000/comment/${id}`,
-  //       {
-  //         comment: newComment,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: token,
-  //         },
-  //       }
-  //     )
-  //     .then((result) => {
-  //       dispatch(updateComments({ id, newComment }));
-  //       getAllPosts();
-  //     })
-  //     .catch((error) => {});
-  // };
   const getCounterNumber = () => {
     axios
       .get("http://localhost:5000/comment/")
@@ -364,7 +274,6 @@ const ShowPost = ({ type, id }) => {
   };
 
   const checkIfLiked = (post, author) => {
-    console.log(post, author, postsReaction);
     if (postsReaction.length == 0) {
       return addReactionToPost(post);
     }
@@ -474,11 +383,10 @@ const ShowPost = ({ type, id }) => {
                         {element.createdAt
                           ? element.createdAt.split("T")[0]
                           : ""}
-                          
-                          {/* <br></br>
-                                         { element.createdAt ?  element.createdAt
-                              .split("T")[1]
-                              .replace(".000Z", ""):""} */}
+                        <br></br>
+                        {element.createdAt
+                          ? element.createdAt.split("T")[1].replace(".000Z", "")
+                          : ""}
                       </span>
                     </div>
                   </div>
@@ -496,18 +404,6 @@ const ShowPost = ({ type, id }) => {
                   updateClick &&
                   currentPost == element.id ? (
                     <>
-                      {/* <input
-                        type={"text"}
-                        onChange={(e) => {
-                          setPostText(e.target.value);
-                        }}
-                      /> */}
-                      {/* <input
-                        type={"file"}
-                        onChange={(e) => {
-                          setPostImg(e.target.files[0]);
-                        }}
-                      /> */}
                       <div>
                         <div className="btnStyling">
                           <button
@@ -516,12 +412,8 @@ const ShowPost = ({ type, id }) => {
                             onClick={(e) => {
                               {
                                 updatePost(element.id, element.postImg);
-                                //   postImg
-                                //     ? uploadImage(e.target.className)
-                                //  : updatePost(element.id, postImg, postText);
                                 setUpdateClick(false);
                               }
-                              // setUpdateClick(false);
                             }}
                           >
                             Update
@@ -568,14 +460,11 @@ const ShowPost = ({ type, id }) => {
                 </div>
                 <div className="postBottom">
                   <div>
-                    {console.log(element)}
-
                     <AiOutlineLike
-                      className={element.isLiked ? "liked" :"likeColor"}
+                      className={element.isLiked ? "liked" : "likeColor"}
                       onClick={() => {
                         checkIfLiked(element.id, currentUserInfo.id);
-    getAllPosts();
-
+                        getAllPosts();
                       }}
                     />
 
@@ -621,7 +510,10 @@ const ShowPost = ({ type, id }) => {
                           </>
                         );
                       })}
-                    <span className={element.isLiked ? "likedTags" :"tags"}> Like</span>
+                    <span className={element.isLiked ? "likedTags" : "tags"}>
+                      {" "}
+                      Like
+                    </span>
                   </div>
                   <div>
                     <BiComment
@@ -678,20 +570,26 @@ const ShowPost = ({ type, id }) => {
                                         {comment.createdAt
                                           ? comment.createdAt.split("T")[0]
                                           : ""}
-                                          {/* <br></br>
-                                         { comment.createdAt ?  comment.createdAt
-                              .split("T")[1]
-                              .replace(".000Z", ""):""} */}
+                                        <br></br>
+                                        {comment.createdAt
+                                          ? comment.createdAt
+                                              .split("T")[1]
+                                              .replace(".000Z", "")
+                                          : ""}
                                       </div>
                                       <div>
                                         <AiOutlineLike
-                                          className={comment.isLikedComment?"commentLiked":"commentNotLiked"}
+                                          className={
+                                            comment.isLikedComment
+                                              ? "commentLiked"
+                                              : "commentNotLiked"
+                                          }
                                           onClick={() => {
                                             checkCommentsLiked(
                                               comment.id,
                                               currentUserInfo.id
                                             );
-                                            getAllPosts()
+                                            getAllPosts();
                                           }}
                                         />
                                         {commentReactionsCounter &&
@@ -714,7 +612,16 @@ const ShowPost = ({ type, id }) => {
                                               );
                                             }
                                           )}
-                                          <span className={element.isLikedComment ? "likedTagsComment" :"tagsComment"}> Like</span>
+                                        <span
+                                          className={
+                                            element.isLikedComment
+                                              ? "likedTagsComment"
+                                              : "tagsComment"
+                                          }
+                                        >
+                                          {" "}
+                                          Like
+                                        </span>
                                       </div>
                                     </div>
                                   </div>
@@ -734,19 +641,6 @@ const ShowPost = ({ type, id }) => {
                                   updateClickComment &&
                                   currentComment == comment.id ? (
                                     <>
-                                      {" "}
-                                      {/* <input
-                                       className="inputUpdateComment"
-                                       placeholder="updated your comment.."
-                                        value={clear}
-                                        onClick={() => {
-                                          setClear();
-                                        }}
-                                        type={"text"}
-                                        onChange={(e) => {
-                                          setNewComment(e.target.value);
-                                        }}
-                                      /> */}
                                       <div className="btnStyling">
                                         <button
                                           className="updateBtn"
@@ -777,6 +671,7 @@ const ShowPost = ({ type, id }) => {
                                   currentComment == comment.id &&
                                   author !== comment.author_id ? (
                                     <p
+                                      style={{ cursor: "pointer" }}
                                       onClick={() => {
                                         reportCommentById(comment.id);
                                       }}

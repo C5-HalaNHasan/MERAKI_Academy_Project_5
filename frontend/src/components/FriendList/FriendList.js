@@ -82,7 +82,7 @@ const FriendList = ({ id }) => {
   //! problem: id of friendship table is used not user id// to be solved in the backend
   return (
     <div className="friendListComponent">
-      <div className="friendList">
+      <div className="friendList" style={{ maxHeight: "18em" }}>
         <div className="boxTitle">
           <h3>FriendList</h3>
         </div>
