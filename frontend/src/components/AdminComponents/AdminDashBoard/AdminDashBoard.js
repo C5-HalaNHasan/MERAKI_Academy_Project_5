@@ -4,9 +4,16 @@ import { TiUserDelete } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalBox } from "../../redux/reducers/modalBox/index";
-import ReactDOM from 'react-dom';
-import * as V from 'victory';
-import { VictoryBar ,VictoryChart,VictoryTheme,VictoryAxis,VictoryPie,VictoryLabel} from 'victory';
+import ReactDOM from "react-dom";
+import * as V from "victory";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryAxis,
+  VictoryPie,
+  VictoryLabel,
+} from "victory";
 import {
   setAllUsers,
   setAllReportedUsers,
@@ -138,6 +145,7 @@ const AdminDashBoard = ({ type }) => {
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
         getAllUsers();
+        getReportedUsers();
       })
       .catch((error) => {
         console.log({ fromAdminRemoveUserError: error });
@@ -241,21 +249,19 @@ const AdminDashBoard = ({ type }) => {
     axios
       .get(`http://localhost:5000/user/birthday`)
       .then((result) => {
-        setData(result.data.result)
+        setData(result.data.result);
         console.log(result, "char");
       })
       .catch((error) => {});
-      axios
+    axios
       .get(`http://localhost:5000/user/gender`)
       .then((result) => {
-        setData2(result.data.result)
+        setData2(result.data.result);
         console.log(result.data.result);
-        
       })
       .catch((error) => {
         console.log(error);
       });
-
   };
   //! based on the props: the targeted action is going to be called:
   const action = () => {
@@ -311,7 +317,7 @@ const AdminDashBoard = ({ type }) => {
       })
     );
   };
-  const showReportedComment =(reportedCommentId)=>{
+  const showReportedComment = (reportedCommentId) => {
     dispatch(
       setModalBox({
         modalId: reportedCommentId,
@@ -321,19 +327,17 @@ const AdminDashBoard = ({ type }) => {
         modalShow: true,
       })
     );
-  }
+  };
   const sharedAxisStyles = {
-   
     tickLabels: {
       fill: "#898F9C",
-      fontSize: 14
+      fontSize: 14,
     },
     axisLabel: {
       fill: "#898F9C",
       padding: 36,
       fontSize: 15,
-      
-    }
+    },
   };
   useEffect(() => {
     showCharts();
@@ -407,7 +411,6 @@ const AdminDashBoard = ({ type }) => {
                     Show Post
                   </button>
                   {/* modalbox */}
-               
 
                   <div>
                     <AiFillDelete
@@ -455,86 +458,80 @@ const AdminDashBoard = ({ type }) => {
                 </div>
               );
             })}
-            { type=="charts" && data.length !=0 && data2.length !=0 ?<>
-            <div className="Gender">
-             <VictoryChart
-            
-             theme={VictoryTheme.material}
-             height={210} width={900}
-            
-             domainPadding={{ x: 200, y: [0, 20] }}
-
-             >
-                <VictoryAxis
-          // tickValues specifies both the number of ticks and where
-          // they are placed on the axis
-          tickValues={[1, 2]}
-          tickFormat={["Male", "Female"]}
-          style={{
-            ...sharedAxisStyles
-          }}
-          label="Gender"
-        />
-        <VictoryAxis
-          dependentAxis
-          style={{
-            ...sharedAxisStyles
-          }}
-          
-         label="# Of users"
-          />
-            <VictoryBar
-           
-        data={data2}
-        // data accessor for x values
-        x="gender"
-        // data accessor for y values
-        y="Total"
-        style={{
-          data: { fill: "#4267B2" },
-          
-        }}
-      />
-      </VictoryChart></div>
-<div className="Gender">
-      <VictoryChart
-            
-             theme={VictoryTheme.material}
-             height={200} width={900}
-            
-             domainPadding={{ x: 100, y: [0, 65] }}
-
-             >
-                <VictoryAxis
-          
-          style={{
-            ...sharedAxisStyles
-          }}
-          
-         label="Year Of Birth"
-          />
-           <VictoryAxis
-          dependentAxis
-          style={{
-            ...sharedAxisStyles
-          }}
-          
-         label="# Of users"
-          />
-            <VictoryBar
-           
-        data={data}
-        // data accessor for x values
-        x="YEAR(birthday)"
-        // data accessor for y values
-        y="COUNT(*)"
-        style={{
-          data: { fill: "#4267B2" }
-        }}
-      />
-      </VictoryChart></div>
-      </>
-      :""}
+          {type == "charts" && data.length != 0 && data2.length != 0 ? (
+            <>
+              <div className="Gender">
+                <VictoryChart
+                  theme={VictoryTheme.material}
+                  height={210}
+                  width={900}
+                  domainPadding={{ x: 200, y: [0, 20] }}
+                >
+                  <VictoryAxis
+                    // tickValues specifies both the number of ticks and where
+                    // they are placed on the axis
+                    tickValues={[1, 2]}
+                    tickFormat={["Male", "Female"]}
+                    style={{
+                      ...sharedAxisStyles,
+                    }}
+                    label="Gender"
+                  />
+                  <VictoryAxis
+                    dependentAxis
+                    style={{
+                      ...sharedAxisStyles,
+                    }}
+                    label="# Of users"
+                  />
+                  <VictoryBar
+                    data={data2}
+                    // data accessor for x values
+                    x="gender"
+                    // data accessor for y values
+                    y="Total"
+                    style={{
+                      data: { fill: "#4267B2" },
+                    }}
+                  />
+                </VictoryChart>
+              </div>
+              <div className="Gender">
+                <VictoryChart
+                  theme={VictoryTheme.material}
+                  height={200}
+                  width={900}
+                  domainPadding={{ x: 100, y: [0, 65] }}
+                >
+                  <VictoryAxis
+                    style={{
+                      ...sharedAxisStyles,
+                    }}
+                    label="Year Of Birth"
+                  />
+                  <VictoryAxis
+                    dependentAxis
+                    style={{
+                      ...sharedAxisStyles,
+                    }}
+                    label="# Of users"
+                  />
+                  <VictoryBar
+                    data={data}
+                    // data accessor for x values
+                    x="YEAR(birthday)"
+                    // data accessor for y values
+                    y="COUNT(*)"
+                    style={{
+                      data: { fill: "#4267B2" },
+                    }}
+                  />
+                </VictoryChart>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
         {/* pagination bar starts here */}
         <div className="paginationBar">

@@ -31,7 +31,7 @@ const Messages = () => {
     };
   });
 
-  //modalBox states:
+  //modalBox states://
   const {
     modalId,
     modalType,
@@ -60,8 +60,9 @@ const Messages = () => {
       })
       .catch((error) => {});
   };
+
+  //! not used yet
   const modalAlerts = () => {
-    //! not used yet
     if (allMessages.length) {
       dispatch(
         setModalBox({
