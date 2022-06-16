@@ -67,13 +67,13 @@ const Actions = ({ id }) => {
     );
   };
   //a function that adds a user as a friend if not in currentUserFriends
-  const addFriend = () => {
+  const addFriend = (id) => {
     let addFriendUrl = `http://localhost:5000/user/${id}`;
     axios
       .post(addFriendUrl, {}, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          dispatch(addToFriendsList(result.data.result[0])); //! to be deleted if not used
+          dispatch(addToFriendsList(result.data.result[0]));
           getAllFriendsOfCurrentUser();
           getAllFriendsOfVisitedUser();
           setIsFriend(true);
@@ -85,13 +85,13 @@ const Actions = ({ id }) => {
   };
 
   //a function that removes a user from currentUserFriends if
-  const removeFriend = () => {
+  const removeFriend = (id) => {
     let removeUserUrl = `http://localhost:5000/user/${id}`;
     axios
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          dispatch(removeFromFriendsList(result.data.result[0].id));
+          dispatch(removeFromFriendsList(id));
           setIsFriend(false);
           getAllFriendsOfCurrentUser();
           getAllFriendsOfVisitedUser();
@@ -150,9 +150,9 @@ const Actions = ({ id }) => {
     <div className="actionsComponent">
       <div className="actionButtons">
         {isFriend ? (
-          <button onClick={() => removeFriend()}>Remove</button>
+          <button onClick={() => removeFriend(id)}>Remove</button>
         ) : (
-          <button onClick={() => addFriend()}>Add</button>
+          <button onClick={() => addFriend(id)}>Add</button>
         )}
         <button onClick={() => sendMessageToUser()}>Send Message</button>
         {/* function to be added later in the backend to remove report from user */}

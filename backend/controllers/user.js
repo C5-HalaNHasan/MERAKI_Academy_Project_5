@@ -315,28 +315,11 @@ const removeFriendById = (req, res) => {
     if (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
-    if (result.affectedRows == 1) {
-      //to return deleted user to be used in the frontend
-      const query1 = `SELECT * FROM user WHERE id=? `;
-      const data1 = [friendshipAccept];
-      connection.query(query1, data1, (error1, result1) => {
-        if (error1) {
-          return res
-            .status(500)
-            .json({ success: false, message: error1.message });
-        }
-        res.status(200).json({
-          success: true,
-          message: `friend ${friendshipAccept} has been deleted successfully`,
-          result: result1,
-        });
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: `friend ${friendshipAccept} is not in your friendlist`,
-      });
-    }
+    res.status(200).json({
+      success: true,
+      message: `friend ${friendshipAccept} has been deleted successfully`,
+      result: result,
+    });
   });
 };
 
@@ -344,7 +327,6 @@ const removeFriendById = (req, res) => {
 const getAllFriendsByUserId = (req, res) => {
   const friendshipRequest = req.params.id;
   const friendshipAccept = friendshipRequest;
-  // const query = `SELECT * FROM user u INNER JOIN friendship f ON  f.friendshipAccept=u.id WHERE f.friendshipRequest=?`;
   const query = `SELECT u.id,u.firstName,u.lastName,u.email,u.country,u.gender,u.profileImg,u.coverImg,u.isPrivate,u.isReported,u.isDeleted,u.role_id FROM user u INNER JOIN friendship f ON f.friendshipAccept=u.id WHERE (f.friendshipRequest=? AND f.isDeleted=0 AND u.isDeleted=0) UNION SELECT u.id,u.firstName,u.lastName,u.email,u.country,u.gender,u.profileImg,u.coverImg,u.isPrivate,u.isReported,u.isDeleted,u.role_id FROM user u INNER JOIN friendship f ON f.friendshipRequest=u.id WHERE (f.friendshipAccept=? AND f.isDeleted=0 AND u.isDeleted=0) `;
   const data = [friendshipRequest, friendshipAccept];
   connection.query(query, data, (error, result) => {
@@ -355,10 +337,6 @@ const getAllFriendsByUserId = (req, res) => {
       });
     }
 
-    //to remove duplicates:
-    // const result2=result.filter((elem,index)=>{
-    //   return elem.id!=friendshipAccept;
-    // });
     res.status(200).json({
       success: true,
       message: `All Friends for userId ${friendshipRequest},£of friends is ${result.length}`,
@@ -369,7 +347,6 @@ const getAllFriendsByUserId = (req, res) => {
 
 //a function that reports a user by id
 const reportUserById = (req, res) => {
-  // const userId = req.token.userId;
   const id = req.params.id;
   const query = `UPDATE user SET isReported=1 WHERE id=? `;
   const data = [id];
