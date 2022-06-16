@@ -26,12 +26,9 @@ const UserProfilePage = () => {
       <ModalBox />
       <NavBar />
       <FriendList id={usedId} />
-      <UserInfo id={usedId} />
+      <UserInfo id={usedId} style={{ alignSelf: "start" }} />
       <ProfileImgs id={usedId} />
       {id == userId && <CreatePost />}
-      {/* <div style={{ visibility: "hidden" }}>
-        {id !== userId && <CreatePost style={{ visibility: "hidden" }} />}
-      </div> */}
       {usedId == userId ? (
         <>
           <ShowPost id={usedId} />

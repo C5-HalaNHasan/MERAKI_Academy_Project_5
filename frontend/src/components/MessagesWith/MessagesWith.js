@@ -141,13 +141,26 @@ const MessagesWith = ({ roomId, id }) => {
               <>
                 {message.sentBy != userId && (
                   <div className="messageCard leftSide">
-                    <div className="senderInfo MW">
-                      <img src={message.profileImg} />
-                      <h3>{message.firstName}</h3>
-                    </div>
-                    <div className="messageContent">
-                      <p>{message.message}</p>
-                    { message.createdAt? <h6>{message.createdAt.split("T")[0]}</h6>:""}
+                    <div className="nearby">
+                      <div className="senderInfo MW">
+                        <img src={message.profileImg} />
+                        <h3>{message.firstName}</h3>
+                      </div>
+                      <div className="messageContent">
+                        <h6>{message.message}</h6>
+                        <p>
+                          {message.createdAt &&
+                            message.createdAt.toString().includes("T") &&
+                            message.createdAt.split("T")[0]}
+                        </p>
+                        <p>
+                          {message.createdAt &&
+                            message.createdAt.toString().includes(".000Z") &&
+                            message.createdAt
+                              .split("T")[1]
+                              .replace(".000Z", "")}
+                        </p>
+                      </div>
                     </div>
                     <div className="inboxButtons">
                       <button id={message.id} style={{ opacity: "0" }}>
@@ -165,9 +178,19 @@ const MessagesWith = ({ roomId, id }) => {
                         <h3>you</h3>
                       </div>
                       <div className="messageContent">
-                        <p>{message.message}</p>
-                        { message.createdAt? <h6>{message.createdAt.split("T")[0]}</h6>:""}
-
+                        <h6>{message.message}</h6>
+                        <p>
+                          {message.createdAt &&
+                            message.createdAt.toString().includes("T") &&
+                            message.createdAt.split("T")[0]}
+                        </p>
+                        <p>
+                          {message.createdAt &&
+                            message.createdAt.toString().includes(".000Z") &&
+                            message.createdAt
+                              .split("T")[1]
+                              .replace(".000Z", "")}
+                        </p>
                       </div>
                     </div>
                     <div className="inboxButtons">
@@ -183,25 +206,23 @@ const MessagesWith = ({ roomId, id }) => {
               </>
             );
           })}
-        <div className="messageCard">
-          <form
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-          >
-            <div className="messageInput">
-              <input
-                placeholder="write your message here..."
-                onChange={(e) => setSentMessage(e.target.value)}
-              />
-              <div className="inboxButtons sendButton">
-                <button type="submit" onClick={() => sendMessageTo()}>
-                  send
-                </button>
-              </div>
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
+          <div className="messageInput">
+            <input
+              placeholder="write your message here..."
+              onChange={(e) => setSentMessage(e.target.value)}
+            />
+            <div className="inboxButtons sendButton">
+              <button type="submit" onClick={() => sendMessageTo()}>
+                send
+              </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );

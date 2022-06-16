@@ -105,8 +105,9 @@ const Users = ({ type, name }) => {
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          dispatch(removeFromFriendsList(result.data.result[0].id));
+          dispatch(removeFromFriendsList(toId)); //toId
           getAllFriendsOfCurrentUser();
+          console.log({ fromRemoveFriends: toId });
         }
       })
       .catch((error) => {

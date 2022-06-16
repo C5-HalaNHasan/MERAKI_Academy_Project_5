@@ -131,7 +131,9 @@
 
 .adminSideBarComponent{
   grid-area:cvr/ls1/ls2;
+  margin-left: 3em;
 }
+
 
 h3{
   text-decoration: none !important;

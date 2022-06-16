@@ -17,7 +17,11 @@
 }
 
 .messageContent h6{
-    font-size:0.7em !important;  
+    font-size:0.9em !important;  
+}
+
+.messageContent p{
+    font-size:0.6em !important;  
     color: var(--mainColor) ;
 }
 
@@ -49,6 +53,7 @@
 
 .sendButton button{
     background-color: green !important;
+    margin-right: 0.5em;
 }
 .nearby{
     display: flex;
