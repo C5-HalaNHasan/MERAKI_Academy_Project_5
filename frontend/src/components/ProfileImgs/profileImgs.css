@@ -14,10 +14,11 @@
     
 }
 
-.coverImg{
+.coverImg {
     width: 100vw;
-    margin-right: -0.75em;
+    margin-right: -0.9em;
 }
+
 
 .coverImg img{
     /* border-radius: 1em; */

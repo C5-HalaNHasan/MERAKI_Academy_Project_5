@@ -1,15 +1,15 @@
-.userInfo{
+.userInfo {
   display: flex;
   flex-direction: column;
   border-radius: 0.5em;
   margin: 0;
   background-color: var(--spanColor);
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
   height: 12em;
   padding-bottom: 0.1em;
   padding-top: 0;
   margin-left: 1.5em;
-  margin-top: -1em;
+  margin-top: 5em;
 }
 
 .userInfoContents{

@@ -86,7 +86,7 @@ const Login = () => {
       })
       .catch(async (error) => {
         dispatch(setLogout);
-        loginErrorMessage(error.response.data.messagee);
+        loginErrorMessage(error.response.data.message);
         if (
           error.response.data.message == "this email exists in the dataBase"
         ) {
