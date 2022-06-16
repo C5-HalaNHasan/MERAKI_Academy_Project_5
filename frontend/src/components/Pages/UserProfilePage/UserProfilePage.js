@@ -33,9 +33,9 @@ const UserProfilePage = () => {
         {id !== userId && <CreatePost style={{ visibility: "hidden" }} />}
       </div> */}
       {usedId == userId ? (
-        <div>
+        <>
           <ShowPost id={usedId} />
-        </div>
+        </>
       ) : (
         <div style={{ alignSelf: "start" }}>
           <ShowPost id={usedId} />
