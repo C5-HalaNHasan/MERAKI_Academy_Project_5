@@ -1,7 +1,6 @@
 const connection = require("../models/db");
 
 // Create post function
-
 const createPost = (req, res) => {
   const author_id = req.token.userId;
   const { postText, postImg, postVideo } = req.body;
@@ -21,26 +20,6 @@ const createPost = (req, res) => {
     });
   });
 };
-
-//create function to get the current user posts
-// const getUserPosts = (req, res) => {
-//   const author_id = req.token.userId;
-//   const query = `SELECT * FROM post WHERE author_id = ? AND isDeleted =0`;
-//   const data = [author_id];
-//   connection.query(query, data, (error, result) => {
-//     if (error) {
-//       return res.status(500).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     }
-//     res.status(201).json({
-//       success: true,
-//       message: `All posts for userId => ${author_id}`,
-//       result: result,
-//     });
-//   });
-// };
 
 //create function to get all posts
 const getAllPosts = (req, res) => {
@@ -98,34 +77,34 @@ const getPostByUserId = (req, res) => {
             ) {
               post.isLiked = true;
             }
-        
           });
         });
 
         const query4 = `SELECT comment_reaction.author_id,comment_reaction.comment_id,comment_reaction.isDeleted from comment_reaction INNER JOIN comment ON comment.id = comment_reaction.comment_id WHERE comment_reaction.isDeleted=0`;
         connection.query(query4, (error4, result4) => {
           result4.forEach((react) => {
-            result2.forEach((comment)=>{
-            result.forEach((post) => {
-              if (
-                react.author_id === friendshipRequest &&
-                comment.id == react.comment_id && comment.post_id==post.id
-              ) {
-                post.isLikedComment = true;
-              }
-          
+            result2.forEach((comment) => {
+              result.forEach((post) => {
+                if (
+                  react.author_id === friendshipRequest &&
+                  comment.id == react.comment_id &&
+                  comment.post_id == post.id
+                ) {
+                  post.isLikedComment = true;
+                }
+              });
             });
-          })
           });
 
-      res.status(200).json({
-        success: true,
-        massage: "All the posts",
-        result: result,
+          res.status(200).json({
+            success: true,
+            massage: "All the posts",
+            result: result,
+          });
+        });
       });
     });
   });
-});})
 };
 
 //creating function to get user posts then update on them using Post Id
@@ -229,7 +208,6 @@ const reportPostById = (req, res) => {
 };
 
 // this function will remove the reported post by the admin using the id for the post
-
 const removePostByIdAdmin = (req, res) => {
   const id = req.params.id;
   const query = `SELECT * FROM post WHERE isReported = 1 AND id =?`;
@@ -342,60 +320,38 @@ const getFriendsPosts = (req, res) => {
             ) {
               post.isLiked = true;
             }
-        
           });
         });
         const query4 = `SELECT comment_reaction.author_id,comment_reaction.comment_id,comment_reaction.isDeleted from comment_reaction INNER JOIN comment ON comment.id = comment_reaction.comment_id WHERE comment_reaction.isDeleted=0`;
         connection.query(query4, (error4, result4) => {
           result4.forEach((react) => {
-            result2.forEach((comment)=>{
-            result.forEach((post) => {
-              if (
-                react.author_id === friendshipRequest &&
-                comment.id == react.comment_id && comment.post_id==post.id
-              ) {
-                comment.isLikedComment = true ;
-              }
-          
+            result2.forEach((comment) => {
+              result.forEach((post) => {
+                if (
+                  react.author_id === friendshipRequest &&
+                  comment.id == react.comment_id &&
+                  comment.post_id == post.id
+                ) {
+                  comment.isLikedComment = true;
+                }
+              });
             });
-          })
           });
 
-        res.status(200).json({
-          success: true,
-          massage: "All the posts",
-          result: result,
-          result3: result3,
+          res.status(200).json({
+            success: true,
+            massage: "All the posts",
+            result: result,
+            result3: result3,
+          });
         });
       });
     });
-  });})
+  });
 };
-// this function will get friends posts
-// const getFriendsPosts = (req, res) => {
-//   const friendshipRequest = req.token.userId;
-//   const query = `SELECT * FROM post WHERE author_id IN(SELECT friendshipAccept FROM friendship WHERE friendshipRequest=?  AND isDeleted=0)`;
-//   const data = [friendshipRequest, friendshipRequest];
-//   connection.query(query, data, (error, result) => {
-//     if (error) {
-//       return res.status(404).json({
-//         success: false,
-//         massage: `Server error`,
-//         error: error,
-//       });
-//     }
-
-//     res.status(201).json({
-//       success: true,
-//       message: `All friends posts`,
-//       result: result,
-//     });
-//   });
-// };
 
 module.exports = {
   createPost,
-  //   getUserPosts,
   getAllPosts,
   getPostByUserId,
   updatePostById,
@@ -405,5 +361,3 @@ module.exports = {
   getReportedPosts,
   getFriendsPosts,
 };
-
-//

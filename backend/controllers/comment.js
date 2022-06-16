@@ -1,7 +1,6 @@
 const connection = require("../models/db");
 
 //function to create new comment using id for the post
-
 const createComment = (req, res) => {
   const post_id = req.params.id;
   const author_id = req.token.userId;
@@ -52,7 +51,7 @@ const getAllComments = (req, res) => {
    WHERE post.isDeleted=0 AND post_reaction.isDeleted=0
   group by post.id `;
   const query2 = `SELECT post.id, count(distinct comment.id) from post
-  LEFT JOIN comment on post.id = comment.post_id WHERE post.isDeleted=0 AND comment.isDeleted=0 group by post.id`
+  LEFT JOIN comment on post.id = comment.post_id WHERE post.isDeleted=0 AND comment.isDeleted=0 group by post.id`;
   connection.query(query, (error, result) => {
     if (error) {
       return res.status(500).json({
@@ -60,38 +59,24 @@ const getAllComments = (req, res) => {
         message: error.message,
       });
     }
-    connection.query(query2,(error2,result2)=>{
+    connection.query(query2, (error2, result2) => {
       if (error2) {
         return res.status(500).json({
           success: false,
           message: error2.message,
         });
       }
-    
-    res.status(201).json({
-      success: true,
-      message: `All comments`,
-      reactionCounter: result,
-      commentCounter:result2
+
+      res.status(201).json({
+        success: true,
+        message: `All comments`,
+        reactionCounter: result,
+        commentCounter: result2,
+      });
     });
-  });})
+  });
 };
-// const getCounterNumber=(req,res)=>{
-//   const query= `SELECT COUNT(post_id) AS postCounter FROM comment WHERE isDeleted=0`
-//   connection.query(query, (error, result) => {
-//     if (error) {
-//       return res.status(500).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     }
-//     res.status(201).json({
-//       success: true,
-//       message: `All comments`,
-//       result: result,
-//     });
-//   });
-// }
+
 // create function to update comment
 const updateCommentById = (req, res) => {
   const { comment } = req.body;
@@ -231,9 +216,13 @@ const removeCommentByIdAdmin = (req, res) => {
 const getReportedComments = (req, res) => {
   const limit = 6;
   const page = req.query.page;
-  const offset = (page-1)*limit;
-  const query = `SELECT comment.id,createdAt,comment.isDeleted ,comment,author_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id  WHERE comment.isDeleted =0 AND comment.isReported =1 limit `+limit+" OFFSET " + offset;
-  const query2 = `SELECT COUNT(*) FROM comment WHERE isReported =1 AND isDeleted =0`
+  const offset = (page - 1) * limit;
+  const query =
+    `SELECT comment.id,createdAt,comment.isDeleted ,comment,author_id,comment.isReported,firstName,lastName,profileImg FROM comment INNER JOIN user ON comment.author_id=user.id  WHERE comment.isDeleted =0 AND comment.isReported =1 limit ` +
+    limit +
+    " OFFSET " +
+    offset;
+  const query2 = `SELECT COUNT(*) FROM comment WHERE isReported =1 AND isDeleted =0`;
 
   connection.query(query, (error, result) => {
     if (error) {
@@ -243,20 +232,21 @@ const getReportedComments = (req, res) => {
         error: error,
       });
     }
-    connection.query(query2,(error2,result2)=>{
+    connection.query(query2, (error2, result2) => {
       if (error2) {
         return res.status(500).json({
           success: false,
           message: error2.message,
         });
       }
-    res.status(201).json({
-      success: true,
-      message: `All Reported comments`,
-      users_count: result2[0]["COUNT(*)"],
-      result: result,
+      res.status(201).json({
+        success: true,
+        message: `All Reported comments`,
+        users_count: result2[0]["COUNT(*)"],
+        result: result,
+      });
     });
-  });})
+  });
 };
 
 module.exports = {

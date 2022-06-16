@@ -2,7 +2,6 @@ const express = require("express");
 const postRouter = express.Router();
 const {
   createPost,
-  // getUserPosts,
   getAllPosts,
   getPostByUserId,
   updatePostById,
@@ -17,9 +16,6 @@ const { authentication } = require("../middlewares/authentication");
 const { authorization } = require("../middlewares/authorization");
 //endpoint for POST request ==> http://localhost:5000/post==> createPost
 postRouter.post("/", authentication, createPost);
-
-//endpoint for GET request ==> http://localhost:5000/post==> getUserPosts
-// postRouter.get("/",authentication,getUserPosts);
 
 //endpoint for GET request ==> http://localhost:5000/post==> getAllPosts
 postRouter.get("/", getAllPosts);
