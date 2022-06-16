@@ -147,7 +147,7 @@ const MessagesWith = ({ roomId, id }) => {
                     </div>
                     <div className="messageContent">
                       <p>{message.message}</p>
-                      <h6>{message.createdAt}</h6>
+                    { message.createdAt? <h6>{message.createdAt.split("T")[0]}</h6>:""}
                     </div>
                     <div className="inboxButtons">
                       <button id={message.id} style={{ opacity: "0" }}>
@@ -166,7 +166,8 @@ const MessagesWith = ({ roomId, id }) => {
                       </div>
                       <div className="messageContent">
                         <p>{message.message}</p>
-                        <h6>{message.createdAt}</h6>
+                        { message.createdAt? <h6>{message.createdAt.split("T")[0]}</h6>:""}
+
                       </div>
                     </div>
                     <div className="inboxButtons">

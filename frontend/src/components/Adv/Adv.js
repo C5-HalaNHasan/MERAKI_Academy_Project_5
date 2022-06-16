@@ -36,7 +36,7 @@ const Adv = () => {
     <div className="advComponent">
       <div className="friendList advList">
         <div className="boxTitle">
-          <h3>Advertisment</h3>
+          <h3>Advertisement</h3>
         </div>
         <div className="advImg">
           <img
