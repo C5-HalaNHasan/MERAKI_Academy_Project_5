@@ -122,7 +122,7 @@
 }
 
 .actionsComponent {
-  grid-area: rs1/rs1;
+  grid-area: rs1/rs1/rs2/rs2;
   margin-right: 1em;
 }
 

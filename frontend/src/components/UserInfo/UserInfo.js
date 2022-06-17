@@ -57,30 +57,21 @@ const UserInfo = ({ id }) => {
       })
       .then((respon) => {
         let result = respon.data.result[0];
-        console.log(result);
         result.birthday = result.birthday.split("T")[0];
         if (result.gender === 0) {
           result.gender = "male";
         }
         if (id === userId) {
           dispatch(setCurrentUserInfo(result));
-          console.log(result.birthday);
-          console.log(result.gender);
         } else {
           dispatch(setVisitedUserInfo(result));
-          console.log(id);
-          console.log(userId);
         }
-        console.log(result.birthday);
-        console.log(result.gender);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  console.log(currentUserInfo);
-  console.log(visitedUserInfo);
-  //! UserInfo component to be modified based on the following:
+
   //since this component will be shown in profile pages only: id is taken from userProfile Params
   //if id=userId: dispatch(setCurrentUserInfo({getUserById from backend}))
   //if id!=userId: disptch(setVisitedUserInfo({getUserById from backend}))

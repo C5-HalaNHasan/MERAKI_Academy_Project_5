@@ -7,7 +7,6 @@ import axios from "axios";
 
 const ProfileImgs = ({ id }) => {
   const dispatch = useDispatch();
-  const [notification, setNotification] = useState("");
   //to use user token for axios calls
   const { token, userId, currentUserInfo, visitedUserInfo } = useSelector(
     (state) => {

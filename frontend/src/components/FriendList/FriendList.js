@@ -54,16 +54,14 @@ const FriendList = ({ id }) => {
     getAllFriendsOfVisitedUser();
     getAllFriendsOfCurrentUser();
   }, []);
-  console.log({ currentUserFriends });
-  console.log({ visitedUserFriends });
 
-  //! problem: id of friendship table is used not user id// to be solved in the backend
   return (
     <div className="friendListComponent">
       <div className="friendList" style={{ maxHeight: "18em" }}>
         <div className="boxTitle">
           <h3>FriendList</h3>
         </div>
+        {!currentUserFriends.length && <h3>This user has no friends yet...</h3>}
         {userId == id ? (
           <>
             {currentUserFriends.length &&
@@ -126,11 +124,11 @@ const FriendList = ({ id }) => {
             Show More...
           </h3>
         )}
-        {currentUserFriends.length < 3 && id == userId && (
+        {currentUserFriends.length <= 3 && id == userId && (
           <h3
             className="showMore"
             onClick={() => {
-              navigate(`/users/search/a`);
+              navigate(`/users/discover/a`);
             }}
           >
             Discover...
