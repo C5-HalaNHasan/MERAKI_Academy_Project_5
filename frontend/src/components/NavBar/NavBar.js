@@ -126,7 +126,7 @@ const NavBar = () => {
                   }}
                 />
               </div>
-              {currentUserInfo.role_id == 1 ? (
+              {currentUserInfo.role_id == 2 ? (
                 <div className="navBarMessages">
                   <RiAdminFill
                     className="adminIcon"

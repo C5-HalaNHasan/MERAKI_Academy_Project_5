@@ -113,12 +113,23 @@ const Users = ({ type, name }) => {
   };
 
   //to check the type sent if search or friendlist and render the users based on that:
-  if (type == "search" || type == "discover") {
+  if (type == "search") {
     useEffect(() => {
       axios
-        .get(`http://localhost:5000/user`)
+        .get(`http://localhost:5000/user`, {
+          headers: { authorization: token },
+        })
         .then((result) => {
-          dispatch(setAllUsers(result.data.result));
+          let filtered = result.data.result.filter((user) => {
+            return user.id !== userId;
+          });
+          dispatch(
+            setAllUsers(
+              result.data.result.filter((user) => {
+                return user.id !== userId;
+              })
+            )
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -137,6 +148,20 @@ const Users = ({ type, name }) => {
           console.log(err);
         });
     }, []);
+  } else if (type == "discover") {
+    useEffect(() => {
+      dispatch(setAllUsers([]));
+      axios
+        .get(`http://localhost:5000/user/Friend/suggestedUser`, {
+          headers: { authorization: token },
+        })
+        .then((res) => {
+          dispatch(setAllUsers(res.data.result));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, []);
   }
 
   return (
@@ -148,10 +173,8 @@ const Users = ({ type, name }) => {
         {type == "search"
           ? allUsers.map((user, index) => {
               if (
-                (user.firstName.toLowerCase().includes(name.toLowerCase()) &&
-                  user.id !== userId) ||
-                (user.lastName.toLowerCase().includes(name.toLowerCase()) &&
-                  user.id !== userId)
+                user.firstName.toLowerCase().includes(name.toLowerCase()) ||
+                user.lastName.toLowerCase().includes(name.toLowerCase())
               ) {
                 return (
                   <div className="friendCard">
