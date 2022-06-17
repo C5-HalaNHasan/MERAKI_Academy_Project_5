@@ -117,7 +117,7 @@ Trello board <a href="https://trello.com/b/xcBFQOdo/warriors-300-social-media-ap
 
 ## Data flow
 
-
+![plot](../MERAKI_Academy_Project_5/frontend/src/components/assets/Screenshot_1.png)
 
 ## ⚠️ Guided By <a name = "guided_by"></a>
 
