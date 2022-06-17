@@ -199,6 +199,7 @@ const updateUserProfile = async (req, res) => {
     profileImg,
     coverImg,
     isPrivate,
+    email,
   } = req.body;
   const id = req.token.userId;
   const SALT = 10;

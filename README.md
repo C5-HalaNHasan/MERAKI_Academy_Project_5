@@ -71,37 +71,49 @@ npm run start
 ```
 
 ## 🎈 Usage <a name="usage"></a>
+
 1. Sign up for a Facebook account.
+
 - If you don't have an account yet, you can Press on Register then you should enter your firstName, lastName, email, gender, password and birthday.
 - Click on Register.
 - If you have google account you can click on login with google account.
 - If you have a Facebook account, at login page you can enter your email and password then click Login.
+
 2. Personalize your profile.
+
 - By clicking on the picture on the right side of the Navbar.
 - You are now in your own profile page
 - Click on the Profile picture or Cover picture.
 - You can choose from your device any image and upload it.
+
 3. Post on Facebook.
+
 - The main purpose of Facebook is to help friends and family connect with each other. And the best way to connect with your friends and family is by updating them about your life with status updates.
 - You can add a video or image by clicking on image or video and you can upload whatever you want from your device.
 - You can write any post to tell your friend about how you feel or add some words on the image or video you uploaded
 - You can update the image or the written post by clicking on the settings icon.
+
 4. You can search for a friend in Facebook.
+
 - By typing his name in search bar the the Navbar.
 - Click on his picture to check his profile and press add to add him to your friends list.
+
 5. Chatting with your friends
+
 - You can visit your friend page and click on message icon
 - Type your message and press send and Enjoy with our live chat.
+
 6. Connect with friends.
+
 - In your home page you can see your posts and your friends posts
 - You can click on Like button to add like.
 - You can click on comment icon then type your comment to share your thoughts about this post.
 - You can update your comment or delete it by clicking on setting icon
 - You can report any post, comment and user if you see something wrong.
+
 7. Suggested friends.
+
 - In this section you can see users you may know to add them.
-
-
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
@@ -117,7 +129,7 @@ Trello board <a href="https://trello.com/b/xcBFQOdo/warriors-300-social-media-ap
 
 ## Data flow
 
-![plot](../MERAKI_Academy_Project_5/frontend/src/components/assets/Screenshot_1.png)
+<img width=200px height=200px src="MERAKI_Academy_Project_5/frontend/src/components/assets/dataBaseSchema.png" alt="DBDiagram"></a>
 
 ## ⚠️ Guided By <a name = "guided_by"></a>
 
