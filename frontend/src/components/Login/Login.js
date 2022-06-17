@@ -49,7 +49,7 @@ const Login = () => {
   };
   const onSuccess = (res) => {
     axios
-      .post("https://warriors300-project5-backend.herokuapp.com/user", {
+      .post("http://localhost:5000/user", {
         firstName: res.profileObj.givenName,
         lastName: res.profileObj.familyName,
         email: res.profileObj.email,
@@ -65,7 +65,7 @@ const Login = () => {
         if (result.data.success == true) {
           //an automatic login in is going to be made and the user will be redirected to the main page (once created)
           await axios
-            .post("https://warriors300-project5-backend.herokuapp.com/user/login", {
+            .post("http://localhost:5000/user/login", {
               email: res.profileObj.email,
               password: newPassword,
             })
@@ -91,7 +91,7 @@ const Login = () => {
           error.response.data.message == "this email exists in the dataBase"
         ) {
           await axios
-            .post("https://warriors300-project5-backend.herokuapp.com/user/login", {
+            .post("http://localhost:5000/user/login", {
               email: res.profileObj.email,
               password: newPassword,
             })
@@ -113,7 +113,7 @@ const Login = () => {
   };
 
   const LoginAction = () => {
-    const loginUrl = "https://warriors300-project5-backend.herokuapp.com/user/login";
+    const loginUrl = "http://localhost:5000/user/login";
     axios
       .post(loginUrl, { email, password })
       .then((result) => {

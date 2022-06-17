@@ -62,7 +62,7 @@ const Register = () => {
       profileImg,
       role_id: 1,
     };
-    let registerUrl = "https://warriors300-project5-backend.herokuapp.com/user";
+    let registerUrl = "http://localhost:5000/user";
     if (
       firstName &&
       lastName &&
@@ -79,7 +79,7 @@ const Register = () => {
           if (result.data.success == true) {
             //an automatic login in is going to be made and the user will be redirected to the main page (once created)
             await axios
-              .post("https://warriors300-project5-backend.herokuapp.com/user/login", {
+              .post("http://localhost:5000/user/login", {
                 email: userData.email,
                 password: userData.password,
               })

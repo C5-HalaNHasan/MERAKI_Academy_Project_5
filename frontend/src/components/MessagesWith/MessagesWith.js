@@ -9,7 +9,7 @@ import {
 } from "../redux/reducers/message/index";
 //for real-time connection:
 import { io } from "socket.io-client";
-const ENDPOINT = "https://warriors300-project5-backend.herokuapp.com";
+const ENDPOINT = "http://localhost:5000";
 const socket = io.connect(ENDPOINT);
 
 const MessagesWith = ({ roomId, id }) => {
@@ -30,7 +30,7 @@ const MessagesWith = ({ roomId, id }) => {
 
   // a function that sets messagesWith in redux store:
   const getMessagesWith = () => {
-    let getMessagesWithUrl = `https://warriors300-project5-backend.herokuapp.com/message/${id}/${roomId}`;
+    let getMessagesWithUrl = `http://localhost:5000/message/${id}/${roomId}`;
     axios
       .get(getMessagesWithUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -59,7 +59,7 @@ const MessagesWith = ({ roomId, id }) => {
     };
     socket.emit("SEND_MESSAGE", messageContent);
 
-    let sendMessageToUrl = `https://warriors300-project5-backend.herokuapp.com/message/${id}`;
+    let sendMessageToUrl = `http://localhost:5000/message/${id}`;
     if (sentMessage.length > 0) {
       axios
         .post(
@@ -103,7 +103,7 @@ const MessagesWith = ({ roomId, id }) => {
       messageId,
     };
     socket.emit("DELETE_MESSAGE", messageContent);
-    let removeMessageFromUrl = `https://warriors300-project5-backend.herokuapp.com/message/${messageId}`;
+    let removeMessageFromUrl = `http://localhost:5000/message/${messageId}`;
     axios
       .put(removeMessageFromUrl, {}, { headers: { authorization: token } })
       .then((result) => {

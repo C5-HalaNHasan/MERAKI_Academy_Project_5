@@ -128,12 +128,12 @@ const ModalBox = () => {
   const sendMessage = () => {
     if (enteredChar.length > 1) {
       //! before sending message to the user: get room id or create on if not exists:
-      let openRoomUrl = `https://warriors300-project5-backend.herokuapp.com/message/room/${modalId}`;
+      let openRoomUrl = `http://localhost:5000/message/room/${modalId}`;
       axios
         .post(openRoomUrl, {}, { headers: { authorization: token } })
         .then((result) => {
           let roomId = result.data.result;
-          let sendMessageToUserUrl = `https://warriors300-project5-backend.herokuapp.com/message/${modalId}`;
+          let sendMessageToUserUrl = `http://localhost:5000/message/${modalId}`;
           if (enteredChar.length > 10) {
             axios
               .post(
@@ -161,7 +161,7 @@ const ModalBox = () => {
 
   //a function to report  users with only if reasons are provided:
   const reportUser = () => {
-    let reportUserUrl = `https://warriors300-project5-backend.herokuapp.com/user/remove/${modalId}`;
+    let reportUserUrl = `http://localhost:5000/user/remove/${modalId}`;
     if (enteredChar.length > 10) {
       axios
         .put(reportUserUrl, {}, { headers: { authorization: token } })
@@ -178,7 +178,7 @@ const ModalBox = () => {
   };
   // a function that gets currentUserInfo sothat the cover & profile photos will be directly shown when modal box is closed:
   const getCurrentUserInfo = () => {
-    let getCurrentUserInfoUrl = `https://warriors300-project5-backend.herokuapp.com/user/${userId}`;
+    let getCurrentUserInfoUrl = `http://localhost:5000/user/${userId}`;
     axios
       .get(getCurrentUserInfoUrl, { headers: { Authorization: token } })
       .then((result) => {
@@ -200,7 +200,7 @@ const ModalBox = () => {
       country,
       birthday,
     };
-    let updateProfileUrl = `https://warriors300-project5-backend.herokuapp.com/user`;
+    let updateProfileUrl = `http://localhost:5000/user`;
     await axios
       .put(updateProfileUrl, userData, { headers: { authorization: token } })
       .then(async (result) => {
@@ -235,7 +235,7 @@ const ModalBox = () => {
       });
   };
   const updateUserImgs = () => {
-    let updateImgUrl = `https://warriors300-project5-backend.herokuapp.com/user`;
+    let updateImgUrl = `http://localhost:5000/user`;
     let update = modalType == "profileImg" ? "profileImg" : "coverImg";
     axios
       .put(
@@ -260,7 +260,7 @@ const ModalBox = () => {
   const getAllPosts = async () => {
     try {
       const res = await axios.get(
-        ` https://warriors300-project5-backend.herokuapp.com/post/user/${userId}`,
+        ` http://localhost:5000/post/user/${userId}`,
         {
           headers: {
             Authorization: token,
@@ -298,7 +298,7 @@ const ModalBox = () => {
   const updatePost = () => {
     axios
       .put(
-        `https://warriors300-project5-backend.herokuapp.com/post/${modalId}`,
+        `http://localhost:5000/post/${modalId}`,
         {
           postText: enteredChar,
           postImg: updatedImg,
@@ -331,7 +331,7 @@ const ModalBox = () => {
   const updateComment = () => {
     axios
       .put(
-        `https://warriors300-project5-backend.herokuapp.com/comment/${modalId}`,
+        `http://localhost:5000/comment/${modalId}`,
         {
           comment: enteredChar,
         },
@@ -359,7 +359,7 @@ const ModalBox = () => {
   //deletePost function:
   const deletePost = () => {
     axios
-      .delete(` https://warriors300-project5-backend.herokuapp.com/post/${modalId}`, {
+      .delete(` http://localhost:5000/post/${modalId}`, {
         headers: {
           Authorization: token,
         },
@@ -376,7 +376,7 @@ const ModalBox = () => {
   // new delete comment function
   const deleteComment = () => {
     axios
-      .delete(`https://warriors300-project5-backend.herokuapp.com/comment/${modalId}`, {
+      .delete(`http://localhost:5000/comment/${modalId}`, {
         headers: {
           Authorization: token,
         },
@@ -391,7 +391,7 @@ const ModalBox = () => {
   };
   const getCounterNumber = () => {
     axios
-      .get("https://warriors300-project5-backend.herokuapp.com/comment/")
+      .get("http://localhost:5000/comment/")
       .then((result) => {
         dispatch(setCommentCounter(result.data.commentCounter));
         getAllPosts();
@@ -405,7 +405,7 @@ const ModalBox = () => {
   //since this action (showPost) requires the post photo to be viewed;it will be invoked when the moalType==showPost:
   const getReportedPost = async () => {
     try {
-      const res = await axios.get(`https://warriors300-project5-backend.herokuapp.com/post`, {
+      const res = await axios.get(`http://localhost:5000/post`, {
         headers: {
           Authorization: token,
         },
@@ -422,7 +422,7 @@ const ModalBox = () => {
   const getReportedComment = async () => {
     try {
       const res = await axios.get(
-        `https://warriors300-project5-backend.herokuapp.com/comment/id/${modalId}`
+        `http://localhost:5000/comment/id/${modalId}`
       );
       if (res.data.success) {
         setReportedCommentText(res.data.result[0].comment);
@@ -435,7 +435,7 @@ const ModalBox = () => {
   // }
   //a function that rerenders the inbox after the room is deleted:
   const getAllMessages = () => {
-    let getMessagesUrl = `https://warriors300-project5-backend.herokuapp.com/message/get/user/room`;
+    let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
     axios
       .get(getMessagesUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -447,7 +447,7 @@ const ModalBox = () => {
   };
   //a function that eletes the room between two users:
   const deleteRoom = () => {
-    let removeRoomUrl = `https://warriors300-project5-backend.herokuapp.com/message/room/${modalId}`;
+    let removeRoomUrl = `http://localhost:5000/message/room/${modalId}`;
     axios
       .put(removeRoomUrl, {}, { headers: { authorization: token } })
       .then((result) => {
