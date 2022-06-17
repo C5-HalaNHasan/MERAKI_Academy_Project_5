@@ -108,7 +108,7 @@ const Suggested = () => {
       <div className="suggestedComponent">
         <div className="friendList suggestedDiv" style={{ maxHeight: "15em" }}>
           <div className="boxTitle">
-            <h3>Suggested Friend</h3>
+            <h3>Suggested Friends</h3>
           </div>
           {suggestedFriends.map((user, index) => {
             if (

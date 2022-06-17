@@ -170,84 +170,31 @@ const Users = ({ type, name }) => {
         <div className="boxTitle">
           <h3>Result</h3>
         </div>
-        {type == "search"
-          ? allUsers.map((user, index) => {
-              if (
-                user.firstName.toLowerCase().includes(name.toLowerCase()) ||
-                user.lastName.toLowerCase().includes(name.toLowerCase())
-              ) {
-                return (
-                  <div className="friendCard">
-                    <div className="friendInfo">
-                      <img
-                        src={user.profileImg}
-                        onClick={() => {
-                          navigate(`/user/${user.id}`);
-                        }}
-                      ></img>
-                      <h3>{user.firstName + " " + user.lastName}</h3>
-                    </div>
-                    <div className="friendButtons">
-                      {/* for add and remove buttons */}
-                      {currentUserFriends.some(
-                        (currentFriend) => currentFriend.id == user.id
-                      ) ? (
-                        <button
-                          onClick={() => {
-                            removeFriend(user.id);
-                          }}
-                        >
-                          Remove
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            addFriend(user.id);
-                          }}
-                        >
-                          Add
-                        </button>
-                      )}
-                      <button
-                        onClick={() => {
-                          sendMessageToUser(user.id);
-                        }}
-                      >
-                        Message
-                      </button>
-                      <button
-                        onClick={() => {
-                          reportUserById(user.id);
-                        }}
-                      >
-                        Report
-                      </button>
-                    </div>
-                  </div>
-                );
-              }
-            })
-          : currentUserFriends.map((friend, index) => {
+        {type == "search" &&
+          allUsers.map((user, index) => {
+            if (
+              user.firstName.toLowerCase().includes(name.toLowerCase()) ||
+              user.lastName.toLowerCase().includes(name.toLowerCase())
+            ) {
               return (
                 <div className="friendCard">
                   <div className="friendInfo">
                     <img
-                      src={friend.profileImg}
+                      src={user.profileImg}
                       onClick={() => {
-                        navigate(`/user/${friend.id}`);
+                        navigate(`/user/${user.id}`);
                       }}
                     ></img>
-                    <h3>
-                      {friend.firstName} {friend.lastName}{" "}
-                    </h3>
+                    <h3>{user.firstName + " " + user.lastName}</h3>
                   </div>
                   <div className="friendButtons">
+                    {/* for add and remove buttons */}
                     {currentUserFriends.some(
-                      (currentFriend) => currentFriend.id == friend.id
+                      (currentFriend) => currentFriend.id == user.id
                     ) ? (
                       <button
                         onClick={() => {
-                          removeFriend(friend.id);
+                          removeFriend(user.id);
                         }}
                       >
                         Remove
@@ -255,23 +202,22 @@ const Users = ({ type, name }) => {
                     ) : (
                       <button
                         onClick={() => {
-                          addFriend(friend.id);
+                          addFriend(user.id);
                         }}
                       >
                         Add
                       </button>
                     )}
-
                     <button
                       onClick={() => {
-                        sendMessageToUser(friend.id);
+                        sendMessageToUser(user.id);
                       }}
                     >
                       Message
                     </button>
                     <button
                       onClick={() => {
-                        reportUserById(friend.id);
+                        reportUserById(user.id);
                       }}
                     >
                       Report
@@ -279,7 +225,62 @@ const Users = ({ type, name }) => {
                   </div>
                 </div>
               );
-            })}
+            }
+          })}
+        {type == "friendlist" &&
+          currentUserFriends.map((friend, index) => {
+            return (
+              <div className="friendCard">
+                <div className="friendInfo">
+                  <img
+                    src={friend.profileImg}
+                    onClick={() => {
+                      navigate(`/user/${friend.id}`);
+                    }}
+                  ></img>
+                  <h3>
+                    {friend.firstName} {friend.lastName}{" "}
+                  </h3>
+                </div>
+                <div className="friendButtons">
+                  {currentUserFriends.some(
+                    (currentFriend) => currentFriend.id == friend.id
+                  ) ? (
+                    <button
+                      onClick={() => {
+                        removeFriend(friend.id);
+                      }}
+                    >
+                      Remove
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        addFriend(friend.id);
+                      }}
+                    >
+                      Add
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      sendMessageToUser(friend.id);
+                    }}
+                  >
+                    Message
+                  </button>
+                  <button
+                    onClick={() => {
+                      reportUserById(friend.id);
+                    }}
+                  >
+                    Report
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         {/* starts here */}
         {type == "discover" &&
           allUsers.map((user, index) => {
