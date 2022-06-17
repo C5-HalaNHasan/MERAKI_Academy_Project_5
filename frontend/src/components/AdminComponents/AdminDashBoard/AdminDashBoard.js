@@ -73,7 +73,7 @@ const AdminDashBoard = ({ type }) => {
   const [data2, setData2] = useState([]);
 
   const getAllUsers = () => {
-    let allUsersUrl = `http://localhost:5000/user/pag?page=1&limit=6`;
+    let allUsersUrl = `https://warriors300-project5-backend.herokuapp.com/user/pag?page=1&limit=6`;
     axios
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -89,7 +89,7 @@ const AdminDashBoard = ({ type }) => {
   const [page, setPage] = useState(1);
   const [show, setShow] = useState(false);
   const getAllUsersNext = (page) => {
-    let allUsersUrl = `http://localhost:5000/user/pag?page=${page}&limit=6`;
+    let allUsersUrl = `https://warriors300-project5-backend.herokuapp.com/user/pag?page=${page}&limit=6`;
     axios
       .get(allUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -103,7 +103,7 @@ const AdminDashBoard = ({ type }) => {
 
   //to get reportedUsers:
   const getReportedUsers = () => {
-    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=1&limit=6`;
+    let reportedUsersUrl = `https://warriors300-project5-backend.herokuapp.com/user/remove/?page=1&limit=6`;
     axios
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -119,7 +119,7 @@ const AdminDashBoard = ({ type }) => {
   };
 
   const getReportedUsersNext = (page) => {
-    let reportedUsersUrl = `http://localhost:5000/user/remove/?page=${page}&limit=6`;
+    let reportedUsersUrl = `https://warriors300-project5-backend.herokuapp.com/user/remove/?page=${page}&limit=6`;
     axios
       .get(reportedUsersUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -132,7 +132,7 @@ const AdminDashBoard = ({ type }) => {
   };
   //to remove a user from dataBase:
   const removeUser = (id) => {
-    let removeUserUrl = `http://localhost:5000/user/remove/${id}`;
+    let removeUserUrl = `https://warriors300-project5-backend.herokuapp.com/user/remove/${id}`;
     axios
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -146,7 +146,7 @@ const AdminDashBoard = ({ type }) => {
 
   //to get reportedPosts:
   const getReportedPosts = () => {
-    let reportedPostsUrl = `http://localhost:5000/post/remove?page=1&limit=6`;
+    let reportedPostsUrl = `https://warriors300-project5-backend.herokuapp.com/post/remove?page=1&limit=6`;
     axios
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -162,7 +162,7 @@ const AdminDashBoard = ({ type }) => {
   };
 
   const getReportedPostsNext = (page) => {
-    let reportedPostsUrl = `http://localhost:5000/post/remove?page=${page}&limit=4`;
+    let reportedPostsUrl = `https://warriors300-project5-backend.herokuapp.com/post/remove?page=${page}&limit=4`;
     axios
       .get(reportedPostsUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -178,7 +178,7 @@ const AdminDashBoard = ({ type }) => {
   //to remove a post from dataBase:
   const removePost = (id) => {
     console.log(id);
-    let removeUserUrl = `http://localhost:5000/post/remove/${id}`;
+    let removeUserUrl = `https://warriors300-project5-backend.herokuapp.com/post/remove/${id}`;
     axios
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -191,7 +191,7 @@ const AdminDashBoard = ({ type }) => {
   // get all reported comments
   const getAllReportedComments = () => {
     axios
-      .get(`http://localhost:5000/comment/remove/?page=1&limit=6`, {
+      .get(`https://warriors300-project5-backend.herokuapp.com/comment/remove/?page=1&limit=6`, {
         headers: { authorization: token },
       })
       .then((result) => {
@@ -204,7 +204,7 @@ const AdminDashBoard = ({ type }) => {
   };
   const getAllReportedCommentsNext = (page) => {
     axios
-      .get(`http://localhost:5000/comment/remove/?page=${page}&limit=6`, {
+      .get(`https://warriors300-project5-backend.herokuapp.com/comment/remove/?page=${page}&limit=6`, {
         headers: { authorization: token },
       })
       .then((result) => {
@@ -215,7 +215,7 @@ const AdminDashBoard = ({ type }) => {
   };
   const removeComment = (id) => {
     axios
-      .delete(`http://localhost:5000/comment/remove/${id}`, {
+      .delete(`https://warriors300-project5-backend.herokuapp.com/comment/remove/${id}`, {
         headers: { authorization: token },
       })
       .then((result) => {
@@ -226,14 +226,14 @@ const AdminDashBoard = ({ type }) => {
   //to vie charts and statistics:
   const showCharts = () => {
     axios
-      .get(`http://localhost:5000/user/birthday`)
+      .get(`https://warriors300-project5-backend.herokuapp.com/user/birthday`)
       .then((result) => {
         setData(result.data.result);
         console.log(result, "char");
       })
       .catch((error) => {});
     axios
-      .get(`http://localhost:5000/user/gender`)
+      .get(`https://warriors300-project5-backend.herokuapp.com/user/gender`)
       .then((result) => {
         setData2(result.data.result);
         console.log(result.data.result);

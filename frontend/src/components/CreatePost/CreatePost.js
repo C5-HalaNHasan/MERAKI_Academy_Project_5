@@ -23,7 +23,7 @@ const CreatePost = () => {
   });
   const getAllPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/post/friends", {
+      const res = await axios.get("https://warriors300-project5-backend.herokuapp.com/post/friends", {
         headers: {
           Authorization: token,
         },
@@ -38,7 +38,7 @@ const CreatePost = () => {
   const submit = (url) => {
     axios
       .post(
-        "http://localhost:5000/post",
+        "https://warriors300-project5-backend.herokuapp.com/post",
         { postText, postVideo: null, postImg: url },
         {
           headers: {

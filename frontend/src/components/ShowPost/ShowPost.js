@@ -89,7 +89,7 @@ const ShowPost = ({ type, id }) => {
   if (type == "home") {
     getAllPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/post/friends", {
+        const res = await axios.get("https://warriors300-project5-backend.herokuapp.com/post/friends", {
           headers: {
             Authorization: token,
           },
@@ -105,7 +105,7 @@ const ShowPost = ({ type, id }) => {
   } else if (id != undefined) {
     getAllPosts = async () => {
       try {
-        const res = await axios.get(` http://localhost:5000/post/user/${id}`, {
+        const res = await axios.get(` https://warriors300-project5-backend.herokuapp.com/post/user/${id}`, {
           headers: {
             Authorization: token,
           },
@@ -170,7 +170,7 @@ const ShowPost = ({ type, id }) => {
   };
   const reportPostById = (id) => {
     axios
-      .put(`http://localhost:5000/post/remove/${id}`)
+      .put(`https://warriors300-project5-backend.herokuapp.com/post/remove/${id}`)
       .then((result) => {
         dispatch(updatePosts({ id, isReported }));
       })
@@ -179,7 +179,7 @@ const ShowPost = ({ type, id }) => {
   const addComment = (id) => {
     axios
       .post(
-        `http://localhost:5000/comment/post/${id}`,
+        `https://warriors300-project5-backend.herokuapp.com/comment/post/${id}`,
         {
           comment,
         },
@@ -200,7 +200,7 @@ const ShowPost = ({ type, id }) => {
 
   const reportCommentById = (id) => {
     axios
-      .put(`http://localhost:5000/comment/remove/${id}`)
+      .put(`https://warriors300-project5-backend.herokuapp.com/comment/remove/${id}`)
       .then((res) => {})
       .catch((error) => {
         dispatch(updateComments({ id, isReported }));
@@ -208,7 +208,7 @@ const ShowPost = ({ type, id }) => {
   };
   const getCounterNumber = () => {
     axios
-      .get("http://localhost:5000/comment/")
+      .get("https://warriors300-project5-backend.herokuapp.com/comment/")
       .then((result) => {
         dispatch(setCommentCounter(result.data.commentCounter));
         dispatch(setReactionCounter(result.data.reactionCounter));
@@ -219,7 +219,7 @@ const ShowPost = ({ type, id }) => {
   };
   const getCommentReactionsCount = () => {
     axios
-      .get(`http://localhost:5000/reaction/comment/counter`, {
+      .get(`https://warriors300-project5-backend.herokuapp.com/reaction/comment/counter`, {
         headers: {
           Authorization: token,
         },
@@ -232,7 +232,7 @@ const ShowPost = ({ type, id }) => {
   const addReactionToPost = async (id) => {
     await axios
       .post(
-        `http://localhost:5000/reaction/post/${id}`,
+        `https://warriors300-project5-backend.herokuapp.com/reaction/post/${id}`,
         {},
         {
           headers: {
@@ -250,7 +250,7 @@ const ShowPost = ({ type, id }) => {
   };
   const removeReactionFromPost = async (id) => {
     await axios
-      .delete(`http://localhost:5000/reaction/post/${id} `, {
+      .delete(`https://warriors300-project5-backend.herokuapp.com/reaction/post/${id} `, {
         headers: {
           Authorization: token,
         },
@@ -262,7 +262,7 @@ const ShowPost = ({ type, id }) => {
   };
   const getAllPostsReactions = () => {
     axios
-      .get("http://localhost:5000/reaction/post", {
+      .get("https://warriors300-project5-backend.herokuapp.com/reaction/post", {
         headers: {
           Authorization: token,
         },
@@ -291,7 +291,7 @@ const ShowPost = ({ type, id }) => {
 
   const getAllCommentsReactions = () => {
     axios
-      .get("http://localhost:5000/reaction/comment", {
+      .get("https://warriors300-project5-backend.herokuapp.com/reaction/comment", {
         headers: {
           Authorization: token,
         },
@@ -304,7 +304,7 @@ const ShowPost = ({ type, id }) => {
   const addReactionToComment = (id) => {
     axios
       .post(
-        `http://localhost:5000/reaction/comment/${id}`,
+        `https://warriors300-project5-backend.herokuapp.com/reaction/comment/${id}`,
         {},
         {
           headers: {
@@ -320,7 +320,7 @@ const ShowPost = ({ type, id }) => {
   };
   const removeReactionFromComment = (id) => {
     axios
-      .delete(`http://localhost:5000/reaction/comment/${id}`, {
+      .delete(`https://warriors300-project5-backend.herokuapp.com/reaction/comment/${id}`, {
         headers: {
           Authorization: token,
         },
