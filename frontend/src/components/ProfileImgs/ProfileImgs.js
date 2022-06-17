@@ -21,7 +21,7 @@ const ProfileImgs = ({ id }) => {
 
   //a function that will get current page user to render ProfileImgs:
   const getUserInfo = () => {
-    let getUserByIdUrl = `https://warriors300-project5-backend.herokuapp.com/user/${id}`;
+    let getUserByIdUrl = `http://localhost:5000/user/${id}`;
     axios
       .get(getUserByIdUrl, { headers: { authorization: token } })
       .then((result) => {

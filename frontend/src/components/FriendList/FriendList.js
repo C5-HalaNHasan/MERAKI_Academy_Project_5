@@ -23,7 +23,7 @@ const FriendList = ({ id }) => {
   const navigate = useNavigate();
   //to re-render visitedUser Friends:
   const getAllFriendsOfVisitedUser = async () => {
-    let getFriendsUrl = ` https://warriors300-project5-backend.herokuapp.com/user/friends/${id}`;
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${id}`;
     axios
       .get(getFriendsUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -38,7 +38,7 @@ const FriendList = ({ id }) => {
 
   //to re-render the currentUser Friends
   const getAllFriendsOfCurrentUser = async () => {
-    let getFriendsUrl = ` https://warriors300-project5-backend.herokuapp.com/user/friends/${userId}`;
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${userId}`;
     axios
       .get(getFriendsUrl, { headers: { authorization: token } })
       .then((result) => {

@@ -45,7 +45,7 @@ const Users = ({ type, name }) => {
   );
   //to re-render the currentUser Friends (for Add/Remove)
   const getAllFriendsOfCurrentUser = async () => {
-    let getFriendsUrl = ` https://warriors300-project5-backend.herokuapp.com/user/friends/${userId}`;
+    let getFriendsUrl = ` http://localhost:5000/user/friends/${userId}`;
     axios
       .get(getFriendsUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -59,7 +59,7 @@ const Users = ({ type, name }) => {
   };
   //a function that adds a user as a friend if not in currentUserFriends
   const addFriend = (id) => {
-    let addFriendUrl = `https://warriors300-project5-backend.herokuapp.com/user/${id}`;
+    let addFriendUrl = `http://localhost:5000/user/${id}`;
     axios
       .post(addFriendUrl, {}, { headers: { authorization: token } })
       .then((result) => {
@@ -98,7 +98,7 @@ const Users = ({ type, name }) => {
   };
   //a function that removes a user from currentUserFriends if
   const removeFriend = (toId) => {
-    let removeUserUrl = `https://warriors300-project5-backend.herokuapp.com/user/${toId}`;
+    let removeUserUrl = `http://localhost:5000/user/${toId}`;
     axios
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
@@ -116,7 +116,7 @@ const Users = ({ type, name }) => {
   if (type == "search") {
     useEffect(() => {
       axios
-        .get(`https://warriors300-project5-backend.herokuapp.com/user`, {
+        .get(`http://localhost:5000/user`, {
           headers: { authorization: token },
         })
         .then((result) => {
@@ -138,7 +138,7 @@ const Users = ({ type, name }) => {
   } else if (type == "friendlist") {
     useEffect(() => {
       axios
-        .get(`https://warriors300-project5-backend.herokuapp.com/user/friends/:${userId}`, {
+        .get(`http://localhost:5000/user/friends/:${userId}`, {
           headers: { authorization: token },
         })
         .then((res) => {
@@ -152,7 +152,7 @@ const Users = ({ type, name }) => {
     useEffect(() => {
       dispatch(setAllUsers([]));
       axios
-        .get(`https://warriors300-project5-backend.herokuapp.com/user/Friend/suggestedUser`, {
+        .get(`http://localhost:5000/user/Friend/suggestedUser`, {
           headers: { authorization: token },
         })
         .then((res) => {

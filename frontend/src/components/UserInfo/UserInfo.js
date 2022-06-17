@@ -52,7 +52,7 @@ const UserInfo = ({ id }) => {
   };
   useEffect(() => {
     axios
-      .get(`https://warriors300-project5-backend.herokuapp.com/user/${id}`, {
+      .get(`http://localhost:5000/user/${id}`, {
         headers: { authorization: token },
       })
       .then((respon) => {
