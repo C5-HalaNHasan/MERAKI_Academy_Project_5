@@ -59,7 +59,7 @@ userRouter.put("/remove/:id", authentication, reportUserById);
 userRouter.delete(
   "/remove/:id",
   authentication,
-  authorization("DELETE user"),
+  authorization("DELETE_User"),
   removeUserByIdAdmin
 );
 

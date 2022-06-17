@@ -447,13 +447,11 @@ const getUserById = (req, res) => {
 };
 const getSuggestedUser = (req, res) => {
   const userId = req.token.userId;
-  console.log(userId);
-  const query = ` SELECT * FROM user WHERE isDeleted=0 AND id NOT IN(SELECT friendshipAccept FROM friendship WHERE friendshipAccept=?) AND id NOT IN(SELECT friendshipRequest FROM friendship WHERE friendshipRequest=?) `;
+  const query = ` SELECT * FROM user WHERE isDeleted=0 AND id NOT IN(SELECT friendshipAccept FROM friendship WHERE friendshipAccept=?) AND id NOT IN(SELECT friendshipRequest FROM friendship WHERE friendshipRequest=?)`;
 
   const data = [userId, userId, userId];
   connection.query(query, data, (error, result) => {
     if (error) {
-      console.log(error);
       res.status(500).json({ error });
     }
     res

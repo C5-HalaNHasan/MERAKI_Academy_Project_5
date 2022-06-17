@@ -75,6 +75,7 @@ const Suggested = () => {
       });
   };
   const suggest = () => {
+    dispatch(setAllUsers([]));
     axios
       .get(`http://localhost:5000/user/Friend/suggestedUser`, {
         headers: {
