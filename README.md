@@ -20,6 +20,7 @@
 - [Built Using](#built_using)
 - [User Story](#user-story)
 - [Data flow](#data-flow)
+- [InterFaces](#interfaces)
 - [Guided By](#guided_by)
 
 ## 🧐 About <a name = "about"></a>
@@ -127,9 +128,13 @@ npm run start
 
 Trello board <a href="https://trello.com/b/xcBFQOdo/warriors-300-social-media-app">Link</a>
 
-## Data flow
+## Data Flow <a name = "#data_flow"></a>
 
-<img width=200px height=200px src="MERAKI_Academy_Project_5/frontend/src/components/assets/dataBaseSchema.png" alt="DBDiagram"></a>
+<img width=200px height=200px src="./frontend/src/components/assets/dataBaseSchema.png" alt="Diagram"></a>
+
+## Interfaces <a name = "#interfaces"></a>
+
+<img width=200px height=200px src="./frontend/src/components/assets/collage.jpg" alt="Diagram"></a>
 
 ## ⚠️ Guided By <a name = "guided_by"></a>
 
