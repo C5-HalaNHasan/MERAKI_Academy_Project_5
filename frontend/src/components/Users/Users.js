@@ -260,7 +260,12 @@ const Users = ({ type, name }) => {
         {/* starts here */}
         {type == "discover" &&
           allUsers.map((user, index) => {
-            if (user.id !== userId) {
+            if (
+              user.id !== userId &&
+              !currentUserFriends.some(
+                (currentFriend) => currentFriend.id == user.id
+              )
+            ) {
               return (
                 <div className="friendCard">
                   <div className="friendInfo">
