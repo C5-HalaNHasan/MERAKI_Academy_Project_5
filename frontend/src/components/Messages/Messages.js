@@ -10,7 +10,7 @@ import {
 import { setModalBox } from "../redux/reducers/modalBox/index";
 //for real-time connection:
 import { io } from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://warriors300-project5-backend.herokuapp.com";
 const socket = io.connect(ENDPOINT);
 
 const Messages = () => {
@@ -49,7 +49,7 @@ const Messages = () => {
   // a function that sets allMessages in redux store:
   const getAllMessages = () => {
     dispatch(setMessagesWith([]));
-    let getMessagesUrl = `http://localhost:5000/message/get/user/room`;
+    let getMessagesUrl = `https://warriors300-project5-backend.herokuapp.com/message/get/user/room`;
     axios
       .get(getMessagesUrl, { headers: { authorization: token } })
       .then((result) => {

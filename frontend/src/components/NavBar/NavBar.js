@@ -52,7 +52,7 @@ const NavBar = () => {
 
   //useEffect to be used to dispatch(setCurrentUserInf(data from BE))
   const getCurrentUser = () => {
-    let getCurrentUserUrl = `http://localhost:5000/user/${userId}`;
+    let getCurrentUserUrl = `https://warriors300-project5-backend.herokuapp.com/user/${userId}`;
     axios
       .get(getCurrentUserUrl, { headers: { authorization: token } })
       .then((result) => {
