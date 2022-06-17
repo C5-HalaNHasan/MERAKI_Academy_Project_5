@@ -110,7 +110,6 @@ const Suggested = () => {
             <h3>Suggested Friend</h3>
           </div>
           {suggestedFriends.map((user, index) => {
-            console.log(arr.includes(user.id));
             if (
               arr.includes(user.id) &&
               !currentUserFriends.some(

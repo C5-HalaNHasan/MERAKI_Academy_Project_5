@@ -55,6 +55,8 @@ const Messages = () => {
       .then((result) => {
         if (result.data.result.length) {
           dispatch(setAllMessages(result.data.result));
+        } else {
+          noInbox();
         }
       })
       .catch((error) => {});
@@ -77,6 +79,18 @@ const Messages = () => {
       })
     );
   };
+
+  const noInbox = () => {
+    dispatch(
+      setModalBox({
+        modalId: "",
+        modalType: "alert",
+        modalMessage: "Inbox",
+        modalDetails: `Your inbox is empty`,
+        modalShow: true,
+      })
+    );
+  };
   useEffect(() => {
     getAllMessages();
   }, []);
@@ -86,6 +100,8 @@ const Messages = () => {
         <div className="boxTitle">
           <h3>Inbox</h3>
         </div>
+        {!allMessages.length && <h3>No conversations to show...</h3>}
+
         {allMessages.length &&
           allMessages.map((room, ind) => {
             return (

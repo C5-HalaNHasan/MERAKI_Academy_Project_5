@@ -9,9 +9,7 @@ import {
   removeFromFriendsList,
 } from "../redux/reducers/user";
 import { setModalBox } from "../redux/reducers/modalBox/index";
-
 import "./users.css";
-import { Navigate } from "react-router-dom";
 
 //Users component will take two props:type(search or friendlist) & name (name of the searched user)
 const Users = ({ type, name }) => {
@@ -41,6 +39,7 @@ const Users = ({ type, name }) => {
         token: state.user.token,
         userId: state.user.userId,
         currentUserFriends: state.user.currentUserFriends,
+        allUsers: state.user.allUsers,
       };
     }
   );
@@ -75,7 +74,6 @@ const Users = ({ type, name }) => {
   };
   //a function that sends a message to user by id:
   const sendMessageToUser = (toId) => {
-    console.log({ sendMessageToUser: toId });
     dispatch(
       setModalBox({
         modalId: toId,
@@ -105,9 +103,8 @@ const Users = ({ type, name }) => {
       .delete(removeUserUrl, { headers: { authorization: token } })
       .then((result) => {
         if (result.data.success) {
-          dispatch(removeFromFriendsList(toId)); //toId
+          dispatch(removeFromFriendsList(toId));
           getAllFriendsOfCurrentUser();
-          console.log({ fromRemoveFriends: toId });
         }
       })
       .catch((error) => {
@@ -116,12 +113,11 @@ const Users = ({ type, name }) => {
   };
 
   //to check the type sent if search or friendlist and render the users based on that:
-  if (type == "search") {
+  if (type == "search" || type == "discover") {
     useEffect(() => {
       axios
         .get(`http://localhost:5000/user`)
         .then((result) => {
-          console.log(result.data.result);
           dispatch(setAllUsers(result.data.result));
         })
         .catch((err) => {
@@ -136,15 +132,13 @@ const Users = ({ type, name }) => {
         })
         .then((res) => {
           dispatch(setCurrentUserFriends(res.data.result));
-          console.log(currentUserFriends);
         })
         .catch((err) => {
           console.log(err);
         });
     }, []);
   }
-  console.log({ currentUserFriendsFromUserSCOMPONENT: currentUserFriends });
-  console.log({ allUsersFromUserSCOMPONENT: allUsers });
+
   return (
     <div className="usersComponent">
       <div className="friendList usersList">
@@ -263,6 +257,62 @@ const Users = ({ type, name }) => {
                 </div>
               );
             })}
+        {/* starts here */}
+        {type == "discover" &&
+          allUsers.map((user, index) => {
+            if (user.id !== userId) {
+              return (
+                <div className="friendCard">
+                  <div className="friendInfo">
+                    <img
+                      src={user.profileImg}
+                      onClick={() => {
+                        navigate(`/user/${user.id}`);
+                      }}
+                    ></img>
+                    <h3>{user.firstName + " " + user.lastName}</h3>
+                  </div>
+                  <div className="friendButtons">
+                    {/* for add and remove buttons */}
+                    {currentUserFriends.some(
+                      (currentFriend) => currentFriend.id == user.id
+                    ) ? (
+                      <button
+                        onClick={() => {
+                          removeFriend(user.id);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          addFriend(user.id);
+                        }}
+                      >
+                        Add
+                      </button>
+                    )}
+                    <button
+                      onClick={() => {
+                        sendMessageToUser(user.id);
+                      }}
+                    >
+                      Message
+                    </button>
+                    <button
+                      onClick={() => {
+                        reportUserById(user.id);
+                      }}
+                    >
+                      Report
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+          })}
+        {/* ends here */}
       </div>
     </div>
   );

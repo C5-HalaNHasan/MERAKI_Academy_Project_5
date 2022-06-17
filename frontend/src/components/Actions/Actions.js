@@ -144,9 +144,11 @@ const Actions = ({ id }) => {
     checkIfFriend();
   }, []);
 
-  console.log(currentUserFriends);
   return (
     <div className="actionsComponent">
+      <div className="boxTitle">
+        <h3>Actions</h3>
+      </div>
       <div className="actionButtons">
         {isFriend ? (
           <button onClick={() => removeFriend(id)}>Remove</button>
