@@ -122,7 +122,7 @@ const Login = () => {
             setLogin({ token: result.data.token, userId: result.data.userId })
           );
           if (result.data.userInfo.role_id == 2) {
-            navigate("/admin");
+            navigate("/charts");
           } else {
             navigate("/home");
           }
@@ -163,7 +163,11 @@ const Login = () => {
             autoComplete="off"
           ></input>
         </div>
-        <GoogleLogin clientId={clientId} onSuccess={onSuccess} />
+        <GoogleLogin
+          clientId={clientId}
+          onSuccess={onSuccess}
+          className=" btn"
+        />
         <button
           onClick={() => {
             LoginAction();
